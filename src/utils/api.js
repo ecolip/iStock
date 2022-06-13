@@ -1,13 +1,12 @@
 const api = {
-  hostname: 'https://openapi.twse.com.tw/v1',
+  hostname: 'https://api.finmindtrade.com/api/v4/data?',
+  token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJkYXRlIjoiMjAyMi0wNi0xMyAyMToxMjowMCIsInVzZXJfaWQiOiJlY29saXAiLCJpcCI6IjExOC4xNjguNDEuMTg2In0.SlGERKyj3V45rngX5UqHGLvIoz-1PRGStCbHLvMvqlM',
   getDateInfo() {
-    return fetch(`${this.hostname}/exchangeReport/STOCK_DAY_ALL`, {
-      mode:'cors',
+    return fetch(`${this.hostname}dataset=TaiwanStockDividend`, {
       headers: new Headers({
-        host: 'https://openapi.twse.com.tw',
-        // 'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.token}`,
       }),
-      method: 'GET',
     }).then((response) => response.json());
   },
 };
