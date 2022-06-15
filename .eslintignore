@@ -2,3 +2,5 @@
 /build
 .DS_Store
 .firebase ignore
+canvasjs.stock.react.js
+canvasjs.stock.min.js
