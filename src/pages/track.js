@@ -91,11 +91,11 @@ function Track() {
   const initStockId = useRef('TAIEX');
   const { CanvasJSStockChart } = CanvasJSReact;
 
-  // const getApiToken = () => {
-  //   api.finMindLogin().then((res) => {
-  //     window.localStorage.setItem('finToken', res.token);
-  //   });
-  // };
+  const getApiToken = () => {
+    api.finMindLogin().then((res) => {
+      window.localStorage.setItem('finToken', res.token);
+    });
+  };
 
   const definedOptions = (dps1, dps2, dps3, id) => {
     const options = {
@@ -257,6 +257,7 @@ function Track() {
 
   useEffect(() => {
     initView();
+    getApiToken();
   }, []);
 
   return (
