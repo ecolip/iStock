@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import styled from 'styled-components';
-import api from '../utils/api';
+// import api from '../utils/api';
 
 const Container = styled.div`
   width: 100%;
@@ -20,18 +20,12 @@ const Container = styled.div`
   }
 `;
 
-
 function Login() {
-  useEffect(() => {
-    api.getDateInfo().then((res)=>{
-      console.log(res);
-    });
-  }, []);
+  // useEffect(() => {
+  // }, []);
 
   return (
-    <Container>
-      
-    </Container>
+    <Container />
   );
 }
 

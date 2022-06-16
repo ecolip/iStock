@@ -16,14 +16,18 @@ const Container = styled.div`
   }
 `;
 const SearchGroup = styled.div`
+  margin: ${(props) => (props.load ? '40px auto 35vh' : '40px auto 20px')};
+
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 25%;
-  margin: 40px auto 20px;
+  width: 300px;
   padding: 0 13px;
   border: 1px solid #424242;
   border-radius: 5px;
+  @media (min-width: 768px) {
+    width: 300px;
+  }
 `;
 const Input = styled.input`
   width: 70%;
@@ -58,7 +62,6 @@ const SearchIcon = styled(SearchOutline)`
     height: 30px;
   }
 `;
-
 const ProgressContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -82,11 +85,11 @@ const ProgressContainer = styled.div`
 
 function Track() {
   const [stockId, setStockId] = useState('');
-  // const [stockInput, setStockInput] = useState('');
   const [isLoaded, setIsLoaded] = useState(true);
   const [option, setOption] = useState(null);
   const [containerProp, setContainerProp] = useState(null);
   const containerRef = useRef(null);
+  const canvasRef = useRef(null);
   const initStockId = useRef('0050');
   const { CanvasJSStockChart } = CanvasJSReact;
 
@@ -103,9 +106,12 @@ function Track() {
       title: {
         text: `${id} 走勢圖`,
         fontSize: 35,
+        fontColor: '#4A4A4A',
       },
       subtitles: [{
-        // text: '量-價 追蹤',
+        text: '價-成交量-成交總金額(千萬)',
+        fontSize: 15,
+        fontColor: '#4A4A4A',
       }],
       charts: [{
         axisX: {
@@ -123,8 +129,8 @@ function Track() {
           },
         },
         axisY: {
-          title: 'price',
-          prefix: '$',
+          // title: 'price',
+          // prefix: '$',
           tickLength: 0,
         },
         toolTip: {
@@ -161,7 +167,7 @@ function Track() {
         },
         data: [{
           name: 'volume',
-          yValueFormatString: '$#,###.##',
+          yValueFormatString: '#,###.##',
           axisYType: 'secondary',
           type: 'column',
           dataPoints: dps2,
@@ -169,6 +175,7 @@ function Track() {
       }],
       navigator: {
         data: [{
+          fontSize: 10,
           dataPoints: dps3,
         }],
         slider: {
@@ -187,7 +194,6 @@ function Track() {
     setContainerProp(containerProps);
     setIsLoaded(false);
     setStockId('');
-    console.log('over');
   };
 
   const constructView = (data, id) => {
@@ -213,19 +219,23 @@ function Track() {
   const drawView = (type) => {
     const finToken = window.localStorage.getItem('finToken');
     setIsLoaded(true);
+    // console.log('畫圖');
     if (type === 'init') {
       api.getHistoryPrice(finToken, initStockId.current, today()).then((res) => {
         if (res.data.length > 0) {
+          // console.log('初始資料', res.data);
           constructView(res.data, initStockId.current);
         }
       });
     } else {
       const stockIdTrim = stockId.trim();
       api.getHistoryPrice(finToken, stockIdTrim, today()).then((res) => {
-        // console.log('get成功:', res.data);
         if (res.data.length > 0) {
           constructView(res.data, stockIdTrim);
-          // console.log('有資料: ', res.data);
+          // console.log('新商品', res.data);
+        } else {
+          setIsLoaded(false);
+          alert('查無資料，請重新輸入股票代碼！');
         }
       });
     }
@@ -239,13 +249,20 @@ function Track() {
     drawView('init');
   };
 
+  // addEventListener(containerRef.current, 'keydown', (e) => {
+  //   console.log(e.keyCode);
+  //   if (e.keyCode === 13) {
+  //     updateView();
+  //   }
+  // });
+
   useEffect(() => {
     initView();
   }, []);
 
   return (
     <Container ref={containerRef}>
-      <SearchGroup>
+      <SearchGroup load={isLoaded}>
         <Input
           type="text"
           value={stockId}
@@ -262,7 +279,7 @@ function Track() {
             </Box>
           </ProgressContainer>
         )
-        : <CanvasJSStockChart containerProps={containerProp} options={option} />}
+        : <CanvasJSStockChart containerProps={containerProp} options={option} ref={canvasRef} />}
     </Container>
   );
 }

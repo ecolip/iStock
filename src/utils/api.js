@@ -1,6 +1,6 @@
 const api = {
   hostname: 'https://api.finmindtrade.com/api/v4/data?',
-  startDate: '2017-05-15',
+  startDate: '2015-05-15',
   finMindLogin() {
     const formData = new FormData();
     formData.append('user_id', process.env.REACT_APP_FINMIND_USER_ID);
