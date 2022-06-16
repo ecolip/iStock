@@ -58,7 +58,6 @@ const SearchIcon = styled(SearchOutline)`
     height: 30px;
   }
 `;
-
 const ProgressContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -82,7 +81,6 @@ const ProgressContainer = styled.div`
 
 function Track() {
   const [stockId, setStockId] = useState('');
-  // const [stockInput, setStockInput] = useState('');
   const [isLoaded, setIsLoaded] = useState(true);
   const [option, setOption] = useState(null);
   const [containerProp, setContainerProp] = useState(null);
@@ -103,9 +101,12 @@ function Track() {
       title: {
         text: `${id} 走勢圖`,
         fontSize: 35,
+        fontColor: '#4A4A4A',
       },
       subtitles: [{
-        // text: '量-價 追蹤',
+        text: '價-成交量-成交總金額(千萬)',
+        fontSize: 15,
+        fontColor: '#4A4A4A',
       }],
       charts: [{
         axisX: {
@@ -187,7 +188,6 @@ function Track() {
     setContainerProp(containerProps);
     setIsLoaded(false);
     setStockId('');
-    console.log('over');
   };
 
   const constructView = (data, id) => {
@@ -212,7 +212,6 @@ function Track() {
 
   const drawView = (type) => {
     const finToken = window.localStorage.getItem('finToken');
-    setIsLoaded(true);
     if (type === 'init') {
       api.getHistoryPrice(finToken, initStockId.current, today()).then((res) => {
         if (res.data.length > 0) {
@@ -222,10 +221,11 @@ function Track() {
     } else {
       const stockIdTrim = stockId.trim();
       api.getHistoryPrice(finToken, stockIdTrim, today()).then((res) => {
-        // console.log('get成功:', res.data);
         if (res.data.length > 0) {
+          setIsLoaded(true);
           constructView(res.data, stockIdTrim);
-          // console.log('有資料: ', res.data);
+        } else {
+          alert('查無資料，請重新輸入股票代碼！');
         }
       });
     }
