@@ -90,7 +90,7 @@ function Track() {
   const [containerProp, setContainerProp] = useState(null);
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
-  const initStockId = useRef('0050');
+  const initStockId = useRef('TAIEX');
   const { CanvasJSStockChart } = CanvasJSReact;
 
   // const getApiToken = () => {
@@ -105,12 +105,12 @@ function Track() {
       theme: 'light2',
       title: {
         text: `${id} 走勢圖`,
-        fontSize: 35,
+        fontSize: 33,
         fontColor: '#4A4A4A',
       },
       subtitles: [{
-        text: '價-成交量-成交總金額(千萬)',
-        fontSize: 15,
+        text: '價/指數-成交量-成交總金額(千萬)',
+        fontSize: 18,
         fontColor: '#4A4A4A',
       }],
       charts: [{
@@ -137,8 +137,9 @@ function Track() {
           shared: true,
         },
         data: [{
-          name: '價格 (in TWD)',
-          yValueFormatString: '$#,###.##',
+          name: '價格(in TWD)/指數',
+          yValueFormatString: '#,###.##',
+          // yValueFormatString: '$#,###.##',
           axisYType: 'secondary',
           type: 'candlestick',
           // risingColor: '#26A69A',
@@ -224,7 +225,7 @@ function Track() {
       api.getHistoryPrice(finToken, initStockId.current, today()).then((res) => {
         if (res.data.length > 0) {
           // console.log('初始資料', res.data);
-          constructView(res.data, initStockId.current);
+          constructView(res.data, '加權指數');
         }
       });
     } else {
