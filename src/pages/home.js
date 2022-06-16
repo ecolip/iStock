@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
-// import api from '../utils/api';
+import Header from '../components/header';
+import api from '../utils/api';
 
 // const data = [
 //   {
@@ -32,33 +33,32 @@ import styled from 'styled-components';
 const Container = styled.div`
   width: 100%;
   margin: 0 auto;
-  position: relative;
-  @media (min-width: 992px) {
-    display: flex;
-    justify-content: center;
-    align-items: space-between;
-    width: 992px;
-  }
-  @media (min-width: 1280px) {
-    display: flex;
-    justify-content: center;
-    align-items: space-between;
-    width: 1280px;
-  }
+  // @media (min-width: 992px) {
+  //   display: flex;
+  //   justify-content: center;
+  //   align-items: space-between;
+  //   width: 992px;
+  // }
+  // @media (min-width: 1280px) {
+  //   display: flex;
+  //   justify-content: center;
+  //   align-items: space-between;
+  //   width: 1280px;
+  // }
 `;
 
 function Home() {
-  const getDayPrice = () => {
-    // api.getDayPrice().then((res)=>{
-    //   console.log(res);
-    // });
-  };
   useEffect(() => {
-    getDayPrice();
+    const finToken = window.localStorage.getItem('finToken');
+    api.getStockList(finToken).then((res) => {
+      console.log(res.data);
+    });
   }, []);
 
   return (
-    <Container />
+    <Container>
+      <Header />
+    </Container>
   );
 }
 
