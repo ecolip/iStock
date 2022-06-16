@@ -22,6 +22,10 @@ const api = {
     return fetch(`${this.hostname}token=${token}&dataset=TaiwanStockPrice&data_id=${id}&start_date=${this.startDate}&end_date=${today}`)
       .then((response) => response.json());
   },
+  getStockList(token) {
+    return fetch(`${this.hostname}token=${token}&dataset=TaiwanStockInfo`)
+      .then((response) => response.json());
+  },
 };
 
 export default api;

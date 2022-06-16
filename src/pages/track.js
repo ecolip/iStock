@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { SearchOutline } from '@styled-icons/evaicons-outline';
-// import addEventListener from 'addeventlistener';
+import useEventListener from '@use-it/event-listener';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import Header from '../components/header';
 import CanvasJSReact from '../utils/canvasjs/canvasjs.stock.react';
 import api from '../utils/api';
 import { today, preYear } from '../utils/formatDate';
@@ -11,9 +12,6 @@ import { today, preYear } from '../utils/formatDate';
 const Container = styled.div`
   width: 100%;
   margin: 0 auto;
-  @media (min-width: 1280px) {
-    max-width: 1280px;
-  }
 `;
 const SearchGroup = styled.div`
   margin: ${(props) => (props.load ? '40px auto 35vh' : '40px auto 20px')};
@@ -90,7 +88,7 @@ function Track() {
   const [containerProp, setContainerProp] = useState(null);
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
-  const initStockId = useRef('0050');
+  const initStockId = useRef('TAIEX');
   const { CanvasJSStockChart } = CanvasJSReact;
 
   // const getApiToken = () => {
@@ -102,15 +100,16 @@ function Track() {
   const definedOptions = (dps1, dps2, dps3, id) => {
     const options = {
       exportEnabled: true,
+      exportFileName: 'StockChart',
       theme: 'light2',
       title: {
         text: `${id} 走勢圖`,
-        fontSize: 35,
+        fontSize: 33,
         fontColor: '#4A4A4A',
       },
       subtitles: [{
-        text: '價-成交量-成交總金額(千萬)',
-        fontSize: 15,
+        text: '價/指數-成交量-成交總金額(千萬)',
+        fontSize: 18,
         fontColor: '#4A4A4A',
       }],
       charts: [{
@@ -137,12 +136,14 @@ function Track() {
           shared: true,
         },
         data: [{
-          name: '價格 (in TWD)',
-          yValueFormatString: '$#,###.##',
+          name: '價格(in TWD)/指數',
+          yValueFormatString: '#,###.##',
+          // yValueFormatString: '$#,###.##',
           axisYType: 'secondary',
           type: 'candlestick',
-          // risingColor: '#26A69A',
-          // fallingColor: '#EF5350',
+          // risingColor: 'red',
+          // fallingColor: '#00B050',
+          // color: 'black',
           dataPoints: dps1,
         }],
       }, {
@@ -186,10 +187,9 @@ function Track() {
     };
     const containerProps = {
       width: '90%',
-      height: '80vh',
+      height: '70vh',
       margin: 'auto',
     };
-
     setOption(options);
     setContainerProp(containerProps);
     setIsLoaded(false);
@@ -224,7 +224,7 @@ function Track() {
       api.getHistoryPrice(finToken, initStockId.current, today()).then((res) => {
         if (res.data.length > 0) {
           // console.log('初始資料', res.data);
-          constructView(res.data, initStockId.current);
+          constructView(res.data, '加權指數');
         }
       });
     } else {
@@ -249,12 +249,11 @@ function Track() {
     drawView('init');
   };
 
-  // addEventListener(containerRef.current, 'keydown', (e) => {
-  //   console.log(e.keyCode);
-  //   if (e.keyCode === 13) {
-  //     updateView();
-  //   }
-  // });
+  useEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      updateView();
+    }
+  });
 
   useEffect(() => {
     initView();
@@ -262,6 +261,7 @@ function Track() {
 
   return (
     <Container ref={containerRef}>
+      <Header />
       <SearchGroup load={isLoaded}>
         <Input
           type="text"
