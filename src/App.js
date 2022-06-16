@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './pages/login';
+import Home from './pages/home';
+import Track from './pages/track';
 
 function App() {
   return (
@@ -7,6 +9,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<Login />} />
+          <Route exact path="home" element={<Home />} />
+          <Route exact path="track" element={<Track />} />
         </Routes>
       </BrowserRouter>
     </div>
