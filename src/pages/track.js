@@ -16,14 +16,18 @@ const Container = styled.div`
   }
 `;
 const SearchGroup = styled.div`
+  margin: ${(props) => (props.load ? '40px auto 35vh' : '40px auto 20px')};
+
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 25%;
-  margin: 40px auto 20px;
+  width: 300px;
   padding: 0 13px;
   border: 1px solid #424242;
   border-radius: 5px;
+  @media (min-width: 768px) {
+    width: 300px;
+  }
 `;
 const Input = styled.input`
   width: 70%;
@@ -85,6 +89,7 @@ function Track() {
   const [option, setOption] = useState(null);
   const [containerProp, setContainerProp] = useState(null);
   const containerRef = useRef(null);
+  const canvasRef = useRef(null);
   const initStockId = useRef('0050');
   const { CanvasJSStockChart } = CanvasJSReact;
 
@@ -124,8 +129,8 @@ function Track() {
           },
         },
         axisY: {
-          title: 'price',
-          prefix: '$',
+          // title: 'price',
+          // prefix: '$',
           tickLength: 0,
         },
         toolTip: {
@@ -162,7 +167,7 @@ function Track() {
         },
         data: [{
           name: 'volume',
-          yValueFormatString: '$#,###.##',
+          yValueFormatString: '#,###.##',
           axisYType: 'secondary',
           type: 'column',
           dataPoints: dps2,
@@ -170,6 +175,7 @@ function Track() {
       }],
       navigator: {
         data: [{
+          fontSize: 10,
           dataPoints: dps3,
         }],
         slider: {
@@ -212,9 +218,12 @@ function Track() {
 
   const drawView = (type) => {
     const finToken = window.localStorage.getItem('finToken');
+    setIsLoaded(true);
+    // console.log('畫圖');
     if (type === 'init') {
       api.getHistoryPrice(finToken, initStockId.current, today()).then((res) => {
         if (res.data.length > 0) {
+          // console.log('初始資料', res.data);
           constructView(res.data, initStockId.current);
         }
       });
@@ -222,9 +231,10 @@ function Track() {
       const stockIdTrim = stockId.trim();
       api.getHistoryPrice(finToken, stockIdTrim, today()).then((res) => {
         if (res.data.length > 0) {
-          setIsLoaded(true);
           constructView(res.data, stockIdTrim);
+          // console.log('新商品', res.data);
         } else {
+          setIsLoaded(false);
           alert('查無資料，請重新輸入股票代碼！');
         }
       });
@@ -239,13 +249,20 @@ function Track() {
     drawView('init');
   };
 
+  // addEventListener(containerRef.current, 'keydown', (e) => {
+  //   console.log(e.keyCode);
+  //   if (e.keyCode === 13) {
+  //     updateView();
+  //   }
+  // });
+
   useEffect(() => {
     initView();
   }, []);
 
   return (
     <Container ref={containerRef}>
-      <SearchGroup>
+      <SearchGroup load={isLoaded}>
         <Input
           type="text"
           value={stockId}
@@ -262,7 +279,7 @@ function Track() {
             </Box>
           </ProgressContainer>
         )
-        : <CanvasJSStockChart containerProps={containerProp} options={option} />}
+        : <CanvasJSStockChart containerProps={containerProp} options={option} ref={canvasRef} />}
     </Container>
   );
 }
