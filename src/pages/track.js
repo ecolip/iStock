@@ -4,17 +4,21 @@ import { SearchOutline } from '@styled-icons/evaicons-outline';
 import useEventListener from '@use-it/event-listener';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
-import Header from '../components/header';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 import CanvasJSReact from '../utils/canvasjs/canvasjs.stock.react';
 import api from '../utils/api';
 import { today, preYear } from '../utils/formatDate';
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 100%;
+  height: 100vh;
   margin: 0 auto;
 `;
 const SearchGroup = styled.div`
-  margin: ${(props) => (props.load ? '40px auto 35vh' : '40px auto 20px')};
+  margin: ${(props) => (props.load ? '40px auto 35vh' : '30px auto 20px')};
 
   display: flex;
   justify-content: space-between;
@@ -281,6 +285,7 @@ function Track() {
           </ProgressContainer>
         )
         : <CanvasJSStockChart containerProps={containerProp} options={option} ref={canvasRef} />}
+      <Footer />
     </Container>
   );
 }
