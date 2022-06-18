@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
 import { SearchOutline } from '@styled-icons/evaicons-outline';
 import useEventListener from '@use-it/event-listener';
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
+// import CircularProgress from '@mui/material/CircularProgress';
+// import Box from '@mui/material/Box';
+import styled from 'styled-components';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import CanvasJSReact from '../utils/canvasjs/canvasjs.stock.react';
@@ -29,8 +29,7 @@ const SearchGroup = styled.div`
   border-radius: 5px;
   
   @media (min-width: 996px) {
-    width: 300px;
-    margin: 30px auto 20px;
+    margin: ${(props) => (props.load ? '30px auto 30vh' : '30px auto 10px')};
   }
 `;
 const Input = styled.input`
@@ -86,6 +85,11 @@ const ProgressContainer = styled.div`
 //     stock_id: '0050',
 //   },
 // ];
+
+const style = {
+  width: '50px',
+  height: '50px',
+};
 
 function Track() {
   const [stockId, setStockId] = useState('');
@@ -281,9 +285,9 @@ function Track() {
       {isLoaded
         ? (
           <ProgressContainer>
-            <Box sx={{ display: 'flex' }}>
-              <CircularProgress />
-            </Box>
+            <div className="spinner-border text-warning" style={style} role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
           </ProgressContainer>
         )
         : <CanvasJSStockChart containerProps={containerProp} options={option} ref={canvasRef} />}

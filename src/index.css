@@ -19,6 +19,10 @@ code {
     monospace;
 }
 
+a {    
+  text-decoration: none;
+}
+
 .canvasjs-chart-credit{
   display: none;
 }
