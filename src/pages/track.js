@@ -25,7 +25,7 @@ const SearchGroup = styled.div`
   align-items: center;
   width: 300px;
   padding: 0 13px;
-  border: 1px solid #424242;
+  border: 2px solid #424242;
   border-radius: 5px;
   
   @media (min-width: 996px) {
