@@ -108,7 +108,7 @@ const MobileBackground = styled.div`
   width: 100%;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 99;
+  z-index: 1000;
  
   @media (min-width: 992px) {
     display: none;
