@@ -18,7 +18,7 @@ const Container = styled.div`
   margin: 0 auto;
 `;
 const SearchGroup = styled.div`
-  margin: ${(props) => (props.load ? '40px auto 35vh' : '30px auto 20px')};
+  margin: ${(props) => (props.load ? '40px auto 35vh' : '110px auto 10px')};
 
   display: flex;
   justify-content: space-between;
@@ -27,8 +27,10 @@ const SearchGroup = styled.div`
   padding: 0 13px;
   border: 1px solid #424242;
   border-radius: 5px;
-  @media (min-width: 768px) {
+  
+  @media (min-width: 996px) {
     width: 300px;
+    margin: 30px auto 20px;
   }
 `;
 const Input = styled.input`
