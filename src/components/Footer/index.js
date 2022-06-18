@@ -13,7 +13,7 @@ const Container = styled.div`
 function Footer() {
   return (
     <Container>
-      版權所有 © 2022 ~ 2024 iStock 資訊股份有限公司
+      iStock © 2022 ~ 2024
     </Container>
   );
 }
