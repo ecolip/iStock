@@ -156,7 +156,7 @@ function Header() {
           <PersonContainer>
             <PersonIcon />
           </PersonContainer>
-          <Button md>登入</Button>
+          <Button md>登出</Button>
         </RightContainer>
       </Container>
       <MobileHead>

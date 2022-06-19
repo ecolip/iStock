@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { SearchOutline } from '@styled-icons/evaicons-outline';
 import useEventListener from '@use-it/event-listener';
-// import CircularProgress from '@mui/material/CircularProgress';
-// import Box from '@mui/material/Box';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
