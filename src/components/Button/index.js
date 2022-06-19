@@ -2,12 +2,13 @@
 import styled from 'styled-components';
 
 const Button = styled.button`
-  background: ${(props) => (props.gray ? '#808080' : '#FCD535')};
+  width: ${(props) => (props.w100 ? '100%' : 'auto')};
   margin-top: ${(props) => (props.mt1 ? '50px' : '0')};
   margin-bottom: ${(props) => (props.mb1 ? '30px' : '0')};
   padding: ${(props) => (props.sm ? '12px 0' : props.md ? '8px 25px' : '12px 24px')};
-  width: ${(props) => (props.w100 ? '100%' : 'auto')};
-
+  color: ${(props) => (props.google ? 'rgb(32, 38, 48)' : '#181A20')};
+  background: ${(props) => (props.google ? '#FFFFFF' : '#FCD535')};
+  
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,8 +17,8 @@ const Button = styled.button`
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
+  transition: background 0.1s linear;
   &:hover {
-    background: #FCD535;
     opacity: 0.9;
   }
 `;

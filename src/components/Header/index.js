@@ -41,7 +41,7 @@ const Logo = styled.div`
 const NavItem = styled.div`
   margin-right: ${(props) => (props.mr ? '20px' : '0')};
   padding: ${(props) => (props.px1 ? '15px 0' : '0')};
-  font-size: ${(props) => (props.fzBig ? '22px' : '18px')};
+  font-size: ${(props) => (props.fzBig ? '20px' : '18px')};
 
   font-weight: 500;
   color: #EAECEF;
@@ -169,7 +169,7 @@ function Header() {
         <MobileBackground displayBlock>
           <MobileNavContainer displayBlock>
             <CloseIcon onClick={() => { setOpenNav(false); }} />
-            <Button sm w100 mb1>登入</Button>
+            <Button sm w100 mb1>登出</Button>
             <NavItem px1 fzBig>當日行情</NavItem>
             <NavItem px1 fzBig>個股</NavItem>
             <Link to="/track">
