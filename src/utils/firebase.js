@@ -36,10 +36,10 @@ const signIn = (email, password) => new Promise((resolve, reject) => {
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const { user } = userCredential;
-      console.log(user);
+      // console.log(user);
       resolve(user);
     }).catch((error) => {
-      console.log(error);
+      // console.log(error);
       reject(error.code);
       // const errorCode = error.code;
       // const errorMessage = error.message;
