@@ -10,9 +10,11 @@ const Container = styled.div`
   display: none;
   align-items: center;
   width: 100%;
-  padding: 14px 30px;
+  height: 90px;
+  padding: 0 30px;
   background-color: #181A20;
   border-bottom: 1px solid #F5F5F5;
+
   @media (min-width: 992px) {
     display: flex;
   }
@@ -33,6 +35,7 @@ const Logo = styled.div`
   font-size: 36px;
   font-weight: bold;
   cursor: pointer;
+  
   @media (min-width: 992px) {
     margin-right: 30px;
     font-size: 40px;
