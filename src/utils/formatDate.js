@@ -11,7 +11,7 @@ const today = () => {
 
 const preYear = () => {
   const date = new Date();
-  const year = date.getFullYear() - 7;
+  const year = date.getFullYear() - 1;
   const month = date.getMonth() + 1;
   const day = date.getDate();
   if (month < 10) {
