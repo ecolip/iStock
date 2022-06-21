@@ -4,6 +4,7 @@ import useEventListener from '@use-it/event-listener';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import Loading from '../components/Loading';
 import CanvasJSReact from '../utils/canvasjs/canvasjs.stock.react';
 import api from '../utils/api';
 import { today, preYear } from '../utils/formatDate';
@@ -63,31 +64,6 @@ const SearchIcon = styled(SearchOutline)`
     height: 30px;
   }
 `;
-const ProgressContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-// const data = [
-//   {
-//     Trading_Volume: 6085859,
-//     Trading_money: 750214036,
-//     Trading_turnover: 11536,
-//     close: 123,
-//     date: '2022-05-16',
-//     max: 124,
-//     min: 122.5,
-//     open: 123.45,
-//     spread: 0.65,
-//     stock_id: '0050',
-//   },
-// ];
-
-const style = {
-  width: '50px',
-  height: '50px',
-};
 
 function Track() {
   const [stockId, setStockId] = useState('');
@@ -99,20 +75,15 @@ function Track() {
   const initStockId = useRef('TAIEX');
   const { CanvasJSStockChart } = CanvasJSReact;
 
-  const getApiToken = () => {
-    api.finMindLogin().then((res) => {
-      window.localStorage.setItem('finToken', res.token);
-    });
-  };
-
   const definedOptions = (dps1, dps2, dps3, id) => {
     const options = {
       exportEnabled: true,
       exportFileName: 'StockChart',
-      theme: 'light2',
+      theme: 'light2', // "light1", "dark1", "dark2"
+      // backgroundColor: '#F5F5F5',
       title: {
         text: `${id} 走勢圖`,
-        fontSize: 33,
+        fontSize: 30,
         fontColor: '#4A4A4A',
       },
       subtitles: [{
@@ -120,10 +91,23 @@ function Track() {
         fontSize: 18,
         fontColor: '#4A4A4A',
       }],
+      // legend: {
+      //   horizontalAlign: 'right', // "center" , "right"
+      //   verticalAlign: 'center', // "top" , "bottom"
+      //   fontSize: 15,
+      // },
       charts: [{
         axisX: {
           lineThickness: 5,
           tickLength: 0,
+          // scaleBreaks: {
+          //   type: '',
+          //   fillOpacity: 1,
+          //   customBreaks: [{
+          //     startValue: '2015-05-15',
+          //     endValue: today(),
+          //   }],
+          // },
           labelFormatter() {
             return '';
           },
@@ -151,7 +135,9 @@ function Track() {
           type: 'candlestick',
           // risingColor: 'red',
           // fallingColor: '#00B050',
-          // color: 'black',
+          // color: 'transparent',
+          // legendText: 'Volume',
+          // showInLegend: true,
           dataPoints: dps1,
         }],
       }, {
@@ -163,13 +149,9 @@ function Track() {
           },
         },
         axisY: {
-          title: '成交量',
+          // title: 'Volume',
           // prefix: '$',
           tickLength: 0,
-        },
-        legend: {
-          verticalAlign: 'top',
-          horizontalAlign: 'left',
         },
         toolTip: {
           shared: true,
@@ -182,6 +164,28 @@ function Track() {
           dataPoints: dps2,
         }],
       }],
+      rangeSelector: {
+        height: 50,
+        buttonStyle: {
+          // backgroundColor: '#eccaa0',
+          // backgroundColorOnHover: '#2B3139',
+          // backgroundColorOnSelect: '#2B3139',
+          // borderColor: '#2B3139',
+          borderThickness: 1,
+          labelFontColor: '#4F4F4F',
+          // labelFontSize: 16,
+          // labelFontFamily: 'Noto Sans TC',
+          // labelFontWeight: 'bolder',
+        },
+        inputFields: {
+          valueFormatString: 'YYYY-MM-DD',
+          // borderColor: '#2B3139',
+          // fontFamily: 'Noto Sans TC',
+          // fontSize: 16,
+          // fontColor: '#4F4F4F',
+          // fontWeight: 'bold',
+        },
+      },
       navigator: {
         data: [{
           fontSize: 10,
@@ -265,7 +269,6 @@ function Track() {
 
   useEffect(() => {
     initView();
-    getApiToken();
   }, []);
 
   return (
@@ -281,13 +284,7 @@ function Track() {
         <SearchIcon onClick={() => { updateView(); }} />
       </SearchGroup>
       {isLoaded
-        ? (
-          <ProgressContainer>
-            <div className="spinner-border text-warning" style={style} role="status">
-              <span className="visually-hidden">Loading...</span>
-            </div>
-          </ProgressContainer>
-        )
+        ? <Loading />
         : <CanvasJSStockChart containerProps={containerProp} options={option} ref={canvasRef} />}
       <Footer />
     </Container>
