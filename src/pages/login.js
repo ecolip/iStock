@@ -225,13 +225,9 @@ function Login() {
   });
 
   const updatePrice = () => {
-    console.log(2222222222);
     fetchTaiexOpenDate(today()).then((openDate) => {
-      console.log(openDate);
       const isNew = checkNewPrices(openDate);
-      console.log(1111111);
       if (isNew) {
-        console.log(1111111);
         getCategoryList().then((indexList) => {
           indexList.forEach((item) => {
             fetchPrices(item, openDate).then((priceItem) => {
