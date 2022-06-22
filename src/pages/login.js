@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Footer from '../components/Footer';
 import Button from '../components/Button';
 import googleSrc from '../imgs/google.svg';
-import { googleSignIn, register, signIn } from '../utils/firebase';
-// import api from '../utils/api';
+import {
+  googleSignIn, register, signIn, getCategoryList, updateCategoryPrices, checkNewPrices,
+} from '../utils/firebase';
+import api from '../utils/api';
+import { today, preDay } from '../utils/formatDate';
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -189,6 +192,64 @@ function Login() {
       window.location.href = '/home';
     });
   };
+
+  const fetchPrices = (item, day) => new Promise((resolve) => {
+    const finToken = window.localStorage.getItem('finToken');
+    api.getTodayPrice(finToken, item.stock_id, day).then((res) => {
+      const newItem = {
+        ...item, close: res.data[0].close, spread: res.data[0].spread.toFixed(2), date: day,
+      };
+      resolve(newItem);
+    });
+  });
+
+  const fetchTaiexOpenDate = (date) => new Promise((resolve) => {
+    const finToken = window.localStorage.getItem('finToken');
+    api.getTodayPrice(finToken, 'TAIEX', date).then((res) => {
+      console.log(res.data);
+      if (res.data.length > 0) {
+        console.log(res.data);
+        resolve(date);
+      } else {
+        console.log(333333);
+        fetchTaiexOpenDate(preDay(date));
+      }
+    });
+  });
+
+  const getApiToken = () => new Promise((resolve) => {
+    api.finMindLogin().then((res) => {
+      window.localStorage.setItem('finToken', res.token);
+      resolve(res.token);
+    });
+  });
+
+  const updatePrice = () => {
+    console.log(2222222222);
+    fetchTaiexOpenDate(today()).then((openDate) => {
+      console.log(openDate);
+      const isNew = checkNewPrices(openDate);
+      console.log(1111111);
+      if (isNew) {
+        console.log(1111111);
+        getCategoryList().then((indexList) => {
+          indexList.forEach((item) => {
+            fetchPrices(item, openDate).then((priceItem) => {
+              updateCategoryPrices(priceItem);
+            });
+          });
+        });
+      }
+    });
+  };
+
+  useEffect(() => {
+    getApiToken().then((token) => {
+      if (token) {
+        updatePrice();
+      }
+    });
+  }, []);
 
   return (
     <Container>

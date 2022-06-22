@@ -100,14 +100,14 @@ function Track() {
         axisX: {
           lineThickness: 5,
           tickLength: 0,
-          // scaleBreaks: {
-          //   type: '',
-          //   fillOpacity: 1,
-          //   customBreaks: [{
-          //     startValue: '2015-05-15',
-          //     endValue: today(),
-          //   }],
-          // },
+          scaleBreaks: {
+            type: '',
+            fillOpacity: 1,
+            customBreaks: [{
+              startValue: 0,
+              endValue: today(),
+            }],
+          },
           labelFormatter() {
             return '';
           },

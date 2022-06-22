@@ -3,18 +3,9 @@ import styled from 'styled-components';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Button from '../components/Button';
-import api from '../utils/api';
+import Loading from '../components/Loading';
 import bannerImg from '../imgs/banner1.jpg';
-import { today, preDay } from '../utils/formatDate';
-
-// demo
-// import { useEffect } from 'react';
-// import styled from 'styled-components';
-// import Header from '../components/Header';
-// import Footer from '../components/Footer';
-// import Button from '../components/Button';
-// import bannerImg from '../imgs/banner1.jpg';
-// import { dataHome2 } from '../utils/defaultData';
+import { getNewCategoryPrice } from '../utils/firebase';
 
 const Container = styled.div`
   display: flex;
@@ -165,62 +156,7 @@ const StockText = styled.div`
 
 function Home() {
   const [stockLists, setStockLists] = useState(null);
-
-  const fetchStockIdAndName = () => new Promise((resolve) => {
-    const finToken = window.localStorage.getItem('finToken');
-    const indexList = [];
-    api.getStockList(finToken).then((res) => {
-      res.data.forEach((item) => {
-        if (item.industry_category === '大盤') {
-          const newItem = {};
-          newItem.stock_id = item.stock_id;
-          newItem.stock_name = item.stock_name;
-          indexList.push(newItem);
-        }
-      });
-      res.data.forEach((item) => {
-        if (item.industry_category === 'Index') {
-          const newItem = {};
-          newItem.stock_id = item.stock_id;
-          newItem.stock_name = item.stock_name;
-          indexList.push(newItem);
-        }
-      });
-      resolve(indexList);
-    });
-  });
-
-  const fetchPrice = (item, day) => new Promise((resolve) => {
-    const finToken = window.localStorage.getItem('finToken');
-    api.getTodayPrice(finToken, item.stock_id, day).then((res) => {
-      // console.log(res.data);
-      if (res.data.length > 0) {
-        // console.log('有資料日期:', day);
-        const newItem = {
-          ...item, close: res.data[0].close, spread: res.data[0].spread, date: day,
-        };
-        // console.log(newItem);
-        // console.log('成功有資料');
-        resolve(newItem);
-      }
-      fetchPrice(item, preDay(day));
-    });
-  });
-
-  const fetchStockLists = () => {
-    fetchStockIdAndName().then((indexList) => {
-      const newItems = [];
-      indexList.forEach((item) => {
-        // 暫時給預設日期'2022-06-17', 要改回today()
-        fetchPrice(item, today()).then((newItem) => {
-          // console.log(newItem);
-          newItems.push(newItem);
-        });
-      });
-      // console.log(newItems);
-      setStockLists(newItems);
-    });
-  };
+  const [isLoaded, setIsLoaded] = useState(true);
 
   const verifySpread = (spread) => {
     if (spread < 0) {
@@ -229,9 +165,17 @@ function Home() {
     return false;
   };
 
+  const redirectToSimple = (id) => {
+    window.location.replace('./category');
+    console.log(id);
+  };
+
   const renderList = () => {
     const output = stockLists.map((item) => (
-      <List key={`stock_id_${item.stock_id}`}>
+      <List
+        key={`stock_id_${item.stock_id}`}
+        onClick={() => { redirectToSimple(item.stock_id); }}
+      >
         <StockName>{item.stock_name}</StockName>
         <StockText>今日收盤</StockText>
         <StockClose>{item.close}</StockClose>
@@ -243,7 +187,10 @@ function Home() {
   };
 
   useEffect(() => {
-    fetchStockLists();
+    getNewCategoryPrice().then((lists) => {
+      setStockLists(lists);
+      setIsLoaded(false);
+    });
   }, []);
 
   return (
@@ -261,10 +208,13 @@ function Home() {
       <ListsDiv>
         <ListsContainer>
           <ListTitle>台股大盤與類股表現</ListTitle>
-          <ListContainer>
-            {stockLists && renderList()}
-            {/* {renderList()} */}
-          </ListContainer>
+          {isLoaded
+            ? <Loading />
+            : (
+              <ListContainer>
+                {stockLists && renderList()}
+              </ListContainer>
+            )}
         </ListsContainer>
       </ListsDiv>
       <Footer />
