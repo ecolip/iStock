@@ -211,7 +211,6 @@ function Login() {
         console.log(res.data);
         resolve(date);
       } else {
-        console.log(333333);
         fetchTaiexOpenDate(preDay(date));
       }
     });
