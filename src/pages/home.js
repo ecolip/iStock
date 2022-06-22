@@ -171,7 +171,7 @@ function Home() {
   };
 
   const redirectToCategory = (stockId) => {
-    navigate('./category', { replace: true });
+    navigate('category', { replace: true });
     dispatch({ category: stockId });
   };
 
