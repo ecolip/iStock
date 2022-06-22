@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Footer from '../components/Footer';
 import Button from '../components/Button';
@@ -115,6 +116,7 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState(null);
+  const navigate = useNavigate();
 
   const trimText = () => {
     const triEmail = email.trim();
@@ -183,13 +185,13 @@ function Login() {
       window.localStorage.setItem('firToken', res.accessToken);
       window.localStorage.setItem('user', user);
       clearInput();
-      window.location.href = '/home';
+      navigate('./home', { replace: true });
     });
   };
 
   const firebaseGoogleLogin = () => {
     googleSignIn().then(() => {
-      window.location.href = '/home';
+      navigate('./home', { replace: true });
     });
   };
 
@@ -206,9 +208,7 @@ function Login() {
   const fetchTaiexOpenDate = (date) => new Promise((resolve) => {
     const finToken = window.localStorage.getItem('finToken');
     api.getTodayPrice(finToken, 'TAIEX', date).then((res) => {
-      console.log(res.data);
       if (res.data.length > 0) {
-        console.log(res.data);
         resolve(date);
       } else {
         fetchTaiexOpenDate(preDay(date));

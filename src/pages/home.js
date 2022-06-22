@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import AppContext from '../AppContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Button from '../components/Button';
@@ -157,6 +159,9 @@ const StockText = styled.div`
 function Home() {
   const [stockLists, setStockLists] = useState(null);
   const [isLoaded, setIsLoaded] = useState(true);
+  // eslint-disable-next-line no-unused-vars
+  const [state, dispatch] = useContext(AppContext);
+  const navigate = useNavigate();
 
   const verifySpread = (spread) => {
     if (spread < 0) {
@@ -165,16 +170,16 @@ function Home() {
     return false;
   };
 
-  const redirectToSimple = (id) => {
-    window.location.replace('./category');
-    console.log(id);
+  const redirectToCategory = (stockId) => {
+    navigate('./category', { replace: true });
+    dispatch({ category: stockId });
   };
 
   const renderList = () => {
     const output = stockLists.map((item) => (
       <List
         key={`stock_id_${item.stock_id}`}
-        onClick={() => { redirectToSimple(item.stock_id); }}
+        onClick={() => { redirectToCategory(item.stock_id); }}
       >
         <StockName>{item.stock_name}</StockName>
         <StockText>今日收盤</StockText>

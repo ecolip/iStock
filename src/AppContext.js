@@ -4,7 +4,7 @@ import App from './App';
 const AppContext = React.createContext({});
 
 export const initialState = {
-  category: '',
+  category: 'TAIEX',
 };
 
 const actionFunction = (state, action) => {
