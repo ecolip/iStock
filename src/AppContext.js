@@ -5,6 +5,7 @@ const AppContext = React.createContext({});
 
 export const initialState = {
   category: 'TAIEX',
+  openDate: '',
 };
 
 const actionFunction = (state, action) => {

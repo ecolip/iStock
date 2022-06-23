@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Footer from '../components/Footer';
 import Button from '../components/Button';
 import googleSrc from '../imgs/google.svg';
+import AppContext from '../AppContext';
 import {
   googleSignIn, register, signIn, getCategoryList, updateCategoryPrices, checkNewPrices,
 } from '../utils/firebase';
@@ -117,6 +118,8 @@ function Login() {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState(null);
   const navigate = useNavigate();
+  // eslint-disable-next-line no-unused-vars
+  const [state, dispatch] = useContext(AppContext);
 
   const trimText = () => {
     const triEmail = email.trim();
@@ -195,47 +198,43 @@ function Login() {
     });
   };
 
-  const fetchPrices = (item, day) => new Promise((resolve) => {
+  const fetchPrices = async (item, day) => {
     const finToken = window.localStorage.getItem('finToken');
-    api.getTodayPrice(finToken, item.stock_id, day).then((res) => {
-      const newItem = {
-        ...item, close: res.data[0].close, spread: res.data[0].spread.toFixed(2), date: day,
-      };
-      resolve(newItem);
-    });
-  });
+    const res = await api.getTodayPrice(finToken, item.stock_id, day);
+    const newItem = {
+      ...item, close: res.data[0].close, spread: res.data[0].spread.toFixed(2), date: day,
+    };
+    return newItem;
+  };
 
-  const fetchTaiexOpenDate = (date) => new Promise((resolve) => {
+  const fetchTaiexOpenDate = async (date) => {
     const finToken = window.localStorage.getItem('finToken');
-    api.getTodayPrice(finToken, 'TAIEX', date).then((res) => {
-      if (res.data.length > 0) {
-        resolve(date);
-      } else {
-        fetchTaiexOpenDate(preDay(date));
-      }
-    });
-  });
+    const res = await api.getTodayPrice(finToken, 'TAIEX', date);
+    if (res.data.length > 0) {
+      dispatch({ openDate: date });
+      return date;
+    }
+    return fetchTaiexOpenDate(preDay(date));
+  };
 
-  const getApiToken = () => new Promise((resolve) => {
-    api.finMindLogin().then((res) => {
-      window.localStorage.setItem('finToken', res.token);
-      resolve(res.token);
-    });
-  });
-
-  const updatePrice = () => {
-    fetchTaiexOpenDate(today()).then((openDate) => {
-      const isNew = checkNewPrices(openDate);
-      if (isNew) {
-        getCategoryList().then((indexList) => {
-          indexList.forEach((item) => {
-            fetchPrices(item, openDate).then((priceItem) => {
-              updateCategoryPrices(priceItem);
-            });
+  const updatePrice = async () => {
+    const openDate = await fetchTaiexOpenDate(today());
+    const isNew = checkNewPrices(openDate);
+    if (!isNew) {
+      getCategoryList().then((indexList) => {
+        indexList.forEach((item) => {
+          fetchPrices(item, openDate).then((priceItem) => {
+            updateCategoryPrices(priceItem);
           });
         });
-      }
-    });
+      });
+    }
+  };
+
+  const getApiToken = async () => {
+    const res = await api.finMindLogin();
+    window.localStorage.setItem('finToken', res.token);
+    return res.token;
   };
 
   useEffect(() => {
