@@ -185,7 +185,7 @@ function Home() {
         <StockName>{item.stock_name}</StockName>
         <StockText>今日收盤</StockText>
         <StockClose>{item.close}</StockClose>
-        <StockText>漲跌幅</StockText>
+        <StockText>漲跌</StockText>
         <StockSpread green={verifySpread(item.spread)}>{item.spread}</StockSpread>
       </List>
     ));
