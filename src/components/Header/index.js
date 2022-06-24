@@ -71,7 +71,7 @@ const PersonIcon = styled(Person)`
   margin-right: 15px;
   color: #FCD535;
   cursor: pointer;
-  tension: opacity 0.1s linear;
+  transition: opacity 0.1s linear;
   :hover {
     opacity: 0.9;
   }
@@ -147,8 +147,7 @@ function Header() {
           <Logo>iStock</Logo>
         </Link>
         <LeftContainer>
-          <NavItem mr>當日行情</NavItem>
-          <NavItem mr>個股</NavItem>
+          <NavItem mr>個股資訊</NavItem>
           <Link to="/track">
             <NavItem mr>走勢圖</NavItem>
           </Link>
@@ -173,8 +172,8 @@ function Header() {
           <MobileNavContainer displayBlock>
             <CloseIcon onClick={() => { setOpenNav(false); }} />
             <Button sm w100 mb1>登出</Button>
-            <NavItem px1 fzBig>當日行情</NavItem>
-            <NavItem px1 fzBig>個股</NavItem>
+            {/* <NavItem px1 fzBig>當日行情</NavItem> */}
+            <NavItem px1 fzBig>個股資訊</NavItem>
             <Link to="/track">
               <NavItem px1 fzBig>走勢圖</NavItem>
             </Link>
