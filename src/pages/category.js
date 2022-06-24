@@ -1,15 +1,17 @@
-/* eslint-disable consistent-return */
+/* eslint-disable no-unused-vars */
 import { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { SearchOutline } from '@styled-icons/evaicons-outline';
 import { ArrowSortedUp, ArrowSortedDown } from '@styled-icons/typicons';
 import { Star } from '@styled-icons/boxicons-regular';
+import { Star as filledStar } from '@styled-icons/boxicons-solid';
 import AppContext from '../AppContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Loading from '../components/Loading';
 import api from '../utils/api';
 import { transferRedirectKey } from '../utils/table';
+import { getTrackStock, addTrackStock, removeTrackStock } from '../utils/firebase';
 
 const handelColor = (props) => {
   if (props.green) {
@@ -33,21 +35,32 @@ const ContextDiv = styled.div`
   background-color: #0B0E11;
 `;
 const ContextContainer = styled.div`
-  
+  padding: 80px 30px 30px;
+  @media (min-width: 992px) {
+    padding: 30px;
+  }
   @media (min-width: 1200px) {
     width: 1200px;
     margin: 0 auto;
   }
 `;
 const TitleGroup = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 50px 0;
+  padding: 30px 0;
+  @media (min-width: 992px) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px 0;
+  }
 `;
 const Title = styled.div`
+  padding-bottom: 10px;
+  text-align: center;
   font-size: 32px;
   color: white;
+  @media (min-width: 992px) {
+    padding-bottom: 0;
+  }
 `;
 const SearchGroup = styled.div`
   border: ${(props) => (props.focus ? '1px solid #F0B90B' : '1px solid #848E9C')};
@@ -55,9 +68,13 @@ const SearchGroup = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin: 0 auto;
   width: 300px;
   padding: 0 13px;
   border-radius: 5px;
+  @media (min-width: 992px) {
+    margin: 0;
+  }
 `;
 const Input = styled.input`
   width: 70%;
@@ -115,6 +132,7 @@ const ListsContainer = styled.div`
   }
 `;
 const Table = styled.table`
+  margin-bottom: ${(props) => (props.mb100 ? '100px' : '0')};
   width: 100%;
 `;
 const TrTitle = styled.tr`
@@ -132,6 +150,7 @@ const Thead = styled.thead`
 const Tbody = styled.tbody`
 `;
 const Th = styled.th`
+  padding-top: ${(props) => (props.pt10 ? '5px' : '0')};
   color: white;
 `;
 const Td = styled.td`
@@ -156,14 +175,27 @@ const StarIcon = styled(Star)`
     height: 28px;
   }
 `;
+const FilledStarIcon = styled(filledStar)`
+  width: 25px;
+  height: 25px;
+  padding: 1px;
+  color: #F5C829;
+  cursor: pointer;
+  :hover {
+    opacity: 0.6;
+  }
+  @media (min-width: 360px) {
+    width: 28px;
+    height: 28px;
+  }
+`;
 
 function Category() {
-  const [isFocus, setIsFocus] = useState(false);
-  const [stockId, setStockId] = useState('');
   const [lists, setLists] = useState([]);
+  const [stockId, setStockId] = useState('');
+  const [isFocus, setIsFocus] = useState(false);
   const [isCloseUp, setIsCloseUp] = useState(false);
   const [isSpreadUp, setIsSpreadUp] = useState(false);
-  // eslint-disable-next-line no-unused-vars
   const [state, dispatch] = useContext(AppContext);
 
   const verifySpread = (spread) => {
@@ -172,6 +204,96 @@ function Category() {
     }
     return false;
   };
+
+  const fetchCategoryStocks = async () => {
+    const category = transferRedirectKey(state.category);
+    const token = window.localStorage.getItem('finToken');
+    const res = await api.getStockList(token);
+    const { data } = res;
+    const stockList = data.filter((item) => item.industry_category === category);
+    return stockList;
+  };
+
+  const updateLists = (id) => {
+    const output = lists.map((item) => {
+      if (item.stock_id === id) {
+        const newItem = {
+          ...item,
+          star: !item.star,
+        };
+        return newItem;
+      }
+      return item;
+    });
+    setLists(output);
+  };
+
+  const removeDBTrack = (id) => {
+    updateLists(id);
+    removeTrackStock(id);
+  };
+
+  const addDBTrack = (id) => {
+    updateLists(id);
+    addTrackStock(id);
+  };
+
+  const fetchCategoryPrice = async (tracks) => {
+    const stockPrices = [];
+    const token = window.localStorage.getItem('finToken');
+    const stockList = await fetchCategoryStocks();
+    await Promise.all(stockList.map(async (item) => {
+      const res = await api.getTodayPrice(token, item.stock_id, state.openDate);
+      const stockItem = res.data[0];
+      if (item.stock_id) {
+        const newItem = {
+          ...stockItem,
+          stock_name: item.stock_name,
+          industry_category: item.industry_category,
+          star: tracks.includes(item.stock_id),
+        };
+        stockPrices.push(newItem);
+      }
+    }));
+    stockPrices.sort((a, b) => b.close - a.close);
+    setLists(stockPrices);
+  };
+
+  const sortSpread = (method) => {
+    if (method === 'down') {
+      setIsSpreadUp(false);
+      lists.sort((a, b) => b.spread - a.spread);
+    } else {
+      setIsSpreadUp(true);
+      lists.sort((a, b) => a.spread - b.spread);
+    }
+  };
+
+  const sortClose = (method) => {
+    if (method === 'down') {
+      setIsCloseUp(false);
+      lists.sort((a, b) => b.close - a.close);
+    } else {
+      setIsCloseUp(true);
+      lists.sort((a, b) => a.close - b.close);
+    }
+  };
+
+  // const fetchPrices = () => {
+  //   const searchId = stockId.trim();
+  //   const result = [];
+  //   lists.forEach((item) => {
+  //     if (item.stock_id === searchId) {
+  //       result.push(item);
+  //     }
+  //   });
+  //   if (result.length > 0) {
+  //     setLists(result);
+  //     setStockId('');
+  //   } else {
+  //     alert('查無資料，請重新輸入股票代碼！');
+  //   }
+  // };
 
   const renderList = () => {
     const output = lists.map((item) => (
@@ -191,63 +313,19 @@ function Category() {
           {item.spread}
         </Td>
         <Td>
-          <StarIcon />
+          {item.star
+            ? <FilledStarIcon onClick={() => { removeDBTrack(item.stock_id); }} />
+            : <StarIcon onClick={() => { addDBTrack(item.stock_id); }} />}
         </Td>
       </Tr>
     ));
     return output;
   };
 
-  const fetchCategoryStocks = async () => {
-    const category = transferRedirectKey(state.category);
-    const token = window.localStorage.getItem('finToken');
-    const res = await api.getStockList(token);
-    const { data } = res;
-    const stockList = data.filter((item) => item.industry_category === category);
-    return stockList;
-  };
-
-  const fetchCategoryPrice = async () => {
-    const stockPrices = [];
-    const token = window.localStorage.getItem('finToken');
-    const stockList = await fetchCategoryStocks();
-    await Promise.all(stockList.map(async (item) => {
-      const res = await api.getTodayPrice(token, item.stock_id, state.openDate);
-      const stockItem = res.data[0];
-      if (item.stock_id) {
-        const newItem = {
-          ...stockItem,
-          stock_name: item.stock_name,
-          industry_category: item.industry_category,
-        };
-        stockPrices.push(newItem);
-      }
-    }));
-    stockPrices.sort((a, b) => b.close - a.close);
-    setLists(stockPrices);
-  };
-
-  const sortSpread = (method) => {
-    if (method === 'down') {
-      setIsSpreadUp(false);
-      lists.sort((a, b) => b.spread - a.spread);
-    } else {
-      setIsSpreadUp(true);
-      lists.sort((a, b) => a.spread - b.spread);
-    }
-  };
-  const sortClose = (method) => {
-    if (method === 'down') {
-      setIsCloseUp(false);
-      lists.sort((a, b) => b.close - a.close);
-    } else {
-      setIsCloseUp(true);
-      lists.sort((a, b) => a.close - b.close);
-    }
-  };
-
   useEffect(() => {
-    fetchCategoryPrice();
+    getTrackStock().then((tracks) => {
+      fetchCategoryPrice(tracks);
+    });
   }, []);
 
   return (
@@ -257,7 +335,7 @@ function Category() {
         <ContextContainer>
           <TitleGroup>
             <Title>當日收盤行情</Title>
-            <SearchGroup focus={isFocus}>
+            {/* <SearchGroup focus={isFocus}>
               <Input
                 type="text"
                 value={stockId}
@@ -267,20 +345,21 @@ function Category() {
                 onBlur={() => { setIsFocus(false); }}
               />
               <SearchIcon />
-            </SearchGroup>
+              <SearchIcon onClick={() => { fetchPrices(); }} />
+            </SearchGroup> */}
           </TitleGroup>
           <ListsContainer>
-            <Table>
+            <Table mb100={lists.length < 1}>
               <Thead>
                 <TrTitle>
                   <Th>代號</Th>
                   <Th>名稱</Th>
-                  <Th>價格
+                  <Th pt10>價格
                     {isCloseUp
                       ? <ArrowUp onClick={() => { sortClose('down'); }} />
                       : <ArrowDown onClick={() => { sortClose('up'); }} />}
                   </Th>
-                  <Th>漲跌
+                  <Th pt10>漲跌
                     {isSpreadUp
                       ? <ArrowUp onClick={() => { sortSpread('down'); }} />
                       : <ArrowDown onClick={() => { sortSpread('up'); }} />}

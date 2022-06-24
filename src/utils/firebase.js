@@ -4,7 +4,7 @@ import {
   createUserWithEmailAndPassword, signInWithEmailAndPassword,
 } from 'firebase/auth';
 import {
-  getFirestore, collection, query, onSnapshot, setDoc, doc, getDoc,
+  getFirestore, collection, query, onSnapshot, setDoc, doc, getDoc, updateDoc,
 } from 'firebase/firestore';
 import firebaseConfig from '../firebaseConfig';
 
@@ -82,6 +82,38 @@ const updateCategoryPrices = (item) => {
   setDoc(doc(db, 'categoryPrices', item.stock_id), item);
 };
 
+const getTrackStock = async () => {
+  const user = window.localStorage.getItem('user');
+  const { email } = JSON.parse(user);
+  const docRef = doc(db, 'userTrackStocks', email);
+  const docSnap = await getDoc(docRef);
+  return docSnap.data().track;
+};
+
+const addTrackStock = async (id) => {
+  const user = window.localStorage.getItem('user');
+  const { email } = JSON.parse(user);
+  const docRef = doc(db, 'userTrackStocks', email);
+  const initTrack = await getTrackStock();
+  const newTrack = [...initTrack, id];
+  updateDoc(docRef, {
+    track: newTrack,
+  });
+};
+
+const removeTrackStock = async (id) => {
+  const user = window.localStorage.getItem('user');
+  const { email } = JSON.parse(user);
+  const docRef = doc(db, 'userTrackStocks', email);
+  const initTrack = await getTrackStock();
+  const newTrack = [...initTrack];
+  const index = initTrack.indexOf(id);
+  newTrack.splice(index, 1);
+  updateDoc(docRef, {
+    track: newTrack,
+  });
+};
+
 export {
   googleSignIn,
   register,
@@ -90,4 +122,7 @@ export {
   updateCategoryPrices,
   checkNewPrices,
   getNewCategoryPrice,
+  getTrackStock,
+  addTrackStock,
+  removeTrackStock,
 };
