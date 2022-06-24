@@ -13,7 +13,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
+  background-color: #0B0E11;
 `;
 const Banner = styled.div`
   width: 100%;
