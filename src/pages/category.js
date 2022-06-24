@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
-import { SearchOutline } from '@styled-icons/evaicons-outline';
+// import { SearchOutline } from '@styled-icons/evaicons-outline';
 import { ArrowSortedUp, ArrowSortedDown } from '@styled-icons/typicons';
 import { Star } from '@styled-icons/boxicons-regular';
 import { Star as filledStar } from '@styled-icons/boxicons-solid';
@@ -257,7 +257,7 @@ function Category() {
     await Promise.all(stockList.map(async (item) => {
       const res = await api.getTodayPrice(token, item.stock_id, state.openDate);
       const stockItem = res.data[0];
-      if (item.stock_id) {
+      if (stockItem) {
         const newItem = {
           ...stockItem,
           stock_name: item.stock_name,
@@ -322,7 +322,7 @@ function Category() {
           green={verifySpread(item.spread)}
           red={!verifySpread(item.spread)}
         >
-          {item.spread}
+          {item.spread === 0 ? '-' : item.spread}
         </Td>
         <Td>
           {item.star
