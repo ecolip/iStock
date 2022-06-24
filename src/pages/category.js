@@ -62,72 +62,80 @@ const Title = styled.div`
     padding-bottom: 0;
   }
 `;
-const SearchGroup = styled.div`
-  border: ${(props) => (props.focus ? '1px solid #F0B90B' : '1px solid #848E9C')};
+// const SearchGroup = styled.div`
+//   border: ${(props) => (props.focus ? '1px solid #F0B90B' : '1px solid #848E9C')};
 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0 auto;
-  width: 300px;
-  padding: 0 13px;
-  border-radius: 5px;
-  @media (min-width: 992px) {
-    margin: 0;
-  }
-`;
-const Input = styled.input`
-  width: 70%;
-  height: 40px;
-  border: none;
-  border-radius: 5px;
-  outline: none;
-  font-size: 20px;
-  color: white;
-  background: transparent;
-  ::placeholder {
-    color: white;
-  }
-  ::-webkit-input-placeholder {
-    color: white;
-  }
-  :-ms-input-placeholder {
-    color: white;
-  }
-  ::-moz-placeholder {
-    color: white;
-    opacity: 1;
-  }
-`;
-const SearchIcon = styled(SearchOutline)`
-  width: 28px;
-  height: 28px;
-  padding: 2px;
-  color: #F5C829;
-  cursor: pointer;
-  :hover {
-    width: 30px;
-    height: 30px;
-  }
-`;
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   margin: 0 auto;
+//   width: 300px;
+//   padding: 0 13px;
+//   border-radius: 5px;
+//   @media (min-width: 992px) {
+//     margin: 0;
+//   }
+// `;
+// const Input = styled.input`
+//   width: 70%;
+//   height: 40px;
+//   border: none;
+//   border-radius: 5px;
+//   outline: none;
+//   font-size: 20px;
+//   color: white;
+//   background: transparent;
+//   ::placeholder {
+//     color: white;
+//   }
+//   ::-webkit-input-placeholder {
+//     color: white;
+//   }
+//   :-ms-input-placeholder {
+//     color: white;
+//   }
+//   ::-moz-placeholder {
+//     color: white;
+//     opacity: 1;
+//   }
+// `;
+// const SearchIcon = styled(SearchOutline)`
+//   width: 28px;
+//   height: 28px;
+//   padding: 2px;
+//   color: #F5C829;
+//   cursor: pointer;
+//   :hover {
+//     width: 30px;
+//     height: 30px;
+//   }
+// `;
 const ArrowUp = styled(ArrowSortedUp)`
-  width: 28px;
-  height: 28px;
+  width: 23px;
+  height: 23px;
   color: #F5C829;
   cursor: pointer;
+    @media (min-width: 576px) {
+    width: 28px;
+    height: 28px;
+  }
 `;
 const ArrowDown = styled(ArrowSortedDown)`
-  width: 28px;
-  height: 28px;
+  width: 23px;
+  height: 23px;
   color: #F5C829;
   cursor: pointer;
+  @media (min-width: 576px) {
+    width: 28px;
+    height: 28px;
+  }
 `;
 const ListsContainer = styled.div`
   min-height: 55vh;
-  padding: 20px 20px;
+  padding: 10px 20px;
   background-color: #181A20;
   border-radius: 8px;
-  @media (min-width: 360px) {
+  @media (min-width: 576px) {
     padding: 20px 50px;
   }
 `;
@@ -152,12 +160,16 @@ const Tbody = styled.tbody`
 const Th = styled.th`
   padding-top: ${(props) => (props.pt10 ? '5px' : '0')};
   color: white;
+  font-size: 15px;
+  @media (min-width: 576px) {
+    font-size: 18px;
+  }
 `;
 const Td = styled.td`
   color: ${(props) => handelColor(props)};
   font-size: 15px;
   font-weight: bold;
-  @media (min-width: 360px) {
+  @media (min-width: 576px) {
     font-size: 18px;
   }
 `;
@@ -170,7 +182,7 @@ const StarIcon = styled(Star)`
   :hover {
     opacity: 0.6;
   }
-  @media (min-width: 360px) {
+  @media (min-width: 576px) {
     width: 28px;
     height: 28px;
   }
@@ -184,7 +196,7 @@ const FilledStarIcon = styled(filledStar)`
   :hover {
     opacity: 0.6;
   }
-  @media (min-width: 360px) {
+  @media (min-width: 576px) {
     width: 28px;
     height: 28px;
   }
@@ -364,7 +376,7 @@ function Category() {
                       ? <ArrowUp onClick={() => { sortSpread('down'); }} />
                       : <ArrowDown onClick={() => { sortSpread('up'); }} />}
                   </Th>
-                  <Th>追蹤</Th>
+                  <Th pt10>追蹤</Th>
                 </TrTitle>
               </Thead>
               <Tbody>
