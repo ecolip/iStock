@@ -68,6 +68,7 @@ const getNewCategoryPrice = () => new Promise((resolve) => {
     querySnapshot.forEach((item) => {
       list.push(item.data());
     });
+    list.sort((a, b) => b.spread - a.spread);
     resolve(list);
   });
 });
