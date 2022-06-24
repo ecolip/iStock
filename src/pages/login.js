@@ -28,7 +28,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
+  /* height: 100vh; */
   margin: 0 auto;
   background-color: #181A20;
 `;
@@ -219,7 +219,7 @@ function Login() {
 
   const updatePrice = async () => {
     const openDate = await fetchTaiexOpenDate(today());
-    const isNew = checkNewPrices(openDate);
+    const isNew = await checkNewPrices(openDate);
     if (!isNew) {
       getCategoryList().then((indexList) => {
         indexList.forEach((item) => {
