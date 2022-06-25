@@ -10,7 +10,7 @@ const Container = styled.div`
   display: none;
   align-items: center;
   width: 100%;
-  height: 90px;
+  height: 80px;
   padding: 0 30px;
   background-color: #181A20;
   border-bottom: 1px solid #F5F5F5;
@@ -152,7 +152,9 @@ function Header() {
             <NavItem mr>走勢圖</NavItem>
           </Link>
           <NavItem mr>券商位置</NavItem>
-          <NavItem>討論區</NavItem>
+          <Link to="/post">
+            <NavItem>討論區</NavItem>
+          </Link>
         </LeftContainer>
         <RightContainer>
           <PersonContainer>
@@ -178,7 +180,9 @@ function Header() {
               <NavItem px1 fzBig>走勢圖</NavItem>
             </Link>
             <NavItem px1 fzBig>券商位置</NavItem>
-            <NavItem px1 fzBig>討論區</NavItem>
+            <Link to="/post">
+              <NavItem px1 fzBig>討論區</NavItem>
+            </Link>
           </MobileNavContainer>
         </MobileBackground>
       )}
