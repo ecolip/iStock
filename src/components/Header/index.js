@@ -7,6 +7,7 @@ import { Close } from '@styled-icons/material';
 import Button from '../Button';
 
 const Container = styled.div`
+  position: fixed;
   display: none;
   align-items: center;
   width: 100%;

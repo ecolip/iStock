@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
-// import { SearchOutline } from '@styled-icons/evaicons-outline';
 import { ArrowSortedUp, ArrowSortedDown } from '@styled-icons/typicons';
 import { Star } from '@styled-icons/boxicons-regular';
 import { Star as filledStar } from '@styled-icons/boxicons-solid';
@@ -27,6 +26,7 @@ const Container = styled.div`
   flex-direction: column;
   width: 100%;
   min-height: 100vh;
+  padding-top: 50px;
   background-color: #0B0E11;
 `;
 const ContextDiv = styled.div`
@@ -50,7 +50,7 @@ const TitleGroup = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 50px 0;
+    padding: 40px 0;
   }
 `;
 const Title = styled.div`
@@ -62,54 +62,6 @@ const Title = styled.div`
     padding-bottom: 0;
   }
 `;
-// const SearchGroup = styled.div`
-//   border: ${(props) => (props.focus ? '1px solid #F0B90B' : '1px solid #848E9C')};
-
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-//   margin: 0 auto;
-//   width: 300px;
-//   padding: 0 13px;
-//   border-radius: 5px;
-//   @media (min-width: 992px) {
-//     margin: 0;
-//   }
-// `;
-// const Input = styled.input`
-//   width: 70%;
-//   height: 40px;
-//   border: none;
-//   border-radius: 5px;
-//   outline: none;
-//   font-size: 20px;
-//   color: white;
-//   background: transparent;
-//   ::placeholder {
-//     color: white;
-//   }
-//   ::-webkit-input-placeholder {
-//     color: white;
-//   }
-//   :-ms-input-placeholder {
-//     color: white;
-//   }
-//   ::-moz-placeholder {
-//     color: white;
-//     opacity: 1;
-//   }
-// `;
-// const SearchIcon = styled(SearchOutline)`
-//   width: 28px;
-//   height: 28px;
-//   padding: 2px;
-//   color: #F5C829;
-//   cursor: pointer;
-//   :hover {
-//     width: 30px;
-//     height: 30px;
-//   }
-// `;
 const ArrowUp = styled(ArrowSortedUp)`
   width: 23px;
   height: 23px;
@@ -204,8 +156,6 @@ const FilledStarIcon = styled(filledStar)`
 
 function Category() {
   const [lists, setLists] = useState([]);
-  const [stockId, setStockId] = useState('');
-  const [isFocus, setIsFocus] = useState(false);
   const [isCloseUp, setIsCloseUp] = useState(false);
   const [isSpreadUp, setIsSpreadUp] = useState(false);
   const [state, dispatch] = useContext(AppContext);
@@ -291,22 +241,6 @@ function Category() {
     }
   };
 
-  // const fetchPrices = () => {
-  //   const searchId = stockId.trim();
-  //   const result = [];
-  //   lists.forEach((item) => {
-  //     if (item.stock_id === searchId) {
-  //       result.push(item);
-  //     }
-  //   });
-  //   if (result.length > 0) {
-  //     setLists(result);
-  //     setStockId('');
-  //   } else {
-  //     alert('查無資料，請重新輸入股票代碼！');
-  //   }
-  // };
-
   const renderList = () => {
     const output = lists.map((item) => (
       <Tr key={item.stock_id}>
@@ -346,19 +280,7 @@ function Category() {
       <ContextDiv>
         <ContextContainer>
           <TitleGroup>
-            <Title>當日收盤行情</Title>
-            {/* <SearchGroup focus={isFocus}>
-              <Input
-                type="text"
-                value={stockId}
-                placeholder="請輸入股票代號"
-                onChange={(e) => { setStockId(e.target.value); }}
-                onFocus={() => { setIsFocus(true); }}
-                onBlur={() => { setIsFocus(false); }}
-              />
-              <SearchIcon />
-              <SearchIcon onClick={() => { fetchPrices(); }} />
-            </SearchGroup> */}
+            <Title>最新收盤行情</Title>
           </TitleGroup>
           <ListsContainer>
             <Table mb100={lists.length < 1}>

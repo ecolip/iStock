@@ -19,7 +19,7 @@ const Container = styled.div`
 const Banner = styled.div`
   width: 100%;
   background-color: #0B0E11;
-  padding: 50px 20px;
+  padding: 120px 20px;
 
   @media (min-width: 1200px){
     padding: 100px 20px;
