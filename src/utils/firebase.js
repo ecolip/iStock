@@ -180,7 +180,8 @@ const getResponsePosts = async (uuid) => {
 const addResponsePost = async (uuid, content) => {
   const user = window.localStorage.getItem('user');
   const { email } = JSON.parse(user);
-  const timestamp = Date.now();
+  const time = Date.now() / 1000;
+  const timestamp = parseInt(time, 10);
   const docRef = doc(db, 'responsePosts', uuid);
   const docSnap = await getDoc(docRef);
   const { data } = docSnap.data();
