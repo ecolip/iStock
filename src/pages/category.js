@@ -36,9 +36,6 @@ const ContextDiv = styled.div`
 `;
 const ContextContainer = styled.div`
   padding: 80px 30px 30px;
-  @media (min-width: 992px) {
-    padding: 30px;
-  }
   @media (min-width: 1200px) {
     width: 1200px;
     margin: 0 auto;
