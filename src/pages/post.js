@@ -210,7 +210,7 @@ const MessageText = styled.div`
   font-weight: 500;
 `;
 const WriteInput = styled.input`
-  width: 24%;
+  width: 200px;
   height: 37px;
   padding: 10px;
   font-size: 15px;
@@ -325,19 +325,19 @@ function Post() {
     const chatTrim = chat.trim();
     if (!chatTrim.length > 0) {
       alert('請輸入討論文字！');
+      return;
     }
     if (!chatId.length > 0) {
-      const name = await compareStockId('TAIEX');
-      addStockPosts('TAIEX', name, chatTrim);
       setChatId('');
       setChat('');
+      addStockPosts('TAIEX', '加權指數', chatTrim);
       fetchPosts();
     } else {
       const name = await compareStockId(chatId);
       if (name) {
-        addStockPosts(chatId, name, chatTrim);
         setChatId('');
         setChat('');
+        addStockPosts(chatId, name, chatTrim);
         fetchPosts();
       }
     }
@@ -373,22 +373,24 @@ function Post() {
     setIsOpen(false);
   };
 
-  const sendResponse = () => {
+  const sendResponse = async () => {
     const { uuid } = resInfo;
     const resChatTrim = resChat.trim();
     if (!resChatTrim.length > 0) {
       alert('請輸入討論文字！');
     } else {
-      addResponsePost(uuid, resChatTrim);
-      getResponsePosts(uuid).then((data) => {
+      const res = await addResponsePost(uuid, resChatTrim);
+      if (res) {
+        setResChat('');
+        const data = await getResponsePosts(uuid);
         setResponsePosts(data);
-      });
+      }
     }
   };
 
   const renderPost = () => {
     const output = posts.map((item) => (
-      <PostItem key={item.timestamp}>
+      <PostItem key={`post-${item.uuid}`}>
         <AuthorContainer>
           <Author>{item.author}</Author>
           <Time>{getDateDiff(item.timestamp * 1000)}</Time>
@@ -418,7 +420,7 @@ function Post() {
 
   const renderDialog = () => {
     const output = responsePosts.map((item) => (
-      <Dialog key={item.timestamp}>
+      <Dialog key={`response-${item.timestamp}`}>
         <AuthorContainer>
           <Author>{item.author}</Author>
           <Time>{getDateDiff(item.timestamp * 1000)}</Time>

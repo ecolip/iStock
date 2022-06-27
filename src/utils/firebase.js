@@ -169,6 +169,13 @@ const addHeart = (uuid) => {
   });
 };
 
+const addChat = (uuid) => {
+  const docRef = doc(db, 'stockPosts', uuid);
+  updateDoc(docRef, {
+    chat: increment(1),
+  });
+};
+
 const getResponsePosts = async (uuid) => {
   const docRef = doc(db, 'responsePosts', uuid);
   const docSnap = await getDoc(docRef);
@@ -177,7 +184,7 @@ const getResponsePosts = async (uuid) => {
   return result;
 };
 
-const addResponsePost = async (uuid, content) => {
+const addResponsePost = async (uuid, context) => {
   const user = window.localStorage.getItem('user');
   const { email } = JSON.parse(user);
   const time = Date.now() / 1000;
@@ -187,13 +194,15 @@ const addResponsePost = async (uuid, content) => {
   const { data } = docSnap.data();
   const newItem = {
     author: email,
-    content,
+    context,
     timestamp,
   };
   const newData = [...data, newItem];
   updateDoc(docRef, {
     data: newData,
   });
+  addChat(uuid);
+  return true;
 };
 
 export {
