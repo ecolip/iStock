@@ -350,7 +350,6 @@ function Post() {
     } else {
       setMessage(null);
       setPosts(res);
-      chatId.current = stockId;
     }
     setStockId('');
     setIsLoaded(false);
@@ -443,7 +442,7 @@ function Post() {
             <Title>討論專區</Title>
           </TitleContainer>
           <ButtonGroup mb100={isLoaded}>
-            <Button sm1>全部</Button>
+            <Button sm1 onClick={() => { fetchPosts(); }}>全部</Button>
             <SearchGroup focus={isFocus}>
               <Input
                 type="text"
