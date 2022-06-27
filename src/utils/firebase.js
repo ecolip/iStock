@@ -145,7 +145,8 @@ const addStockPosts = async (id, name, context) => {
   const { email } = JSON.parse(user);
   const postRef = doc(collection(db, 'stockPosts'));
   const docRef = doc(db, 'responsePosts', postRef.id);
-  const timestamp = Date.now();
+  const time = Date.now() / 1000;
+  const timestamp = parseInt(time, 10);
   await setDoc(postRef, {
     author: email,
     stock_id: id,
@@ -183,14 +184,12 @@ const addResponsePost = async (uuid, content) => {
   const docRef = doc(db, 'responsePosts', uuid);
   const docSnap = await getDoc(docRef);
   const { data } = docSnap.data();
-  console.log(data);
   const newItem = {
     author: email,
     content,
     timestamp,
   };
   const newData = [...data, newItem];
-  console.log(newData);
   updateDoc(docRef, {
     data: newData,
   });
