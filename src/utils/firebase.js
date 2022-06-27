@@ -4,7 +4,7 @@ import {
   createUserWithEmailAndPassword, signInWithEmailAndPassword,
 } from 'firebase/auth';
 import {
-  getFirestore, collection, query, onSnapshot, setDoc, doc, getDoc, updateDoc,
+  getFirestore, collection, query, onSnapshot, setDoc, doc, getDoc, updateDoc, where, increment,
 } from 'firebase/firestore';
 import firebaseConfig from '../firebaseConfig';
 
@@ -12,6 +12,20 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
+
+const signIn = (email, password) => new Promise((resolve, reject) => {
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const { user } = userCredential;
+      // console.log(user);
+      resolve(user);
+    }).catch((error) => {
+      // console.log(error);
+      reject(error.code);
+      // const errorCode = error.code;
+      // const errorMessage = error.message;
+    });
+});
 
 const googleSignIn = () => new Promise((resolve) => {
   signInWithPopup(auth, provider)
@@ -33,20 +47,6 @@ const register = (email, password) => new Promise((resolve) => {
     .then((userCredential) => {
       const { user } = userCredential;
       resolve(user);
-    });
-});
-
-const signIn = (email, password) => new Promise((resolve, reject) => {
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const { user } = userCredential;
-      // console.log(user);
-      resolve(user);
-    }).catch((error) => {
-      // console.log(error);
-      reject(error.code);
-      // const errorCode = error.code;
-      // const errorMessage = error.message;
     });
 });
 
@@ -115,10 +115,66 @@ const removeTrackStock = async (id) => {
   });
 };
 
+const getAllPosts = () => new Promise((resolve) => {
+  const q = query(collection(db, 'stockPosts'));
+  const list = [];
+  onSnapshot(q, (querySnapshot) => {
+    querySnapshot.forEach((item) => {
+      list.push(item.data());
+    });
+    list.sort((a, b) => b.timestamp - a.timestamp);
+    resolve(list);
+  });
+});
+
+const getStockPosts = (id) => new Promise((resolve) => {
+  const q = query(collection(db, 'stockPosts'), where('stock_id', '==', id));
+  const list = [];
+  onSnapshot(q, (querySnapshot) => {
+    querySnapshot.forEach((item) => {
+      list.push(item.data());
+    });
+    list.sort((a, b) => b.timestamp - a.timestamp);
+    resolve(list);
+  });
+});
+
+const addStockPosts = async (id, name, context) => {
+  const user = window.localStorage.getItem('user');
+  const { email } = JSON.parse(user);
+  const postRef = doc(collection(db, 'stockPosts'));
+  const docRef = doc(db, 'responsePosts', postRef.id);
+  const timestamp = Date.now();
+  await setDoc(postRef, {
+    author: email,
+    stock_id: id,
+    stock_name: name,
+    context,
+    chat: 0,
+    heart: 0,
+    timestamp,
+    uuid: postRef.id,
+  });
+};
+
+const addHeart = (uuid) => {
+  const docRef = doc(db, 'stockPosts', uuid);
+  updateDoc(docRef, {
+    heart: increment(1),
+  });
+};
+
+const getResponsePosts = async (uuid) => {
+  console.log(uuid);
+  const docRef = doc(db, 'responsePosts', uuid);
+  const docSnap = await getDoc(docRef);
+  return docSnap.data().data;
+};
+
 export {
+  signIn,
   googleSignIn,
   register,
-  signIn,
   getCategoryList,
   updateCategoryPrices,
   checkNewPrices,
@@ -126,4 +182,9 @@ export {
   getTrackStock,
   addTrackStock,
   removeTrackStock,
+  getAllPosts,
+  getStockPosts,
+  addStockPosts,
+  addHeart,
+  getResponsePosts,
 };
