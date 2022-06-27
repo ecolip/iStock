@@ -26,7 +26,6 @@ const Container = styled.div`
   flex-direction: column;
   width: 100%;
   min-height: 100vh;
-  padding-top: 50px;
   background-color: #0B0E11;
 `;
 const ContextDiv = styled.div`
@@ -85,7 +84,7 @@ const ListsContainer = styled.div`
   background-color: #181A20;
   border-radius: 8px;
   @media (min-width: 576px) {
-    padding: 20px 50px;
+    padding: 20px 50px 30px;
   }
 `;
 const Table = styled.table`
