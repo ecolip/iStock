@@ -10,7 +10,7 @@ import Footer from '../components/Footer';
 import Button from '../components/Button';
 import Loading from '../components/Loading';
 import {
-  getAllPosts, getStockPosts, addStockPosts, addHeart, getResponsePosts,
+  getAllPosts, getStockPosts, addStockPosts, addHeart, getResponsePosts, addResponsePost,
 } from '../utils/firebase';
 import { getDateDiff } from '../utils/formatDate';
 import api from '../utils/api';
@@ -251,7 +251,6 @@ const DialogContainer = styled.div`
   opacity: 1;
 `;
 const Dialog = styled.div`
-  height: 100px;
   box-shadow: 0 2px 8px rgba(255, 255, 255, .5);
   padding: 20px;
   margin-bottom: 40px;
@@ -269,14 +268,16 @@ const CloseIcon = styled(Close)`
     opacity: 0.9;
   }
 `;
+const RenderDialogDiv = styled.div`
+  min-height: 200px;
+`;
 const DialogDiv = styled.div`
   padding: 30px 80px;
   background-color: #0B0E11;
-  max-height: 100vh;
+  height: 100vh;
   overflow: auto;
   @media (min-width: 768px) {
     width: 768px;
-    height: 100vh;
     margin: 0 auto;
   }
 `;
@@ -291,6 +292,8 @@ function Post() {
   const [isFocus, setIsFocus] = useState(false);
   const [isLoaded, setIsLoaded] = useState(true);
   const [responsePosts, setResponsePosts] = useState(null);
+  const [resInfo, setResInfo] = useState('');
+  const [resChat, setResChat] = useState('');
 
   const fetchPosts = async () => {
     const res = await getAllPosts();
@@ -353,11 +356,34 @@ function Post() {
     setIsLoaded(false);
   };
 
-  const openDialog = (uuid) => {
-    getResponsePosts(uuid).then((res) => {
-      setResponsePosts(res);
+  const openDialog = (uuid, id, name) => {
+    getResponsePosts(uuid).then((data) => {
+      setResInfo({
+        id,
+        name,
+        uuid,
+      });
+      setResponsePosts(data);
       setIsOpen(true);
     });
+  };
+
+  const closeDialog = () => {
+    setResInfo({});
+    setIsOpen(false);
+  };
+
+  const sendResponse = () => {
+    const { uuid } = resInfo;
+    const resChatTrim = resChat.trim();
+    if (!resChatTrim.length > 0) {
+      alert('請輸入討論文字！');
+    } else {
+      addResponsePost(uuid, resChatTrim);
+      getResponsePosts(uuid).then((data) => {
+        setResponsePosts(data);
+      });
+    }
   };
 
   const renderPost = () => {
@@ -365,7 +391,7 @@ function Post() {
       <PostItem key={item.timestamp}>
         <AuthorContainer>
           <Author>{item.author}</Author>
-          <Time>{getDateDiff(item.timestamp.seconds * 1000)}</Time>
+          <Time>{getDateDiff(item.timestamp * 1000)}</Time>
         </AuthorContainer>
         <StockId>{item.stock_id} {item.stock_name}</StockId>
         <Context>{item.context}</Context>
@@ -378,7 +404,10 @@ function Post() {
             <Num>{item.heart}</Num>
           </HeartDiv>
           <ChatDiv>
-            <Img src={ChatImg} onClick={() => { openDialog(item.uuid); }} />
+            <Img
+              src={ChatImg}
+              onClick={() => { openDialog(item.uuid, item.stock_id, item.stock_name); }}
+            />
             <Num>{item.chat}</Num>
           </ChatDiv>
         </Div>
@@ -389,10 +418,10 @@ function Post() {
 
   const renderDialog = () => {
     const output = responsePosts.map((item) => (
-      <Dialog key={item.timestamp.seconds}>
+      <Dialog key={item.timestamp}>
         <AuthorContainer>
           <Author>{item.author}</Author>
-          <Time>{getDateDiff(item.timestamp.seconds * 1000)}</Time>
+          <Time>{getDateDiff(item.timestamp * 1000)}</Time>
         </AuthorContainer>
         <Context>{item.context}</Context>
       </Dialog>
@@ -456,16 +485,18 @@ function Post() {
       </Container>
       <DialogContainer show={isOpen}>
         <DialogDiv>
-          <CloseIcon onClick={() => { setIsOpen(false); }} />
-          <WriteTitle mb20>參與討論</WriteTitle>
-          {responsePosts && renderDialog()}
+          <CloseIcon onClick={() => { closeDialog(); }} />
+          <WriteTitle mb20>{resInfo.id} {resInfo.name}</WriteTitle>
+          <RenderDialogDiv>
+            {responsePosts && renderDialog()}
+          </RenderDialogDiv>
           <WriteTitle pb10 fz24>留言</WriteTitle>
           <WriteTextarea
-            value={chat}
-            onChange={(e) => { setChat(e.target.value); }}
+            value={resChat}
+            onChange={(e) => { setResChat(e.target.value); }}
           />
           <ButtonDiv>
-            <Button>送出</Button>
+            <Button onClick={() => { sendResponse(); }}>送出</Button>
           </ButtonDiv>
         </DialogDiv>
       </DialogContainer>
