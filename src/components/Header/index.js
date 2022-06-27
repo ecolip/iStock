@@ -143,10 +143,10 @@ function Header() {
   const navigate = useNavigate();
 
   const logout = () => {
-    navigate('/', { replace: true });
     window.localStorage.removeItem('firToken');
     window.localStorage.removeItem('user');
     window.localStorage.removeItem('finToken');
+    navigate('/', { replace: true });
   };
 
   return (
