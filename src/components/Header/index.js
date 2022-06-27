@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Person } from '@styled-icons/ionicons-solid';
 import { Navicon } from '@styled-icons/evil';
@@ -140,6 +140,14 @@ const MobileNavContainer = styled.div`
 
 function Header() {
   const [openNav, setOpenNav] = useState(false);
+  const navigate = useNavigate();
+
+  const logout = () => {
+    navigate('/', { replace: true });
+    window.localStorage.removeItem('firToken');
+    window.localStorage.removeItem('user');
+    window.localStorage.removeItem('finToken');
+  };
 
   return (
     <>
@@ -161,7 +169,7 @@ function Header() {
           <PersonContainer>
             <PersonIcon />
           </PersonContainer>
-          <Button md>登出</Button>
+          <Button md onClick={() => { logout(); }}>登出</Button>
         </RightContainer>
       </Container>
       <MobileHead>
@@ -174,8 +182,7 @@ function Header() {
         <MobileBackground displayBlock>
           <MobileNavContainer displayBlock>
             <CloseIcon onClick={() => { setOpenNav(false); }} />
-            <Button sm w100 mb1>登出</Button>
-            {/* <NavItem px1 fzBig>當日行情</NavItem> */}
+            <Button sm w100 mb1 onClick={() => { logout(); }}>登出</Button>
             <NavItem px1 fzBig>個股資訊</NavItem>
             <Link to="/track">
               <NavItem px1 fzBig>走勢圖</NavItem>
