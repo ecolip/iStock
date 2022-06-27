@@ -167,7 +167,7 @@ function Login() {
       window.localStorage.setItem('firToken', res.accessToken);
       window.localStorage.setItem('user', user);
       clearInput();
-      window.location.href = '/home';
+      navigate('./home', { replace: true });
     }).catch((code) => {
       if (code === 'auth/user-not-found') {
         setMessage('此帳號尚未註冊');
