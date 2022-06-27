@@ -46,6 +46,7 @@ const register = (email, password) => new Promise((resolve) => {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const { user } = userCredential;
+      setDoc(doc(db, 'userTrackStocks', email), { track: [] });
       resolve(user);
     });
 });
@@ -155,6 +156,9 @@ const addStockPosts = async (id, name, context) => {
     timestamp,
     uuid: postRef.id,
   });
+  await setDoc(docRef, {
+    data: [],
+  });
 };
 
 const addHeart = (uuid) => {
@@ -165,10 +169,31 @@ const addHeart = (uuid) => {
 };
 
 const getResponsePosts = async (uuid) => {
-  console.log(uuid);
   const docRef = doc(db, 'responsePosts', uuid);
   const docSnap = await getDoc(docRef);
-  return docSnap.data().data;
+  const result = docSnap.data().data;
+  result.sort((a, b) => b.timestamp - a.timestamp);
+  return result;
+};
+
+const addResponsePost = async (uuid, content) => {
+  const user = window.localStorage.getItem('user');
+  const { email } = JSON.parse(user);
+  const timestamp = Date.now();
+  const docRef = doc(db, 'responsePosts', uuid);
+  const docSnap = await getDoc(docRef);
+  const { data } = docSnap.data();
+  console.log(data);
+  const newItem = {
+    author: email,
+    content,
+    timestamp,
+  };
+  const newData = [...data, newItem];
+  console.log(newData);
+  updateDoc(docRef, {
+    data: newData,
+  });
 };
 
 export {
@@ -187,4 +212,5 @@ export {
   addStockPosts,
   addHeart,
   getResponsePosts,
+  addResponsePost,
 };
