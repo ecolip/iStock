@@ -15,7 +15,8 @@ const HeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 30px;
+  height: 80px;
+  padding: 0 30px;
   background-color: #181A20;
   border-bottom: 1px solid #F5F5F5;
 `;
