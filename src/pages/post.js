@@ -288,13 +288,13 @@ function Post() {
   const [chatId, setChatId] = useState('');
   const [posts, setPosts] = useState(null);
   const [stockId, setStockId] = useState('');
+  const [resInfo, setResInfo] = useState('');
+  const [resChat, setResChat] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
   const [isLoaded, setIsLoaded] = useState(true);
   const [responsePosts, setResponsePosts] = useState(null);
-  const [resInfo, setResInfo] = useState('');
-  const [resChat, setResChat] = useState('');
 
   const fetchPosts = async () => {
     const res = await getAllPosts();
@@ -314,10 +314,6 @@ function Post() {
     const { data } = res;
     const items = data.filter((item) => item.stock_id === id);
     const item = items[0];
-    if (!item) {
-      alert('查無資料，請重新輸入股票代碼！');
-      return false;
-    }
     return item.stock_name;
   };
 
@@ -384,6 +380,7 @@ function Post() {
         setResChat('');
         const data = await getResponsePosts(uuid);
         setResponsePosts(data);
+        fetchPosts();
       }
     }
   };

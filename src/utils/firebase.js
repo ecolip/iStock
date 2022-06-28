@@ -4,7 +4,7 @@ import {
   createUserWithEmailAndPassword, signInWithEmailAndPassword,
 } from 'firebase/auth';
 import {
-  getFirestore, collection, query, onSnapshot, setDoc, doc, getDoc, updateDoc, where, increment,
+  getFirestore, collection, query, setDoc, doc, getDoc, updateDoc, where, increment, getDocs,
 } from 'firebase/firestore';
 import firebaseConfig from '../firebaseConfig';
 
@@ -51,28 +51,24 @@ const register = (email, password) => new Promise((resolve) => {
     });
 });
 
-const getCategoryList = () => new Promise((resolve) => {
-  const q = query(collection(db, 'indexList'));
-  onSnapshot(q, (querySnapshot) => {
-    const list = [];
-    querySnapshot.forEach((item) => {
-      list.push(item.data());
-    });
-    resolve(list);
+const getCategoryList = async () => {
+  const list = [];
+  const querySnapshot = await getDocs(collection(db, 'indexList'));
+  querySnapshot.forEach((item) => {
+    list.push(item.data());
   });
-});
+  return list;
+};
 
-const getNewCategoryPrice = () => new Promise((resolve) => {
-  const q = query(collection(db, 'categoryPrices'));
-  onSnapshot(q, (querySnapshot) => {
-    const list = [];
-    querySnapshot.forEach((item) => {
-      list.push(item.data());
-    });
-    list.sort((a, b) => b.spread - a.spread);
-    resolve(list);
+const getNewCategoryPrice = async () => {
+  const list = [];
+  const querySnapshot = await getDocs(collection(db, 'categoryPrices'));
+  querySnapshot.forEach((item) => {
+    list.push(item.data());
   });
-});
+  list.sort((a, b) => b.spread - a.spread);
+  return list;
+};
 
 const checkNewPrices = async (openDate) => {
   const docRef = doc(db, 'categoryPrices', 'TAIEX');
@@ -116,29 +112,26 @@ const removeTrackStock = async (id) => {
   });
 };
 
-const getAllPosts = () => new Promise((resolve) => {
-  const q = query(collection(db, 'stockPosts'));
+const getAllPosts = async () => {
   const list = [];
-  onSnapshot(q, (querySnapshot) => {
-    querySnapshot.forEach((item) => {
-      list.push(item.data());
-    });
-    list.sort((a, b) => b.timestamp - a.timestamp);
-    resolve(list);
+  const querySnapshot = await getDocs(collection(db, 'stockPosts'));
+  querySnapshot.forEach((item) => {
+    list.push(item.data());
   });
-});
+  list.sort((a, b) => b.timestamp - a.timestamp);
+  return list;
+};
 
-const getStockPosts = (id) => new Promise((resolve) => {
-  const q = query(collection(db, 'stockPosts'), where('stock_id', '==', id));
+const getStockPosts = async (id) => {
   const list = [];
-  onSnapshot(q, (querySnapshot) => {
-    querySnapshot.forEach((item) => {
-      list.push(item.data());
-    });
-    list.sort((a, b) => b.timestamp - a.timestamp);
-    resolve(list);
+  const q = query(collection(db, 'stockPosts'), where('stock_id', '==', id));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((item) => {
+    list.push(item.data());
   });
-});
+  list.sort((a, b) => b.timestamp - a.timestamp);
+  return list;
+};
 
 const addStockPosts = async (id, name, context) => {
   const user = window.localStorage.getItem('user');
