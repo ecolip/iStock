@@ -8,6 +8,7 @@ import AppContext from '../AppContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Loading from '../components/Loading';
+import ScrollTop from '../components/ScrollTop';
 import api from '../utils/api';
 import { transferRedirectKey } from '../utils/table';
 import { getTrackStock, addTrackStock, removeTrackStock } from '../utils/firebase';
@@ -305,6 +306,7 @@ function Category() {
           </ListsContainer>
         </ContextContainer>
       </ContextDiv>
+      <ScrollTop />
       <Footer />
     </Container>
   );

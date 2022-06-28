@@ -6,6 +6,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Button from '../components/Button';
 import Loading from '../components/Loading';
+import ScrollTop from '../components/ScrollTop';
 import bannerImg from '../imgs/banner1.jpg';
 import { getNewCategoryPrice } from '../utils/firebase';
 
@@ -223,6 +224,7 @@ function Home() {
             )}
         </ListsContainer>
       </ListsDiv>
+      <ScrollTop />
       <Footer />
     </Container>
   );

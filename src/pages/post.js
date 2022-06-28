@@ -9,7 +9,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Button from '../components/Button';
 import Loading from '../components/Loading';
-import ScrollTop from '../components/scrollTop';
+import ScrollTop from '../components/ScrollTop';
 import {
   getAllPosts, getStockPosts, addStockPosts, addHeart, getResponsePosts, addResponsePost,
 } from '../utils/firebase';
