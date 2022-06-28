@@ -6,7 +6,7 @@ const StyledArrow = styled(UpArrowAlt)`
   position: fixed;
   width: 40px;
   height: 40px;
-  bottom: 15%;
+  bottom: 12%;
   right: 30px;
   z-index: 100;
   color: #0B0E11;
