@@ -9,19 +9,11 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Loading from '../components/Loading';
 import ScrollTop from '../components/ScrollTop';
-import api from '../utils/api';
+import { handelColor } from '../utils/formatDate';
 import { transferRedirectKey } from '../utils/table';
+import api from '../utils/api';
 import { getTrackStock, addTrackStock, removeTrackStock } from '../utils/firebase';
 
-const handelColor = (props) => {
-  if (props.green) {
-    return '#0ECB81';
-  }
-  if (props.red) {
-    return '#F6465D';
-  }
-  return '#EAECEF';
-};
 const Container = styled.div`
   display: flex;
   flex-direction: column;
