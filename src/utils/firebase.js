@@ -17,13 +17,9 @@ const signIn = (email, password) => new Promise((resolve, reject) => {
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const { user } = userCredential;
-      // console.log(user);
       resolve(user);
     }).catch((error) => {
-      // console.log(error);
       reject(error.code);
-      // const errorCode = error.code;
-      // const errorMessage = error.message;
     });
 });
 
@@ -39,15 +35,24 @@ const googleSignIn = () => new Promise((resolve) => {
       window.localStorage.setItem('firToken', token);
       window.localStorage.setItem('user', user);
       resolve(token);
+      const docRef = doc(db, 'userTrackStocks', email);
+      if (!docRef) {
+        const ref = doc(db, 'userTrackStocks', email);
+        setDoc(ref, {
+          track: [],
+        });
+      }
     });
 });
 
-const register = (email, password) => new Promise((resolve) => {
+const register = (email, password) => new Promise((resolve, reject) => {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const { user } = userCredential;
       setDoc(doc(db, 'userTrackStocks', email), { track: [] });
       resolve(user);
+    }).catch((error) => {
+      reject(error.code);
     });
 });
 

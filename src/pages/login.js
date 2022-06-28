@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import useEventListener from '@use-it/event-listener';
 import Footer from '../components/Footer';
 import Button from '../components/Button';
 import googleSrc from '../imgs/google.svg';
@@ -135,11 +136,13 @@ function Login() {
 
   const clickLoginItem = () => {
     clearInput();
+    setMessage('');
     setLogin(true);
   };
 
   const clickRegisterItem = () => {
     clearInput();
+    setMessage('');
     setLogin(false);
   };
 
@@ -183,13 +186,16 @@ function Login() {
     const { triEmail, triPassword } = trimText();
     const isVerify = verifyEmailAndPassword(triEmail, triPassword);
     if (!isVerify) return;
-
     register(triEmail, triPassword).then((res) => {
       const user = JSON.stringify({ email: res.email });
       window.localStorage.setItem('firToken', res.accessToken);
       window.localStorage.setItem('user', user);
       clearInput();
       navigate('./home', { replace: true });
+    }).catch((code) => {
+      if (code === 'auth/email-already-in-use') {
+        setMessage('此帳號已註冊');
+      }
     });
   };
 
@@ -237,6 +243,16 @@ function Login() {
     window.localStorage.setItem('finToken', res.token);
     return res.token;
   };
+
+  useEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      if (login) {
+        firebaseLogin();
+      } else {
+        firebaseRegister();
+      }
+    }
+  });
 
   useEffect(() => {
     getApiToken().then((token) => {
