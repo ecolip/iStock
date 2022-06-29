@@ -314,7 +314,10 @@ function Post() {
     const { data } = res;
     const items = data.filter((item) => item.stock_id === id);
     const item = items[0];
-    return item.stock_name;
+    if (item) {
+      return item.stock_name;
+    }
+    return false;
   };
 
   const sendPost = async () => {
@@ -335,6 +338,8 @@ function Post() {
         setChat('');
         addStockPosts(chatId, name, chatTrim);
         fetchPosts();
+      } else {
+        alert('請輸入正確股票代號');
       }
     }
   };
