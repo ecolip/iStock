@@ -66,7 +66,7 @@ const DragIcon = styled(DragIndicator)`
   width: 20px;
   height: 30px;
   margin-right: 5px;
-  cursor: pointer;
+  cursor: move;
 `;
 const CloseIcon = styled(Close)`
   width: 20px;
