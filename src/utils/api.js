@@ -26,6 +26,10 @@ const api = {
     return fetch(`${this.hostname}token=${token}&dataset=TaiwanStockInfo`)
       .then((response) => response.json());
   },
+  getTodayNews(token, id, today, preDay) {
+    return fetch(`${this.hostname}token=${token}&dataset=TaiwanStockNews&data_id=${id}&start_date=${preDay}&end_date=${today}`)
+      .then((response) => response.json());
+  },
 };
 
 export default api;

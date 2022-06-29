@@ -15,7 +15,7 @@ const Container = styled.div`
   padding: 0 30px;
   background-color: #181A20;
   border-bottom: 1px solid #F5F5F5;
-
+  z-index: 100;
   @media (min-width: 992px) {
     display: flex;
   }
@@ -167,7 +167,9 @@ function Header() {
         </LeftContainer>
         <RightContainer>
           <PersonContainer>
-            <PersonIcon />
+            <Link to="/profile">
+              <PersonIcon />
+            </Link>
           </PersonContainer>
           <Button md onClick={() => { logout(); }}>登出</Button>
         </RightContainer>
@@ -183,6 +185,9 @@ function Header() {
           <MobileNavContainer displayBlock>
             <CloseIcon onClick={() => { setOpenNav(false); }} />
             <Button sm w100 mb1 onClick={() => { logout(); }}>登出</Button>
+            <Link to="/profile">
+              <NavItem px1 fzBig>我的收藏</NavItem>
+            </Link>
             <NavItem px1 fzBig>個股資訊</NavItem>
             <Link to="/track">
               <NavItem px1 fzBig>走勢圖</NavItem>

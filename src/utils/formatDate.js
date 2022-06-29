@@ -11,6 +11,16 @@ const today = () => {
   return `${year}-${month}-${day}`;
 };
 
+const getPreMonth = (now) => {
+  const date = new Date(now);
+  const ds = new Date(date.setMonth(date.getMonth() - 1));
+  const year = ds.getFullYear();
+  const mon = ds.getMonth() + 1;
+  const day = ds.getDate();
+  const preMonthDate = `${year}-${mon < 10 ? (`0${mon}`) : mon}-${day < 10 ? (`0${day}`) : day}`;
+  return preMonthDate;
+};
+
 const preYear = () => {
   const date = new Date();
   const year = date.getFullYear() - 1;
@@ -80,6 +90,22 @@ function getDateDiff(dateTimeStamp) {
   return result;
 }
 
+const handelColor = (props) => {
+  if (props.green) {
+    return '#0ECB81';
+  }
+  if (props.red) {
+    return '#F6465D';
+  }
+  return '#EAECEF';
+};
+
 export {
-  today, preYear, preDay, transferToDate, getDateDiff,
+  today,
+  getPreMonth,
+  preYear,
+  preDay,
+  transferToDate,
+  getDateDiff,
+  handelColor,
 };

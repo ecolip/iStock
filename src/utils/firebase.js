@@ -102,6 +102,7 @@ const addTrackStock = async (id) => {
   updateDoc(docRef, {
     track: newTrack,
   });
+  return true;
 };
 
 const removeTrackStock = async (id) => {
@@ -115,6 +116,7 @@ const removeTrackStock = async (id) => {
   updateDoc(docRef, {
     track: newTrack,
   });
+  return true;
 };
 
 const getAllPosts = async () => {

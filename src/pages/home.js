@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import AppContext from '../AppContext';
 import Header from '../components/Header';
@@ -20,10 +20,10 @@ const Container = styled.div`
 const Banner = styled.div`
   width: 100%;
   background-color: #0B0E11;
-  padding: 120px 20px;
+  padding: 100px 20px 10px;
 
   @media (min-width: 1200px){
-    padding: 100px 20px;
+    padding: 150px 20px 100px;
   }
 `;
 const BannerContainer = styled.div`
@@ -208,7 +208,9 @@ function Home() {
           <Img src={bannerImg} alt="banner-image" />
           <LeftContainer>
             <Title>Taiwan Stock Market Timing, Track and manage you interested stocks</Title>
-            <Button>我的收藏</Button>
+            <Link to="/profile">
+              <Button>我的追蹤</Button>
+            </Link>
           </LeftContainer>
         </BannerContainer>
       </Banner>
