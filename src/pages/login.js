@@ -9,8 +9,8 @@ import AppContext from '../AppContext';
 import {
   googleSignIn, register, signIn, getCategoryList, updateCategoryPrices, checkNewPrices,
 } from '../utils/firebase';
-import api from '../utils/api';
 import { today, preDay } from '../utils/formatDate';
+import api from '../utils/api';
 
 const HeaderContainer = styled.div`
   display: flex;

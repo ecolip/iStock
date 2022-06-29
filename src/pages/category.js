@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
-import { ArrowSortedUp, ArrowSortedDown } from '@styled-icons/typicons';
 import { Star } from '@styled-icons/boxicons-regular';
 import { Star as filledStar } from '@styled-icons/boxicons-solid';
+import { ArrowSortedUp, ArrowSortedDown } from '@styled-icons/typicons';
 import AppContext from '../AppContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -11,8 +11,8 @@ import Loading from '../components/Loading';
 import ScrollTop from '../components/ScrollTop';
 import { handelColor } from '../utils/formatDate';
 import { transferRedirectKey } from '../utils/table';
-import api from '../utils/api';
 import { getTrackStock, addTrackStock, removeTrackStock } from '../utils/firebase';
+import api from '../utils/api';
 
 const Container = styled.div`
   display: flex;
@@ -156,15 +156,6 @@ function Category() {
     return false;
   };
 
-  const fetchCategoryStocks = async () => {
-    const category = transferRedirectKey(state.category);
-    const token = window.localStorage.getItem('finToken');
-    const res = await api.getStockList(token);
-    const { data } = res;
-    const stockList = data.filter((item) => item.industry_category === category);
-    return stockList;
-  };
-
   const updateLists = (id) => {
     const output = lists.map((item) => {
       if (item.stock_id === id) {
@@ -189,6 +180,35 @@ function Category() {
     addTrackStock(id);
   };
 
+  const sortSpread = (method) => {
+    if (method === 'down') {
+      setIsSpreadUp(false);
+      lists.sort((a, b) => b.spread - a.spread);
+    } else {
+      setIsSpreadUp(true);
+      lists.sort((a, b) => a.spread - b.spread);
+    }
+  };
+
+  const sortClose = (method) => {
+    if (method === 'down') {
+      setIsCloseUp(false);
+      lists.sort((a, b) => b.close - a.close);
+    } else {
+      setIsCloseUp(true);
+      lists.sort((a, b) => a.close - b.close);
+    }
+  };
+
+  const fetchCategoryStocks = async () => {
+    const category = transferRedirectKey(state.category);
+    const token = window.localStorage.getItem('finToken');
+    const res = await api.getStockList(token);
+    const { data } = res;
+    const stockList = data.filter((item) => item.industry_category === category);
+    return stockList;
+  };
+
   const fetchCategoryPrice = async (tracks) => {
     const stockPrices = [];
     const token = window.localStorage.getItem('finToken');
@@ -208,26 +228,6 @@ function Category() {
     }));
     stockPrices.sort((a, b) => b.close - a.close);
     setLists(stockPrices);
-  };
-
-  const sortSpread = (method) => {
-    if (method === 'down') {
-      setIsSpreadUp(false);
-      lists.sort((a, b) => b.spread - a.spread);
-    } else {
-      setIsSpreadUp(true);
-      lists.sort((a, b) => a.spread - b.spread);
-    }
-  };
-
-  const sortClose = (method) => {
-    if (method === 'down') {
-      setIsCloseUp(false);
-      lists.sort((a, b) => b.close - a.close);
-    } else {
-      setIsCloseUp(true);
-      lists.sort((a, b) => a.close - b.close);
-    }
   };
 
   const renderList = () => {
