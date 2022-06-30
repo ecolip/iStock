@@ -99,7 +99,7 @@ const ListTitle = styled.div`
   text-align: center;
   padding-bottom: 40px;
   font-size: 32px;
-  color: #fff;
+  color: #EAECEF;
 
   @media (min-width: 576px){
     text-align: left;

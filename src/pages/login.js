@@ -10,6 +10,7 @@ import {
   googleSignIn, register, signIn, getCategoryList, updateCategoryPrices, checkNewPrices,
 } from '../utils/firebase';
 import { today, preDay } from '../utils/formatDate';
+// import { list, banksList } from '../utils/locationData';
 import api from '../utils/api';
 
 const HeaderContainer = styled.div`
@@ -244,6 +245,35 @@ function Login() {
     return res.token;
   };
 
+  // const handleBrokerages = (bankName) => {
+  //   const data = [];
+  //   list.forEach((item) => {
+  //     if (bankName.length === 2) {
+  //       const bank = item.name.slice(0, 2);
+  //       if (bank === bankName) {
+  //         data.push(item);
+  //       }
+  //     } else if (bankName.length === 3) {
+  //       const bank = item.name.slice(0, 3);
+  //       if (bank === bankName) {
+  //         data.push(item);
+  //       }
+  //     } else if (bankName.length === 4) {
+  //       const bank = item.name.slice(0, 4);
+  //       if (bank === bankName) {
+  //         data.push(item);
+  //       }
+  //     }
+  //   });
+  //   addBrokerages(bankName, data);
+  // };
+
+  // const initBrokeragesToDB = () => {
+  //   banksList.forEach((item) => {
+  //     handleBrokerages(item);
+  //   });
+  // };
+
   useEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       if (login) {
@@ -260,6 +290,7 @@ function Login() {
         updatePrice();
       }
     });
+    // initBrokeragesToDB();
   }, []);
 
   return (

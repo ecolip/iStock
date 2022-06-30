@@ -160,9 +160,11 @@ function Header() {
           <Link to="/track">
             <NavItem mr>走勢圖</NavItem>
           </Link>
-          <NavItem mr>券商位置</NavItem>
           <Link to="/post">
-            <NavItem>討論區</NavItem>
+            <NavItem mr>討論區</NavItem>
+          </Link>
+          <Link to="/location">
+            <NavItem>券商位置</NavItem>
           </Link>
         </LeftContainer>
         <RightContainer>
@@ -192,9 +194,11 @@ function Header() {
             <Link to="/track">
               <NavItem px1 fzBig>走勢圖</NavItem>
             </Link>
-            <NavItem px1 fzBig>券商位置</NavItem>
             <Link to="/post">
               <NavItem px1 fzBig>討論區</NavItem>
+            </Link>
+            <Link to="/location">
+              <NavItem px1 fzBig>券商位置</NavItem>
             </Link>
           </MobileNavContainer>
         </MobileBackground>
