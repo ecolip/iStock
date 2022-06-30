@@ -357,12 +357,13 @@ function Post() {
     setIsLoaded(false);
   };
 
-  const openDialog = (uuid, id, name) => {
+  const openDialog = (uuid, id, name, chatNum) => {
     getResponsePosts(uuid).then((data) => {
       setResInfo({
         id,
         name,
         uuid,
+        chatNum,
       });
       setResponsePosts(data);
       setIsOpen(true);
@@ -375,12 +376,12 @@ function Post() {
   };
 
   const sendResponse = async () => {
-    const { uuid } = resInfo;
+    const { uuid, chatNum } = resInfo;
     const resChatTrim = resChat.trim();
     if (!resChatTrim.length > 0) {
       alert('請輸入討論文字！');
     } else {
-      const res = await addResponsePost(uuid, resChatTrim);
+      const res = await addResponsePost(uuid, resChatTrim, chatNum);
       if (res) {
         setResChat('');
         const data = await getResponsePosts(uuid);
@@ -410,7 +411,7 @@ function Post() {
           <ChatDiv>
             <Img
               src={ChatImg}
-              onClick={() => { openDialog(item.uuid, item.stock_id, item.stock_name); }}
+              onClick={() => { openDialog(item.uuid, item.stock_id, item.stock_name, item.chat); }}
             />
             <Num>{item.chat}</Num>
           </ChatDiv>

@@ -4,7 +4,7 @@ import {
   createUserWithEmailAndPassword, signInWithEmailAndPassword,
 } from 'firebase/auth';
 import {
-  getFirestore, collection, query, setDoc, doc, getDoc, updateDoc, where, increment, getDocs,
+  getFirestore, collection, query, setDoc, doc, getDoc, updateDoc, where, getDocs,
 } from 'firebase/firestore';
 import firebaseConfig from '../firebaseConfig';
 
@@ -162,17 +162,17 @@ const addStockPosts = async (id, name, context) => {
   });
 };
 
-const addHeart = (uuid) => {
+const addHeart = (uuid, heart) => {
   const docRef = doc(db, 'stockPosts', uuid);
   updateDoc(docRef, {
-    heart: increment(1),
+    heart: heart + 1,
   });
 };
 
-const addChat = (uuid) => {
+const addChat = async (uuid, chat) => {
   const docRef = doc(db, 'stockPosts', uuid);
   updateDoc(docRef, {
-    chat: increment(1),
+    chat: chat + 1,
   });
 };
 
@@ -184,7 +184,7 @@ const getResponsePosts = async (uuid) => {
   return result;
 };
 
-const addResponsePost = async (uuid, context) => {
+const addResponsePost = async (uuid, context, chat) => {
   const user = window.localStorage.getItem('user');
   const { email } = JSON.parse(user);
   const time = Date.now() / 1000;
@@ -201,8 +201,43 @@ const addResponsePost = async (uuid, context) => {
   updateDoc(docRef, {
     data: newData,
   });
-  addChat(uuid);
+  addChat(uuid, chat);
   return true;
+};
+
+const addBrokerages = (bank, data) => {
+  setDoc(doc(db, 'brokerages', bank), { data });
+};
+
+const getBanks = async () => {
+  const list = [];
+  const querySnapshot = await getDocs(collection(db, 'banks'));
+  querySnapshot.forEach((item) => {
+    list.push(item.data());
+  });
+  const { data } = list[0];
+  return data;
+};
+
+const getCities = async () => {
+  const list = [];
+  const querySnapshot = await getDocs(collection(db, 'cities'));
+  querySnapshot.forEach((item) => {
+    list.push(item.data());
+  });
+  const { data } = list[0];
+  return data;
+};
+
+const getBrokerages = async (bank, city) => {
+  const docRef = doc(db, 'brokerages', bank);
+  const docSnap = await getDoc(docRef);
+  const list = docSnap.data().data;
+  const output = list.filter((item) => {
+    const dbCity = item.address.slice(0, 3);
+    return dbCity === city;
+  });
+  return output;
 };
 
 export {
@@ -222,4 +257,8 @@ export {
   addHeart,
   getResponsePosts,
   addResponsePost,
+  addBrokerages,
+  getBanks,
+  getCities,
+  getBrokerages,
 };
