@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Button from '../components/Button';
 import ScrollTop from '../components/ScrollTop';
+import GoogleMap from '../components/GoogleMap';
 import { getBanks, getCities, getBrokerages } from '../utils/firebase';
 
 const Container = styled.div`
@@ -29,13 +30,17 @@ const Title = styled.div`
   color: #EAECEF;
 `;
 const SearchContainer = styled.div`
-  display: flex;
-  align-items: center;
-  height: 90px;
-  padding: 0 30px;
+  /* display: flex;
+  align-items: center; */
+  /* height: 90px; */
+  padding: 10px 30px;
   margin-bottom: 30px;
   background-color: #181A20;
   border-radius: 8px;
+  @media (min-width: 1200px) {
+    display: flex;
+    align-items: center;
+  }
 `;
 const SearchTitle = styled.div`
   padding-right: 20px;
@@ -44,16 +49,19 @@ const SearchTitle = styled.div`
 `;
 const SearchGroup = styled.div`
   display: flex;
-  align-items: center;
+  justify-content: space-between; 
+  @media (min-width: 1200px) {
+    align-items: center;
+  }
 `;
 const Select = styled.select`
   margin-right: ${(props) => (props.mr20 ? '20px' : '0')};
 
-  width: 160px;
-  height: 50px;
-  font-size: 20px;
+  width: 36%;
+  height: 45px;
+  font-size: 18px;
   color: #EAECEF;
-  padding: 8px 10px 8px 8px;
+  padding: 5px 10px 5px 8px;
   background-color: transparent;
   border: 1.5px solid #848E9C;
   cursor: pointer;
@@ -61,18 +69,30 @@ const Select = styled.select`
   :hover {
     border-color: #F5C829;
   }
+  @media (min-width: 1200px) {
+    width: 160px;
+    height: 50px;
+    padding: 8px 10px 8px 8px;
+    font-size: 20px;
+  }
 `;
 const Option = styled.option`
 `;
 const ListMapGroup = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @media (min-width: 1200px) {
+    display: flex;
+    justify-content: space-between;
+  }
 `;
 const ListContainer = styled.div`
   width: 100%;
+  height: 500px;
+  margin-bottom: 50px;
+  overflow: auto;
   @media (min-width: 1200px) {
-    width: 34%;
+    width: 25%;
+    height: inherit;
+    margin-bottom: 0;
   }
 `;
 const List = styled.div`
@@ -104,7 +124,7 @@ const Phone = styled.div`
 const MapContainer = styled.div`
   width: 100%;
   @media (min-width: 1200px) {
-    width: 64%;
+    width: 73%;
   }
 `;
 const MapIconGroup = styled.div`
@@ -142,13 +162,37 @@ const Message = styled.div`
   background-color: #181A20;
   border-radius: 8px;
 `;
+const MapDescribe = styled.div`
+  text-align: center;
+  @media (min-width: 1200px) {
+    display: none;
+  }
+`;
+const Hr = styled.hr`
+  width: 15%;
+  margin: 0 auto;
+  border-bottom: 1px solid #848E9C;
+`;
+const DescribeText = styled.div`
+  margin: 30px 0 20px;
+  color: #EAECEF;
+  font-size: 22px;
+  font-style: italic;
+`;
 
 function Location() {
   const [banks, setBanks] = useState(null);
   const [cities, setCities] = useState(null);
   const [selectBank, setSelectBank] = useState('元大');
   const [selectCity, setSelectCity] = useState('台北市');
+  const [name, setName] = useState('元大-松江');
+  const [address, setAddress] = useState('台北市中山區松江路139號3樓及3樓之1');
   const [list, setList] = useState([]);
+
+  const handleInfo = (selectName, selectAddress) => {
+    setName(selectName);
+    setAddress(selectAddress);
+  };
 
   const fetchBrokerages = async () => {
     const res = await getBrokerages(selectBank, selectCity);
@@ -175,7 +219,9 @@ function Location() {
         <Name>{item.id} {item.name}</Name>
         <Address>
           {item.address}
-          <MapIconGroup>
+          <MapIconGroup
+            onClick={() => { handleInfo(item.name, item.address); }}
+          >
             <MapIcon />
             <MapText>MAP</MapText>
           </MapIconGroup>
@@ -227,7 +273,13 @@ function Location() {
           <ListContainer>
             {list.length > 0 ? renderList() : <Message>無符合搜尋結果</Message>}
           </ListContainer>
-          <MapContainer>map</MapContainer>
+          <MapDescribe>
+            <Hr />
+            <DescribeText>Google Map</DescribeText>
+          </MapDescribe>
+          <MapContainer>
+            <GoogleMap address={address} name={name} />
+          </MapContainer>
         </ListMapGroup>
       </MainContainer>
       <ScrollTop />

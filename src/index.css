@@ -27,3 +27,8 @@ a {
 .canvasjs-chart-credit{
   display: none;
 }
+
+button.gm-ui-hover-effect {
+  top: -2px !important;
+  right: 0px !important;
+}

@@ -30,6 +30,10 @@ const api = {
     return fetch(`${this.hostname}token=${token}&dataset=TaiwanStockNews&data_id=${id}&start_date=${preDay}&end_date=${today}`)
       .then((response) => response.json());
   },
+  getLatAndLng(address) {
+    return fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&language=zh-TW`)
+      .then((response) => response.json());
+  },
 };
 
 export default api;
