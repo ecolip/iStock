@@ -44,7 +44,7 @@ const DiscussionImg = styled.img`
 `;
 const Title = styled.div`
   font-size: 35px;
-  color: white;
+  color: #EAECEF;
 `;
 const ButtonGroup = styled.div`
   margin-bottom: ${(props) => (props.mb100 ? '100px' : '0')};
