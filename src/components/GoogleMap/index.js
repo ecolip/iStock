@@ -107,7 +107,7 @@ function MyComponent({ address, name }) {
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={containerStyle}
-      center={userPosition || bankPosition}
+      center={bankPosition}
       zoom={zoom}
       onLoad={onLoad}
     >
