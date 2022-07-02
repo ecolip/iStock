@@ -156,7 +156,9 @@ function Header() {
           <Logo>iStock</Logo>
         </Link>
         <LeftContainer>
-          <NavItem mr>個股資訊</NavItem>
+          <Link to="/individual">
+            <NavItem mr>個股資訊</NavItem>
+          </Link>
           <Link to="/track">
             <NavItem mr>走勢圖</NavItem>
           </Link>
@@ -190,7 +192,9 @@ function Header() {
             <Link to="/profile">
               <NavItem px1 fzBig>我的收藏</NavItem>
             </Link>
-            <NavItem px1 fzBig>個股資訊</NavItem>
+            <Link to="/individual">
+              <NavItem px1 fzBig>個股資訊</NavItem>
+            </Link>
             <Link to="/track">
               <NavItem px1 fzBig>走勢圖</NavItem>
             </Link>

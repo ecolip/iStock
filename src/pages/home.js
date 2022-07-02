@@ -23,7 +23,7 @@ const Banner = styled.div`
   padding: 100px 20px 10px;
 
   @media (min-width: 1200px){
-    padding: 150px 20px 100px;
+    padding: 160px 20px 100px;
   }
 `;
 const BannerContainer = styled.div`

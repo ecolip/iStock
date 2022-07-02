@@ -213,7 +213,6 @@ function Location() {
       top: mapRef.current.offsetTop - 100,
       behavior: 'smooth',
     });
-    console.log(mapRef.current.offsetTop);
   };
 
   const handleInfo = (selectName, selectAddress) => {
