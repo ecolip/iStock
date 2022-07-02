@@ -28,7 +28,12 @@ a {
   display: none;
 }
 
+/* google map */
 button.gm-ui-hover-effect {
-  top: -2px !important;
-  right: 0px !important;
+  top: -3px !important;
+  right: -2px !important;
+  outline: none !important;
+}
+.gm-style .gm-style-iw-c {
+  padding-right: 5px !important;
 }

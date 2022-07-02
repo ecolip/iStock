@@ -17,10 +17,10 @@ const Container = styled.div`
 `;
 const MainContainer = styled.div`
   width: 100%;
-  padding: 120px 30px 30px;
+  padding: 120px 30px 100px;
   @media (min-width: 1200px) {
     width: 1200px;
-    padding: 150px 30px 80px;
+    padding: 120px 30px 80px;
     margin: 0 auto;
   }
 `;
@@ -64,6 +64,7 @@ const Select = styled.select`
   padding: 5px 10px 5px 8px;
   background-color: transparent;
   border: 1.5px solid #848E9C;
+  border-radius: 3px;
   cursor: pointer;
   outline: none;
   :hover {
@@ -86,7 +87,7 @@ const ListMapGroup = styled.div`
 `;
 const ListContainer = styled.div`
   width: 100%;
-  height: 500px;
+  height: 600px;
   margin-bottom: 50px;
   overflow: auto;
   @media (min-width: 1200px) {
@@ -122,6 +123,7 @@ const Phone = styled.div`
   color: #EAECEF;
 `;
 const MapContainer = styled.div`
+  position: relative;
   width: 100%;
   @media (min-width: 1200px) {
     width: 73%;
@@ -187,6 +189,8 @@ function Location() {
   const [selectCity, setSelectCity] = useState('台北市');
   const [name, setName] = useState('元大-松江');
   const [address, setAddress] = useState('台北市中山區松江路139號3樓及3樓之1');
+  // const [name, setName] = useState(null);
+  // const [address, setAddress] = useState(null);
   const [list, setList] = useState([]);
 
   const handleInfo = (selectName, selectAddress) => {
