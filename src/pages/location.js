@@ -39,7 +39,7 @@ const SearchContainer = styled.div`
   @media (min-width: 576px) {
     padding: 30px;
   }
-  @media (min-width: 768px) {
+  @media (min-width: 992px) {
     display: flex;
     align-items: center;
   }
@@ -50,13 +50,12 @@ const SearchTitle = styled.div`
   font-size: 22px;
 `;
 const SearchGroup = styled.div`
-  
-  @media (min-width: 576px) {
+  @media (min-width: 768px) {
     display: flex;
     justify-content: space-between; 
     margin: 15px 0 0;
   }
-  @media (min-width: 768px) {
+  @media (min-width: 992px) {
     margin: 0;
   }
   @media (min-width: 1200px) {
@@ -80,12 +79,12 @@ const Select = styled.select`
   :hover {
     border-color: #F5C829;
   }
-  @media (min-width: 576px) {
-    width: 100rem;
+  @media (min-width: 768px) {
+    width: 30rem;
     margin: 0 20px 0 0;
   }
-  @media (min-width: 768px) {
-    width: 200px;
+  @media (min-width: 992px) {
+    width: 250px;
     height: 50px;
     padding: 8px 10px 8px 8px;
     font-size: 20px;
@@ -196,6 +195,17 @@ const DescribeText = styled.div`
   font-size: 22px;
   font-style: italic;
 `;
+const ButtonDiv = styled.div`
+  width: 100%;
+  margin-top: 20px;
+  @media (min-width: 768px) {
+    width: 200px;
+    margin-top: 0;
+  }
+  @media (min-width: 992px) {
+    width: 100px;
+  }
+`;
 
 function Location() {
   const [banks, setBanks] = useState(null);
@@ -298,7 +308,9 @@ function Location() {
             <Select mr20 onChange={(e) => { setSelectCity(e.target.value); }}>
               {cities && renderCity()}
             </Select>
-            <Button w100 location onClick={() => { handleSearch(); }}>搜尋</Button>
+            <ButtonDiv>
+              <Button w100 location onClick={() => { handleSearch(); }}>搜尋</Button>
+            </ButtonDiv>
           </SearchGroup>
         </SearchContainer>
         <ListMapGroup>
