@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { SearchOutline } from '@styled-icons/evaicons-outline';
 import { Close } from '@styled-icons/material';
@@ -36,6 +36,9 @@ const TitleContainer = styled.div`
   display: flex;
   align-items: center;
   padding-bottom: 30px;
+`;
+const LoadContainer = styled.div`
+  padding-top: 50px;
 `;
 const DiscussionImg = styled.img`
   width: 50px;
@@ -273,10 +276,11 @@ const RenderDialogDiv = styled.div`
   min-height: 200px;
 `;
 const DialogDiv = styled.div`
+  height: 100vh;
   padding: 30px 80px;
   background-color: #0B0E11;
-  height: 100vh;
   overflow: auto;
+  border-radius: 8px;
   @media (min-width: 768px) {
     width: 768px;
     margin: 0 auto;
@@ -295,6 +299,14 @@ function Post() {
   const [isFocus, setIsFocus] = useState(false);
   const [isLoaded, setIsLoaded] = useState(true);
   const [responsePosts, setResponsePosts] = useState(null);
+  const postRef = useRef(null);
+
+  const scrollToPost = () => {
+    window.scrollTo({
+      top: postRef.current.offsetTop - 100,
+      behavior: 'smooth',
+    });
+  };
 
   const fetchPosts = async () => {
     const res = await getAllPosts();
@@ -331,6 +343,7 @@ function Post() {
       setChat('');
       addStockPosts('TAIEX', '加權指數', chatTrim);
       fetchPosts();
+      scrollToPost();
     } else {
       const name = await compareStockId(chatId);
       if (name) {
@@ -338,6 +351,7 @@ function Post() {
         setChat('');
         addStockPosts(chatId, name, chatTrim);
         fetchPosts();
+        scrollToPost();
       } else {
         alert('請輸入正確股票代號');
       }
@@ -445,7 +459,7 @@ function Post() {
         <MainContainer>
           <TitleContainer>
             <DiscussionImg src={DiscussionIcon} />
-            <Title>討論專區</Title>
+            <Title ref={postRef}>討論專區</Title>
           </TitleContainer>
           <ButtonGroup mb100={isLoaded}>
             <Button sm1 onClick={() => { fetchPosts(); }}>全部</Button>
@@ -484,7 +498,7 @@ function Post() {
                 </WriteContainer>
               </>
             )
-            : <Loading />}
+            : <LoadContainer><Loading /></LoadContainer>}
         </MainContainer>
         <Footer />
       </Container>
