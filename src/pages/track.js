@@ -28,7 +28,7 @@ const SearchGroup = styled.div`
   border-radius: 5px;
   
   @media (min-width: 996px) {
-    margin: ${(props) => (props.load ? '100px auto 30vh' : '30px auto 10px')};
+    margin: ${(props) => (props.load ? '110px auto 30vh' : '30px auto 10px')};
   }
 `;
 const Input = styled.input`
@@ -80,6 +80,7 @@ function Track() {
       exportEnabled: true,
       exportFileName: 'StockChart',
       theme: 'light2', // "light1", "dark1", "dark2"
+      animationEnabled: true,
       // backgroundColor: '#F5F5F5',
       title: {
         text: `${id} 走勢圖`,
