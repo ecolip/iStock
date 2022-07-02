@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+/* eslint-disable no-nested-ternary */
+import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { Map } from '@styled-icons/boxicons-solid';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Button from '../components/Button';
+import Loading from '../components/Loading';
 import ScrollTop from '../components/ScrollTop';
 import GoogleMap from '../components/GoogleMap';
 import { getBanks, getCities, getBrokerages } from '../utils/firebase';
@@ -203,15 +205,31 @@ function Location() {
   const [name, setName] = useState('元大-松江');
   const [address, setAddress] = useState('台北市中山區松江路139號3樓及3樓之1');
   const [list, setList] = useState([]);
+  const [message, setMessage] = useState(false);
+  const mapRef = useRef(null);
+
+  const scrollToMap = () => {
+    window.scrollTo({
+      top: mapRef.current.offsetTop - 100,
+      behavior: 'smooth',
+    });
+    console.log(mapRef.current.offsetTop);
+  };
 
   const handleInfo = (selectName, selectAddress) => {
     setName(selectName);
     setAddress(selectAddress);
+    scrollToMap();
   };
 
   const fetchBrokerages = async () => {
     const res = await getBrokerages(selectBank, selectCity);
-    setList(res);
+    if (!res.length > 0) {
+      setMessage(true);
+    } else {
+      setMessage(false);
+      setList(res);
+    }
   };
 
   const fetchCities = async () => {
@@ -286,13 +304,15 @@ function Location() {
         </SearchContainer>
         <ListMapGroup>
           <ListContainer>
-            {list.length > 0 ? renderList() : <Message>無符合搜尋結果</Message>}
+            { message ? <Message>無符合搜尋結果</Message>
+              : list.length > 0 ? renderList()
+                : <Loading />}
           </ListContainer>
           <MapDescribe>
             <Hr />
             <DescribeText>Google Map</DescribeText>
           </MapDescribe>
-          <MapContainer>
+          <MapContainer ref={mapRef}>
             <GoogleMap address={address} name={name} />
           </MapContainer>
         </ListMapGroup>

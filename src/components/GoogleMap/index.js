@@ -16,7 +16,7 @@ import api from '../../utils/api';
 
 const containerStyle = {
   width: '100%',
-  height: '800px',
+  height: '700px',
 };
 const LoadContainer = styled.div`
   padding-top: 250px;
