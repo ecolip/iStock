@@ -30,14 +30,14 @@ const Title = styled.div`
   color: #EAECEF;
 `;
 const SearchContainer = styled.div`
-  /* display: flex;
-  align-items: center; */
-  /* height: 90px; */
-  padding: 10px 30px;
+  padding: 20px;
   margin-bottom: 30px;
   background-color: #181A20;
   border-radius: 8px;
-  @media (min-width: 1200px) {
+  @media (min-width: 576px) {
+    padding: 30px;
+  }
+  @media (min-width: 768px) {
     display: flex;
     align-items: center;
   }
@@ -48,8 +48,15 @@ const SearchTitle = styled.div`
   font-size: 22px;
 `;
 const SearchGroup = styled.div`
-  display: flex;
-  justify-content: space-between; 
+  
+  @media (min-width: 576px) {
+    display: flex;
+    justify-content: space-between; 
+    margin: 15px 0 0;
+  }
+  @media (min-width: 768px) {
+    margin: 0;
+  }
   @media (min-width: 1200px) {
     align-items: center;
   }
@@ -57,8 +64,9 @@ const SearchGroup = styled.div`
 const Select = styled.select`
   margin-right: ${(props) => (props.mr20 ? '20px' : '0')};
 
-  width: 36%;
+  width: 100%;
   height: 45px;
+  margin: 10px 0;
   font-size: 18px;
   color: #EAECEF;
   padding: 5px 10px 5px 8px;
@@ -70,8 +78,12 @@ const Select = styled.select`
   :hover {
     border-color: #F5C829;
   }
-  @media (min-width: 1200px) {
-    width: 160px;
+  @media (min-width: 576px) {
+    width: 100rem;
+    margin: 0 20px 0 0;
+  }
+  @media (min-width: 768px) {
+    width: 200px;
     height: 50px;
     padding: 8px 10px 8px 8px;
     font-size: 20px;
@@ -115,8 +127,11 @@ const Address = styled.div`
   display: flex;
   align-items: center;
   padding: 8px 0;
-  font-size: 16px;
+  font-size: 15px;
   color: #EAECEF;
+  @media (min-width: 1200px) {
+    font-size: 16px;
+  }
 `;
 const Phone = styled.div`
   font-size: 16px;
@@ -133,16 +148,14 @@ const MapIconGroup = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 58px;
-  height: 22px;
+  padding: 1px 6px;
   margin-left: 10px;
   color: #181A20;
-  background-color: #F5C829;
+  background-color: #FFDA6A;
   border-radius: 10px;
-  opacity: 0.8;
   cursor: pointer;
   ${List}:hover & {
-    opacity: 1;
+    color: #181A20;
     background-color: #F5C829;
   }
 `;
@@ -189,8 +202,6 @@ function Location() {
   const [selectCity, setSelectCity] = useState('台北市');
   const [name, setName] = useState('元大-松江');
   const [address, setAddress] = useState('台北市中山區松江路139號3樓及3樓之1');
-  // const [name, setName] = useState(null);
-  // const [address, setAddress] = useState(null);
   const [list, setList] = useState([]);
 
   const handleInfo = (selectName, selectAddress) => {
@@ -270,7 +281,7 @@ function Location() {
             <Select mr20 onChange={(e) => { setSelectCity(e.target.value); }}>
               {cities && renderCity()}
             </Select>
-            <Button onClick={() => { handleSearch(); }}>搜尋</Button>
+            <Button w100 location onClick={() => { handleSearch(); }}>搜尋</Button>
           </SearchGroup>
         </SearchContainer>
         <ListMapGroup>

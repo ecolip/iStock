@@ -21,6 +21,9 @@ const Button = styled.button`
   &:hover {
     opacity: 0.9;
   }
+  @media(min-width: 768px){
+    width: ${(props) => (props.location ? 'auto' : 'auto')};
+  }
 `;
 
 export default Button;
