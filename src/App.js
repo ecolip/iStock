@@ -7,6 +7,7 @@ import Profile from './pages/profile';
 import Category from './pages/category';
 import Location from './pages/location';
 import Individual from './pages/individual';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route exact path="location" element={<Location />} />
           <Route exact path="post" element={<Post />} />
           <Route exact path="track" element={<Track />} />
+          <Route exact path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>
