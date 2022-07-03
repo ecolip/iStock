@@ -28,7 +28,7 @@ const SearchGroup = styled.div`
   border-radius: 5px;
   
   @media (min-width: 996px) {
-    margin: ${(props) => (props.load ? '110px auto 30vh' : '30px auto 10px')};
+    margin: ${(props) => (props.load ? '110px auto 30vh' : '110px auto 10px')};
   }
 `;
 const Input = styled.input`
