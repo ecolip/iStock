@@ -276,6 +276,7 @@ function Profile() {
   };
 
   const fetchHistoryNews = async () => {
+    setNews(null);
     const token = window.localStorage.getItem('finToken');
     const trackIds = await getTrackStock();
     const data = [];
@@ -295,6 +296,7 @@ function Profile() {
   };
 
   const getTrackList = async () => {
+    setList(null);
     const token = window.localStorage.getItem('finToken');
     const trackIds = await getTrackStock();
     const data = [];
