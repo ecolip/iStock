@@ -6,6 +6,7 @@ import Login from './pages/login';
 import Profile from './pages/profile';
 import Category from './pages/category';
 import Location from './pages/location';
+import Individual from './pages/individual';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route exact path="/" element={<Login />} />
           <Route exact path="home" element={<Home />} />
           <Route exact path="profile" element={<Profile />} />
+          <Route exact path="individual" element={<Individual />} />
           <Route exact path="category" element={<Category />} />
           <Route exact path="location" element={<Location />} />
           <Route exact path="post" element={<Post />} />

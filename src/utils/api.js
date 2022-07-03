@@ -1,6 +1,6 @@
 const api = {
   hostname: 'https://api.finmindtrade.com/api/v4/data?',
-  startDate: '2015-05-15',
+  startDate: '2017-05-15',
   finMindLogin() {
     const formData = new FormData();
     formData.append('user_id', process.env.REACT_APP_FINMIND_USER_ID);
@@ -28,6 +28,22 @@ const api = {
   },
   getTodayNews(token, id, today, preDay) {
     return fetch(`${this.hostname}token=${token}&dataset=TaiwanStockNews&data_id=${id}&start_date=${preDay}&end_date=${today}`)
+      .then((response) => response.json());
+  },
+  getMonthRevenue(token, id, today, preYear) {
+    return fetch(`${this.hostname}token=${token}&dataset=TaiwanStockMonthRevenue&data_id=${id}&start_date=${preYear}&end_date=${today}`)
+      .then((response) => response.json());
+  },
+  getHistoryDividend(token, id, today) {
+    return fetch(`${this.hostname}token=${token}&dataset=TaiwanStockDividend&data_id=${id}&start_date=${this.startDate}&end_date=${today}`)
+      .then((response) => response.json());
+  },
+  getHistoryHolding(token, id, today, preWeek) {
+    return fetch(`${this.hostname}token=${token}&dataset=TaiwanStockShareholding&data_id=${id}&start_date=${preWeek}&end_date=${today}`)
+      .then((response) => response.json());
+  },
+  getHistoryFinancial(token, id, today) {
+    return fetch(`${this.hostname}token=${token}&dataset=TaiwanStockFinancialStatements&data_id=${id}&start_date=${this.startDate}&end_date=${today}`)
       .then((response) => response.json());
   },
   getLatAndLng(address) {

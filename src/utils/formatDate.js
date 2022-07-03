@@ -42,6 +42,14 @@ const specifyDay = (dateObj) => {
   return `${year}-${month}-${day}`;
 };
 
+const canvasDay = (date) => {
+  const dateObj = new Date(date);
+  const year = dateObj.getFullYear();
+  const month = dateObj.getMonth();
+  const day = dateObj.getDate();
+  return { year, month, day };
+};
+
 const preDay = (date) => {
   const dateObj = new Date(date);
   const time = dateObj.getTime();
@@ -107,5 +115,6 @@ export {
   preDay,
   transferToDate,
   getDateDiff,
+  canvasDay,
   handelColor,
 };

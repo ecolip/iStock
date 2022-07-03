@@ -4,3 +4,5 @@
 .firebase ignore
 canvasjs.stock.react.js
 canvasjs.stock.min.js
+canvasjs.min.js
+canvasjs.react.js

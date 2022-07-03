@@ -24,7 +24,11 @@ a {
   text-decoration: none;
 }
 
+/* canvasjs */
 .canvasjs-chart-credit{
+  display: none;
+}
+.canvasjs-chart-toolbar {
   display: none;
 }
 

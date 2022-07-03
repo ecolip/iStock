@@ -87,7 +87,7 @@ const MobileHead = styled.div`
   width: 100%;
   height: 80px;
   padding: 0px 30px;
-  
+  z-index: 100;
   @media (min-width: 992px) {
     display: none;
     padding: 0 32px;
