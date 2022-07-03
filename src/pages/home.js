@@ -157,6 +157,9 @@ const StockText = styled.div`
   font-weight: 500;
   font-size: 18px;
 `;
+const ButtonContainer = styled.div`
+  width: 112px;
+`;
 
 function Home() {
   const [stockLists, setStockLists] = useState(null);
@@ -209,7 +212,7 @@ function Home() {
           <LeftContainer>
             <Title>Taiwan Stock Market Timing, Track and manage you interested stocks</Title>
             <Link to="/profile">
-              <Button>我的追蹤</Button>
+              <ButtonContainer><Button>我的追蹤</Button></ButtonContainer>
             </Link>
           </LeftContainer>
         </BannerContainer>
