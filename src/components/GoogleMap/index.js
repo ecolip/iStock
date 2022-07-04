@@ -87,7 +87,7 @@ function MyComponent({ address, name }) {
           lng: position.coords.longitude,
         };
         setUserPosition(pos);
-        setZoom(15);
+        setZoom(14);
         fetchDirection(pos);
       });
     } else {
