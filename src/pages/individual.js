@@ -191,9 +191,9 @@ function Individual() {
     }
   };
 
-  const fetchMonthRevenue = async (id) => {
+  const fetchMonthRevenue = async () => {
     const token = window.localStorage.getItem('finToken');
-    const revenue = await api.getMonthRevenue(token, id, today(), preYear());
+    const revenue = await api.getMonthRevenue(token, stockIdRef.current, today(), preYear());
     if (revenue.data.length > 0) {
       setStockId('');
       setList(revenue.data);
