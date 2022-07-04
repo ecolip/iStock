@@ -160,7 +160,7 @@ function Dividend({ list }) {
 
   return (
     <Div>
-      {!isLoaded
+      {(!isLoaded && data)
         ? (
           <>
             <CanvasJSChart options={options} />

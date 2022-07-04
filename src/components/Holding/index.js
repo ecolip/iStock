@@ -162,7 +162,7 @@ function Holding({ list }) {
 
   return (
     <Div>
-      {!isLoaded
+      {(!isLoaded && data)
         ? (
           <>
             <CanvasJSChart options={options} />

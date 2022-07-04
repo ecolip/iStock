@@ -195,8 +195,8 @@ function Individual() {
     const token = window.localStorage.getItem('finToken');
     const revenue = await api.getMonthRevenue(token, stockIdRef.current, today(), preYear());
     if (revenue.data.length > 0) {
-      setStockId('');
       setList(revenue.data);
+      setStockId('');
     } else {
       alert('查無資料');
     }

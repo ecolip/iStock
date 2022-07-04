@@ -159,7 +159,7 @@ function MonthRevenue({ list }) {
 
   return (
     <Div>
-      {!isLoaded
+      {(!isLoaded && data)
         ? (
           <>
             <CanvasJSChart options={options} />

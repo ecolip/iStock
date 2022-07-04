@@ -162,7 +162,7 @@ function Financial({ list }) {
 
   return (
     <Div>
-      {!isLoaded
+      {(!isLoaded && data)
         ? (
           <>
             <CanvasJSChart options={options} />
