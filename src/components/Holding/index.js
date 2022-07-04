@@ -85,7 +85,7 @@ function Holding({ list }) {
     exportEnabled: true,
     theme: 'dark1',
     title: {
-      text: `${stockId} ${stockName} 本週持股`,
+      text: `${stockId} ${stockName}`,
     },
     axisY: {
       title: '持股比例',

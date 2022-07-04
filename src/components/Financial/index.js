@@ -84,7 +84,7 @@ function Financial({ list }) {
     animationEnabled: true,
     theme: 'dark1',
     title: {
-      text: `${stockId} ${stockName} 綜合損益`,
+      text: `${stockId} ${stockName}`,
     },
     axisX: {
       valueFormatString: 'MMM YYYY',
