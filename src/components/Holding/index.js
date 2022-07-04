@@ -9,6 +9,9 @@ import api from '../../utils/api';
 
 const Div = styled.div`
 `;
+const LoadContainer = styled.div`
+  padding-top: 100px;
+`;
 const TableTitle = styled.div`
   padding: 80px 0 20px;
   font-size: 25px;
@@ -74,6 +77,7 @@ function Holding({ list }) {
   const [data, setData] = useState(null);
   const [stockId, setStockId] = useState('');
   const [stockName, setStockName] = useState('');
+  const [isLoaded, setIsLoaded] = useState(true);
   const CanvasJS = CanvasJSReact.CanvasJS;
   const CanvasJSChart = CanvasJSReact.CanvasJSChart;
   const options = {
@@ -137,6 +141,7 @@ function Holding({ list }) {
       return newItem;
     });
     setData(output);
+    setIsLoaded(false);
   };
 
   const renderTable = () => {
@@ -157,7 +162,7 @@ function Holding({ list }) {
 
   return (
     <Div>
-      {data
+      {!isLoaded
         ? (
           <>
             <CanvasJSChart options={options} />
@@ -174,7 +179,7 @@ function Holding({ list }) {
               </Table>
             </TableContainer>
           </>
-        ) : <Loading />}
+        ) : <LoadContainer><Loading /></LoadContainer>}
     </Div>
   );
 }

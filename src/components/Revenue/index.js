@@ -9,7 +9,9 @@ import CanvasJSReact from '../../utils/canvasjs-3.6.6/canvasjs.react';
 import api from '../../utils/api';
 
 const Div = styled.div`
-
+`;
+const LoadContainer = styled.div`
+  padding-top: 100px;
 `;
 const TableTitle = styled.div`
   padding: 80px 0 20px;
@@ -80,6 +82,7 @@ function MonthRevenue({ list }) {
   const [data, setData] = useState(null);
   const [stockId, setStockId] = useState('');
   const [stockName, setStockName] = useState('');
+  const [isLoaded, setIsLoaded] = useState(true);
   const CanvasJS = CanvasJSReact.CanvasJS;
   const CanvasJSChart = CanvasJSReact.CanvasJSChart;
   const options = {
@@ -87,7 +90,7 @@ function MonthRevenue({ list }) {
     exportEnabled: true,
     theme: 'dark1',
     title: {
-      text: `${stockId} ${stockName} 營收走勢`,
+      text: `${stockId} ${stockName}`,
     },
     axisX: {
       valueFormatString: 'MMM YYYY',
@@ -134,6 +137,7 @@ function MonthRevenue({ list }) {
       return newItem;
     });
     setData(output);
+    setIsLoaded(false);
   };
 
   const renderTable = () => {
@@ -155,7 +159,7 @@ function MonthRevenue({ list }) {
 
   return (
     <Div>
-      {data
+      {!isLoaded
         ? (
           <>
             <CanvasJSChart options={options} />
@@ -172,7 +176,7 @@ function MonthRevenue({ list }) {
               </Table>
             </TableContainer>
           </>
-        ) : <Loading />}
+        ) : <LoadContainer><Loading /></LoadContainer>}
     </Div>
   );
 }
