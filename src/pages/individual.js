@@ -220,10 +220,10 @@ function Individual() {
           fetchHistoryHolding(stockId);
           break;
       }
-      setStockId('');
     } else {
       alert('請輸入正確股票代號');
     }
+    setStockId('');
   };
 
   const handleSelect = async (index) => {
