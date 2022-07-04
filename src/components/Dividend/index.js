@@ -126,8 +126,10 @@ function Dividend({ list }) {
   const handleData = () => {
     handleName(list[0].stock_id);
     const output = list.map((item) => {
-      const value = parseFloat(item.CashEarningsDistribution);
-      const num = Math.round(value);
+      // const value = parseFloat(item.CashEarningsDistribution);
+      // const num = Math.round(value);
+      const value = item.CashEarningsDistribution;
+      const num = Math.round(value * 100) / 100;
       const newItem = {
         label: `${item.year}`,
         y: num,
