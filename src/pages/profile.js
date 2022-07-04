@@ -1,18 +1,20 @@
 /* eslint-disable no-unused-vars */
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Close } from '@styled-icons/material';
 import { PersonSquare } from '@styled-icons/bootstrap';
 import { DragIndicator } from '@styled-icons/material-twotone';
 import useEventListener from '@use-it/event-listener';
-import AppContext from '../AppContext';
+import * as dayjs from 'dayjs';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Button from '../components/Button';
 import Loading from '../components/Loading';
 import ScrollTop from '../components/ScrollTop';
-import { getTrackStock, addTrackStock, removeTrackStock } from '../utils/firebase';
-import { preDay, handelColor } from '../utils/formatDate';
+import {
+  getTrackStock, addTrackStock, removeTrackStock, getOpenDate,
+} from '../utils/firebase';
+import { handelColor } from '../utils/formatDate';
 import api from '../utils/api';
 
 const Container = styled.div`
@@ -43,24 +45,22 @@ const Div = styled.div`
 `;
 const UserInfoDiv = styled.div`
   display: flex;
+  justify-content: center;
   align-items: center;
-  height: 100px;
   margin-bottom: 10px;
   padding: 0 15px;
   font-size: 14px;
   font-weight: 500;
   color: #fff;
-  border-radius: 8px;
   background-color: #181A20;
   @media (min-width: 576px) {
-    padding: 0 30px;
+    padding: 20px 30px;
     font-size: 16px;
   }
 `;
 const UserIcon = styled(PersonSquare)`
   width: 50px;
   height: 50px;
-  margin-right: 30px;
 `;
 const DragIcon = styled(DragIndicator)`
   width: 20px;
@@ -93,7 +93,6 @@ const NewsContainer = styled.div`
   margin-top: 100px;
   padding: 30px 50px;
   background-color: #181A20;
-  border-radius: 8px;
   @media (min-width: 1200px) {
     width: 63%;
     min-height: 70vh;
@@ -129,7 +128,7 @@ const TrackContainer = styled.div`
   }
 `;
 const TrackTitle = styled.div`
-  margin: 30px 0 4px;
+  margin: 30px 0 10px;
   font-size: 25px;
   font-weight: bold;
   color: #EAECEF;
@@ -146,7 +145,6 @@ const TrackItems = styled.div`
   min-height: 30vh;
   padding: 15px 0;
   background-color: #181A20;
-  border-radius: 8px;
 `;
 const Item = styled.div`
   display: flex;
@@ -261,7 +259,8 @@ function Profile() {
   const [index, setIndex] = useState(1);
   const [stockId, setStockId] = useState('');
   const [news, setNews] = useState(null);
-  const [state, dispatch] = useContext(AppContext);
+  const [isLoadedNews, setIsLoadedNews] = useState(true);
+  const [isLoadedTrack, setIsLoadedTrack] = useState(true);
 
   const compareStockId = async (id) => {
     const token = window.localStorage.getItem('finToken');
@@ -276,13 +275,14 @@ function Profile() {
   };
 
   const fetchHistoryNews = async () => {
-    setNews(null);
-    const token = window.localStorage.getItem('finToken');
-    const trackIds = await getTrackStock();
     const data = [];
+    const token = window.localStorage.getItem('finToken');
+    const preWeek = dayjs().subtract(7, 'day').format('YYYY-MM-DD');
+    const openDate = await getOpenDate();
+    const trackIds = await getTrackStock();
     await Promise.all(trackIds.map(async (id) => {
       const name = await compareStockId(id);
-      const res = await api.getTodayNews(token, id, state.openDate, preDay(state.openDate));
+      const res = await api.getTodayNews(token, id, openDate, preWeek);
       const newsItems = res.data;
       if (newsItems.length > 0) {
         const newItem = {
@@ -293,16 +293,18 @@ function Profile() {
       }
     }));
     setNews(data);
+    console.log(data, '拿news');
+    setIsLoadedNews(false);
   };
 
-  const getTrackList = async () => {
-    setList(null);
-    const token = window.localStorage.getItem('finToken');
-    const trackIds = await getTrackStock();
+  const fetchTrackList = async () => {
     const data = [];
+    const token = window.localStorage.getItem('finToken');
+    const openDate = await getOpenDate();
+    const trackIds = await getTrackStock();
     await Promise.all(trackIds.map(async (id) => {
       const name = await compareStockId(id);
-      const res = await api.getTodayPrice(token, id, state.openDate);
+      const res = await api.getTodayPrice(token, id, openDate);
       const stockItem = res.data[0];
       if (stockItem) {
         const newItem = {
@@ -312,11 +314,15 @@ function Profile() {
         data.push(newItem);
       }
     }));
+    console.log(data, '拿track');
     setList(data);
+    setIsLoadedTrack(false);
   };
 
   const updateTrackAndNews = () => {
-    getTrackList();
+    setIsLoadedTrack(true);
+    setIsLoadedNews(true);
+    fetchTrackList();
     fetchHistoryNews();
   };
 
@@ -368,6 +374,11 @@ function Profile() {
     return output;
   };
 
+  const fetchTrackAndNews = () => {
+    fetchTrackList();
+    fetchHistoryNews();
+  };
+
   const getUserInfo = () => {
     const data = window.localStorage.getItem('user');
     const result = JSON.parse(data);
@@ -382,8 +393,9 @@ function Profile() {
 
   useEffect(() => {
     getUserInfo();
-    updateTrackAndNews();
+    fetchTrackAndNews();
   }, []);
+
   return (
     <Container>
       <Header />
@@ -395,7 +407,7 @@ function Profile() {
             <NewsNav active={index === 3} onClick={() => { setIndex(3); }}>公告</NewsNav>
           </NavGroup>
           <NewsItems>
-            {news ? renderNews() : <LoadContainer><Loading /></LoadContainer>}
+            {!isLoadedNews ? renderNews() : <LoadContainer><Loading /></LoadContainer>}
           </NewsItems>
         </NewsContainer>
         <TrackContainer>
@@ -409,7 +421,7 @@ function Profile() {
           <TrackTitle>追蹤清單</TrackTitle>
           <TrackItemsContainer>
             <TrackItems>
-              {list ? renderList() : <LoadContainer><Loading /></LoadContainer>}
+              {!isLoadedTrack ? renderList() : <LoadContainer><Loading /></LoadContainer>}
             </TrackItems>
             <InputContainer>
               <WriteInput
