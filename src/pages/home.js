@@ -115,11 +115,11 @@ const List = styled.div`
   font-size: 28px;
   color: white;
   background-color: #181A20;
-  box-shadow: 0 1px 3px rgb(0 0 0 / 20%);
   border-radius: 20px;
   cursor: pointer;
   transition: color 0.1s linear;
   :hover {
+    box-shadow: 2px 5px 5px rgb(255 255 255 / 50%);
     background-color: #2B313A;
   }
 
