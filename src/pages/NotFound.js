@@ -24,10 +24,12 @@ const SubTitle = styled.div`
   text-align: center;
   font-size: 36px;
   font-weight: bold;
-  color: #EAECEF;
+  color: #F5C829;
   cursor: pointer;
+  opacity: 0.9;
+  transition: all 0.1s linear;
   :hover {
-    color: #F5C829;
+    opacity: 0.9;
   }
 `;
 
