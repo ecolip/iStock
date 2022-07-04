@@ -158,7 +158,7 @@ const StockText = styled.div`
   font-size: 18px;
 `;
 const ButtonContainer = styled.div`
-  width: 112px;
+  display: inline-block;
 `;
 
 function Home() {
