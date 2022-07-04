@@ -136,14 +136,14 @@ const List = styled.div`
 const StockName = styled.div`
   padding-bottom: 10px;
   font-size: 20px;
-  font-weight: bold;
   color: #EAECEF;
 `;
 const StockClose = styled.div`
+  color: ${(props) => (props.green ? '#0ECB81' : '#F6465D')};
+
   padding-bottom: 10px;
   font-size: 28px;
   font-weight: bold;
-  color: white;
   padding-bottom: 20px;
 `;
 const StockSpread = styled.div`
@@ -153,7 +153,7 @@ const StockSpread = styled.div`
   font-size: 26px;
 `;
 const StockText = styled.div`
-  color: #EAECEF;
+  color: #848E9C;
   font-weight: 500;
   font-size: 18px;
 `;
@@ -188,7 +188,7 @@ function Home() {
       >
         <StockName>{item.stock_name}</StockName>
         <StockText>今日收盤</StockText>
-        <StockClose>{item.close}</StockClose>
+        <StockClose green={verifySpread(item.spread)}>{item.close}</StockClose>
         <StockText>漲跌</StockText>
         <StockSpread green={verifySpread(item.spread)}>{item.spread}</StockSpread>
       </List>
@@ -219,7 +219,7 @@ function Home() {
       </Banner>
       <ListsDiv>
         <ListsContainer>
-          <ListTitle>台股大盤與類股表現</ListTitle>
+          <ListTitle>台股大盤與類股</ListTitle>
           {isLoaded
             ? <Loading />
             : (

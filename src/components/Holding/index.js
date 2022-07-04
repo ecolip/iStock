@@ -40,7 +40,6 @@ const TableContainer = styled.div`
 `;
 const Table = styled.div`
   background-color: #181A20;
-  border-radius: 8px;
   padding: 30px 10px;
   @media (min-width: 768px) {
     padding: 30px 50px;
@@ -88,7 +87,7 @@ function Holding({ list }) {
       text: `${stockId} ${stockName}`,
     },
     axisY: {
-      title: '持股比例',
+      title: '外資持股比例',
       suffix: '%',
     },
     axisX: {

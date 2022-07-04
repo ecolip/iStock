@@ -11,7 +11,9 @@ import Loading from '../components/Loading';
 import ScrollTop from '../components/ScrollTop';
 import { handelColor } from '../utils/formatDate';
 import { transferRedirectKey } from '../utils/table';
-import { getTrackStock, addTrackStock, removeTrackStock } from '../utils/firebase';
+import {
+  getTrackStock, addTrackStock, removeTrackStock, getOpenDate,
+} from '../utils/firebase';
 import api from '../utils/api';
 
 const Container = styled.div`
@@ -212,9 +214,10 @@ function Category() {
   const fetchCategoryPrice = async (tracks) => {
     const stockPrices = [];
     const token = window.localStorage.getItem('finToken');
+    const openDate = await getOpenDate();
     const stockList = await fetchCategoryStocks();
     await Promise.all(stockList.map(async (item) => {
-      const res = await api.getTodayPrice(token, item.stock_id, state.openDate);
+      const res = await api.getTodayPrice(token, item.stock_id, openDate);
       const stockItem = res.data[0];
       if (stockItem) {
         const newItem = {

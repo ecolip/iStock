@@ -103,18 +103,17 @@ const Lists = styled.div`
   text-align: center;
   padding: 10px 0;
   margin-bottom: 30px;
-  border-radius: 8px;
   background-color: #181A20;
   @media (min-width: 576px) {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 30px;
+    padding: 0 30px;
   }
 `;
 const List = styled.div`
   color: ${(props) => (props.active ? '#EAECEF' : '#848E9C')};
-  margin: 20px 0;
+  margin: 10px 0;
   padding: 0 0 5px;
   font-size: 20px;
   cursor: pointer;

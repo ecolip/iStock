@@ -37,7 +37,7 @@ const SearchContainer = styled.div`
   background-color: #181A20;
   border-radius: 8px;
   @media (min-width: 576px) {
-    padding: 30px;
+    padding: 20px;
   }
   @media (min-width: 992px) {
     display: flex;

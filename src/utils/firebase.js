@@ -240,6 +240,13 @@ const getBrokerages = async (bank, city) => {
   return output;
 };
 
+const getOpenDate = async () => {
+  const docRef = doc(db, 'categoryPrices', 'TAIEX');
+  const docSnap = await getDoc(docRef);
+  const { date } = docSnap.data();
+  return date;
+};
+
 export {
   signIn,
   googleSignIn,
@@ -261,4 +268,5 @@ export {
   getBanks,
   getCities,
   getBrokerages,
+  getOpenDate,
 };

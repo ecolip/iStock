@@ -39,7 +39,6 @@ const TableContainer = styled.div`
 `;
 const Table = styled.div`
   background-color: #181A20;
-  border-radius: 8px;
   padding: 30px 10px;
   @media (min-width: 768px) {
     padding: 30px 50px;
@@ -93,15 +92,15 @@ function MonthRevenue({ list }) {
       text: `${stockId} ${stockName}`,
     },
     axisX: {
-      valueFormatString: 'MMM YYYY',
+      valueFormatString: 'YYYY MMM',
       labelAngle: -20,
     },
     axisY: {
-      title: '營收 (千元)',
+      title: '營收(千元)',
+      prefix: '$',
     },
     data: [{
       type: 'line',
-      toolTipContent: '{x}: {y} (千元)',
       xValueFormatString: 'YYYY MMMM',
       dataPoints: data,
     }],

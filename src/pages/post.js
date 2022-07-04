@@ -46,7 +46,7 @@ const DiscussionImg = styled.img`
   margin-right: 20px;
 `;
 const Title = styled.div`
-  font-size: 35px;
+  font-size: 32px;
   color: #EAECEF;
 `;
 const ButtonGroup = styled.div`

@@ -40,7 +40,6 @@ const TableContainer = styled.div`
 `;
 const Table = styled.div`
   background-color: #181A20;
-  border-radius: 8px;
   padding: 30px 10px;
   @media (min-width: 768px) {
     padding: 30px 50px;
@@ -88,7 +87,7 @@ function Dividend({ list }) {
       text: `${stockId} ${stockName}`,
     },
     axisY: {
-      title: '股利 (元)',
+      title: '股利(元)',
       prefix: '$',
       includeZero: true,
     },
@@ -98,6 +97,7 @@ function Dividend({ list }) {
     data: [
       {
         type: 'column',
+        toolTipContent: '{x}: {y} (元)',
         dataPoints: data,
       },
     ],
