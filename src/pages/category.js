@@ -12,7 +12,7 @@ import ScrollTop from '../components/ScrollTop';
 import { handelColor } from '../utils/formatDate';
 import { transferRedirectKey } from '../utils/table';
 import {
-  getTrackStock, addTrackStock, removeTrackStock, getOpenDate,
+  getTrack, addTrackStock, removeTrackStock, getOpenDate,
 } from '../utils/firebase';
 import api from '../utils/api';
 
@@ -23,34 +23,83 @@ const Container = styled.div`
   min-height: 100vh;
   background-color: #0B0E11;
 `;
-const ContextDiv = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: #0B0E11;
-`;
-const ContextContainer = styled.div`
-  padding: 80px 30px 30px;
-  @media (min-width: 1200px) {
-    width: 1200px;
-    margin: 0 auto;
-  }
-`;
-const TitleGroup = styled.div`
-  padding: 30px 0;
-  @media (min-width: 992px) {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 40px 0;
-  }
-`;
-const Title = styled.div`
+const TitleText = styled.div`
   padding-bottom: 10px;
   text-align: center;
   font-size: 32px;
   color: white;
   @media (min-width: 992px) {
     padding-bottom: 0;
+  }
+`;
+const TableContainer = styled.div`
+  min-height: 55vh;
+`;
+const MainContainer = styled.div`
+  padding: 80px 0 30px;
+  @media (min-width: 1260px) {
+    width: 1260px;
+    margin: 0 auto;
+    padding: 80px 30px 30px;
+  }
+`;
+const TitleContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  font-size: 14px;
+  color: #848E9C;
+`;
+const Title = styled.div`
+  display: ${(props) => (props.df ? 'flex' : 'block')};
+  justify-content: ${(props) => (props.jce ? 'end' : 'start')};
+  width: 100px;
+`;
+const ItemContainer = styled.div`
+`;
+const Items = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  :hover {
+    background-color: #2B3139;
+  }
+`;
+const Item = styled.div`
+  color: ${(props) => handelColor(props)};
+  display: ${(props) => (props.df ? 'flex' : 'block')};
+  justify-content: ${(props) => (props.jce ? 'end' : 'start')};
+  width: 100px;
+  font-size: 15px;
+`;
+const FilledStarIcon = styled(filledStar)`
+  width: 18px;
+  height: 18px;
+  padding: 1px;
+  color: #F5C829;
+  cursor: pointer;
+  :hover {
+    opacity: 0.6;
+  }
+  @media (min-width: 576px) {
+    width: 20px;
+    height: 20px;
+  }
+`;
+const StarIcon = styled(Star)`
+  width: 18px;
+  height: 18px;
+  padding: 1px;
+  color: #F5C829;
+  cursor: pointer;
+  :hover {
+    opacity: 0.6;
+  }
+  @media (min-width: 576px) {
+    width: 20px;
+    height: 20px;
   }
 `;
 const ArrowUp = styled(ArrowSortedUp)`
@@ -64,84 +113,13 @@ const ArrowUp = styled(ArrowSortedUp)`
   }
 `;
 const ArrowDown = styled(ArrowSortedDown)`
-  width: 23px;
-  height: 23px;
+  width: 18px;
+  height: 18px;
   color: #F5C829;
   cursor: pointer;
   @media (min-width: 576px) {
-    width: 28px;
-    height: 28px;
-  }
-`;
-const ListsContainer = styled.div`
-  min-height: 55vh;
-  padding: 10px 20px;
-  background-color: #181A20;
-  border-radius: 8px;
-  @media (min-width: 576px) {
-    padding: 20px 50px 30px;
-  }
-`;
-const Table = styled.table`
-  margin-bottom: ${(props) => (props.mb100 ? '100px' : '0')};
-  width: 100%;
-`;
-const TrTitle = styled.tr`
-  height: 55px;
-`;
-const Tr = styled.tr`
-  height: 65px;
-  border-bottom: 1px solid #474D57;
-  :hover{
-    background-color: #0B0E11;
-  }
-`;
-const Thead = styled.thead`
-`;
-const Tbody = styled.tbody`
-`;
-const Th = styled.th`
-  padding-top: ${(props) => (props.pt10 ? '5px' : '0')};
-  color: white;
-  font-size: 15px;
-  @media (min-width: 576px) {
-    font-size: 18px;
-  }
-`;
-const Td = styled.td`
-  color: ${(props) => handelColor(props)};
-  font-size: 15px;
-  font-weight: bold;
-  @media (min-width: 576px) {
-    font-size: 18px;
-  }
-`;
-const StarIcon = styled(Star)`
-  width: 25px;
-  height: 25px;
-  padding: 1px;
-  color: #F5C829;
-  cursor: pointer;
-  :hover {
-    opacity: 0.6;
-  }
-  @media (min-width: 576px) {
-    width: 28px;
-    height: 28px;
-  }
-`;
-const FilledStarIcon = styled(filledStar)`
-  width: 25px;
-  height: 25px;
-  padding: 1px;
-  color: #F5C829;
-  cursor: pointer;
-  :hover {
-    opacity: 0.6;
-  }
-  @media (min-width: 576px) {
-    width: 28px;
-    height: 28px;
+    width: 20px;
+    height: 20px;
   }
 `;
 
@@ -235,33 +213,28 @@ function Category() {
 
   const renderList = () => {
     const output = lists.map((item) => (
-      <Tr key={item.stock_id}>
-        <Td>{item.stock_id}</Td>
-        <Td>{item.stock_name}</Td>
-        <Td
-          green={verifySpread(item.spread)}
-          red={!verifySpread(item.spread)}
-        >
-          {item.close}
-        </Td>
-        <Td
+      <Items key={item.stock_id}>
+        <Item>{item.stock_id}</Item>
+        <Item>{item.stock_name}</Item>
+        <Item>${item.close}</Item>
+        <Item
           green={verifySpread(item.spread)}
           red={!verifySpread(item.spread)}
         >
           {item.spread === 0 ? '-' : item.spread}
-        </Td>
-        <Td>
+        </Item>
+        <Item df jce>
           {item.star
             ? <FilledStarIcon onClick={() => { removeDBTrack(item.stock_id); }} />
             : <StarIcon onClick={() => { addDBTrack(item.stock_id); }} />}
-        </Td>
-      </Tr>
+        </Item>
+      </Items>
     ));
     return output;
   };
 
   useEffect(() => {
-    getTrackStock().then((tracks) => {
+    getTrack('track').then((tracks) => {
       fetchCategoryPrice(tracks);
     });
   }, []);
@@ -269,38 +242,31 @@ function Category() {
   return (
     <Container>
       <Header />
-      <ContextDiv>
-        <ContextContainer>
-          <TitleGroup>
-            <Title>最新收盤行情</Title>
-          </TitleGroup>
-          <ListsContainer>
-            <Table mb100={lists.length < 1}>
-              <Thead>
-                <TrTitle>
-                  <Th>代號</Th>
-                  <Th>名稱</Th>
-                  <Th pt10>價格
-                    {isCloseUp
-                      ? <ArrowUp onClick={() => { sortClose('down'); }} />
-                      : <ArrowDown onClick={() => { sortClose('up'); }} />}
-                  </Th>
-                  <Th pt10>漲跌
-                    {isSpreadUp
-                      ? <ArrowUp onClick={() => { sortSpread('down'); }} />
-                      : <ArrowDown onClick={() => { sortSpread('up'); }} />}
-                  </Th>
-                  <Th pt10>追蹤</Th>
-                </TrTitle>
-              </Thead>
-              <Tbody>
-                {lists.length > 0 && renderList()}
-              </Tbody>
-            </Table>
-            {lists.length < 1 && <Loading />}
-          </ListsContainer>
-        </ContextContainer>
-      </ContextDiv>
+      <MainContainer>
+        <TitleText>最新收盤行情</TitleText>
+        <TableContainer>
+          <TitleContainer>
+            <Title>代號</Title>
+            <Title>名稱</Title>
+            <Title>
+              價格
+              {isCloseUp
+                ? <ArrowUp onClick={() => { sortClose('down'); }} />
+                : <ArrowDown onClick={() => { sortClose('up'); }} />}
+            </Title>
+            <Title>
+              漲跌
+              {isSpreadUp
+                ? <ArrowUp onClick={() => { sortSpread('down'); }} />
+                : <ArrowDown onClick={() => { sortSpread('up'); }} />}
+            </Title>
+            <Title df jce>追蹤</Title>
+          </TitleContainer>
+          <ItemContainer>
+            {lists.length > 0 ? renderList() : <Loading />}
+          </ItemContainer>
+        </TableContainer>
+      </MainContainer>
       <ScrollTop />
       <Footer />
     </Container>
