@@ -5,9 +5,11 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Loading from '../Loading';
 import CanvasJSReact from '../../utils/canvasjs-3.6.6/canvasjs.react';
+import { formatPrice } from '../../utils/formatDate';
 import api from '../../utils/api';
 
 const Div = styled.div`
+ margin: 0 -15px;
 `;
 const LoadContainer = styled.div`
   padding-top: 100px;
@@ -22,43 +24,35 @@ const Titles = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 0 20px;
+  padding: 0 15px 20px;
+  font-size: 14px;
+  color: #848E9C;
 `;
 const Title = styled.div`
   width: ${(props) => (props.day ? '80px' : '40px')};
   display: ${(props) => (props.smDisplayNon ? 'none' : 'block')};
-
-  font-size: 15px;
-  color: #EAECEF;
   @media (min-width: 768px) {
     display: ${(props) => (props.smDisplayNon ? 'block' : 'block')};
     width: 100px;
-    font-size: 22px;
   }
 `;
 const TableContainer = styled.div`
 `;
 const Table = styled.div`
-  background-color: #181A20;
-  padding: 30px 10px;
-  @media (min-width: 768px) {
-    padding: 30px 50px;
-  }
 `;
 const Item = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 0;
+  padding: 15px;
   font-size: 13px;
   color: #EAECEF;
   border-radius: 3px;
-  cursor: pointer;
   :hover {
-    background-color: #0B0E11;
+    background-color: #2B3139;
   }
   @media (min-width: 768px) {
-    font-size: 18px;
+    font-size: 16px;
   }
 `;
 const ItemText = styled.div`
@@ -87,6 +81,7 @@ function Financial({ list }) {
     },
     axisX: {
       valueFormatString: 'MMM YYYY',
+      labelAngle: -20,
     },
     axisY: {
       title: '綜合損益總額(千元)',
@@ -149,7 +144,7 @@ function Financial({ list }) {
         <ItemText>{item.stock_id}</ItemText>
         <ItemText smDisplayNon>{stockName}</ItemText>
         <ItemText day>{item.date}</ItemText>
-        <ItemText day>{item.value / 1000}</ItemText>
+        <ItemText day>${formatPrice(item.value / 1000)}</ItemText>
       </Item>
     ));
     return output;
@@ -172,7 +167,7 @@ function Financial({ list }) {
                   <Title>代碼</Title>
                   <Title smDisplayNon>名稱</Title>
                   <Title day>日期</Title>
-                  <Title day>總額</Title>
+                  <Title day>總額(千元)</Title>
                 </Titles>
                 {renderTable()}
               </Table>

@@ -19,7 +19,7 @@ const api = {
       .then((response) => response.json());
   },
   getHistoryPrice(token, id, today) {
-    return fetch(`${this.hostname}token=${token}&dataset=TaiwanStockPrice&data_id=${id}&start_date=${this.startDate}&end_date=${today}`)
+    return fetch(`${this.hostname}token=${token}&dataset=TaiwanStockPrice&data_id=${id}&start_date='2015-05-15'&end_date=${today}`)
       .then((response) => response.json());
   },
   getStockList(token) {

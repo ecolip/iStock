@@ -42,9 +42,7 @@ const SearchContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 30px;
   margin-bottom: 30px;
-  border-radius: 8px;
 `;
 const SearchGroup = styled.div`
   border: ${(props) => (props.focus ? '1px solid #F0B90B' : '1px solid #848E9C')};
@@ -102,13 +100,11 @@ const SearchIcon = styled(SearchOutline)`
 const Lists = styled.div`
   text-align: center;
   padding: 10px 0;
-  margin-bottom: 30px;
-  background-color: #181A20;
+  margin: 0 -15px 30px;
   @media (min-width: 576px) {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 30px;
   }
 `;
 const List = styled.div`

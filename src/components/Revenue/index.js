@@ -4,11 +4,12 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Loading from '../Loading';
-import { canvasDay } from '../../utils/formatDate';
 import CanvasJSReact from '../../utils/canvasjs-3.6.6/canvasjs.react';
+import { canvasDay, formatPrice } from '../../utils/formatDate';
 import api from '../../utils/api';
 
 const Div = styled.div`
+  margin: 0 -15px;
 `;
 const LoadContainer = styled.div`
   padding-top: 100px;
@@ -23,41 +24,33 @@ const Titles = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 0 20px;
+  padding: 0 15px 20px;
+  font-size: 14px;
+  color: #848E9C;
 `;
 const Title = styled.div`
   width: ${(props) => (props.t1 ? '35px' : '70px')};
-
-  font-size: 15px;
-  color: #EAECEF;
   @media (min-width: 768px) {
     width: 100px;
-    font-size: 22px;
   }
 `;
 const TableContainer = styled.div`
 `;
 const Table = styled.div`
-  background-color: #181A20;
-  padding: 30px 10px;
-  @media (min-width: 768px) {
-    padding: 30px 50px;
-  }
 `;
 const Item = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 0;
+  padding: 15px;
   font-size: 13px;
   color: #EAECEF;
   border-radius: 3px;
-  cursor: pointer;
   :hover {
-    background-color: #0B0E11;
+    background-color: #2B3139;
   }
   @media (min-width: 768px) {
-    font-size: 18px;
+    font-size: 16px;
   }
 `;
 const ItemText = styled.div`
@@ -69,7 +62,6 @@ const ItemDate = styled.div`
   @media (min-width: 768px) {
     width: 100px;
   }
-
 `;
 const ItemNum = styled.div`
   @media (min-width: 768px) {
@@ -92,7 +84,7 @@ function MonthRevenue({ list }) {
       text: `${stockId} ${stockName}`,
     },
     axisX: {
-      valueFormatString: 'YYYY MMM',
+      valueFormatString: 'MMM YYYY',
       labelAngle: -20,
     },
     axisY: {
@@ -101,7 +93,9 @@ function MonthRevenue({ list }) {
     },
     data: [{
       type: 'line',
-      xValueFormatString: 'YYYY MMMM',
+      yValueFormatString: '$#,###',
+      xValueFormatString: 'MMM YYYY',
+      // toolTipContent: '{x}: $ {y}',
       dataPoints: data,
     }],
   };
@@ -146,7 +140,7 @@ function MonthRevenue({ list }) {
         <ItemText>{item.stock_id}</ItemText>
         <ItemText>{stockName}</ItemText>
         <ItemDate>{item.date}</ItemDate>
-        <ItemNum>{item.revenue / 1000}</ItemNum>
+        <ItemNum>${formatPrice(item.revenue / 1000)}</ItemNum>
       </Item>
     ));
     return output;
@@ -169,7 +163,7 @@ function MonthRevenue({ list }) {
                   <Title t1>代碼</Title>
                   <Title t1>名稱</Title>
                   <Title>年度</Title>
-                  <Title>月營收</Title>
+                  <Title>月營收(千元)</Title>
                 </Titles>
                 {renderTable()}
               </Table>

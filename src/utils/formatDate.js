@@ -108,6 +108,8 @@ const handelColor = (props) => {
   return '#EAECEF';
 };
 
+const formatPrice = (price) => String(price).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
 export {
   today,
   getPreMonth,
@@ -117,4 +119,5 @@ export {
   getDateDiff,
   canvasDay,
   handelColor,
+  formatPrice,
 };

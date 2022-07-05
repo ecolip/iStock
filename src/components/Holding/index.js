@@ -8,6 +8,7 @@ import CanvasJSReact from '../../utils/canvasjs-3.6.6/canvasjs.react';
 import api from '../../utils/api';
 
 const Div = styled.div`
+ margin: 0 -15px;
 `;
 const LoadContainer = styled.div`
   padding-top: 100px;
@@ -22,43 +23,35 @@ const Titles = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 0 20px;
+  padding: 0 15px 20px;
+  font-size: 14px;
+  color: #848E9C;
 `;
 const Title = styled.div`
   width: ${(props) => (props.day ? '80px' : '40px')};
   display: ${(props) => (props.smDisplayNon ? 'none' : 'block')};
-
-  font-size: 15px;
-  color: #EAECEF;
   @media (min-width: 768px) {
     display: ${(props) => (props.smDisplayNon ? 'block' : 'block')};
     width: 100px;
-    font-size: 22px;
   }
 `;
 const TableContainer = styled.div`
 `;
 const Table = styled.div`
-  background-color: #181A20;
-  padding: 30px 10px;
-  @media (min-width: 768px) {
-    padding: 30px 50px;
-  }
 `;
 const Item = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 0;
+  padding: 15px;
   font-size: 13px;
   color: #EAECEF;
   border-radius: 3px;
-  cursor: pointer;
   :hover {
-    background-color: #0B0E11;
+    background-color: #2B3139;
   }
   @media (min-width: 768px) {
-    font-size: 18px;
+    font-size: 16px;
   }
 `;
 const ItemText = styled.div`
@@ -87,14 +80,17 @@ function Holding({ list }) {
       text: `${stockId} ${stockName}`,
     },
     axisY: {
-      title: '外資持股比例',
+      title: '外資持股比例(%)',
       suffix: '%',
     },
     axisX: {
-      interval: 2,
+      valueFormatString: 'MMM YYYY',
+      labelAngle: -20,
+      // interval: 2,
     },
     data: [{
       type: 'area',
+      xValueFormatString: 'MMM YYYY',
       toolTipContent: '{x}: {y}%',
       dataPoints: data,
     }],
@@ -149,7 +145,7 @@ function Holding({ list }) {
         <ItemText>{item.stock_id}</ItemText>
         <ItemText smDisplayNon>{item.stock_name}</ItemText>
         <ItemText day>{item.date}</ItemText>
-        <ItemText>{item.ForeignInvestmentSharesRatio}</ItemText>
+        <ItemText>{item.ForeignInvestmentSharesRatio}%</ItemText>
       </Item>
     ));
     return output;

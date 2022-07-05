@@ -8,6 +8,7 @@ import CanvasJSReact from '../../utils/canvasjs-3.6.6/canvasjs.react';
 import api from '../../utils/api';
 
 const Div = styled.div`
+ margin: 0 -15px;
 `;
 const LoadContainer = styled.div`
   padding-top: 100px;
@@ -22,43 +23,38 @@ const Titles = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 0 20px;
+  padding: 0 15px 20px;
+  font-size: 15px;
+  color: #EAECEF;
 `;
 const Title = styled.div`
   width: ${(props) => (props.day ? '80px' : '40px')};
   display: ${(props) => (props.smDisplayNon ? 'none' : 'block')};
 
-  font-size: 15px;
-  color: #EAECEF;
+  font-size: 14px;
+  color: #848E9C;
   @media (min-width: 768px) {
     display: ${(props) => (props.smDisplayNon ? 'block' : 'block')};
     width: 100px;
-    font-size: 22px;
   }
 `;
 const TableContainer = styled.div`
 `;
 const Table = styled.div`
-  background-color: #181A20;
-  padding: 30px 10px;
-  @media (min-width: 768px) {
-    padding: 30px 50px;
-  }
 `;
 const Item = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 0;
+  padding: 15px;
   font-size: 13px;
   color: #EAECEF;
   border-radius: 3px;
-  cursor: pointer;
   :hover {
-    background-color: #0B0E11;
+    background-color: #2B3139;
   }
   @media (min-width: 768px) {
-    font-size: 18px;
+    font-size: 16px;
   }
 `;
 const ItemText = styled.div`
@@ -89,6 +85,7 @@ function Dividend({ list }) {
     axisY: {
       title: '股利(元)',
       prefix: '$',
+      suffix: '元',
       includeZero: true,
     },
     toolbar: {
@@ -97,7 +94,10 @@ function Dividend({ list }) {
     data: [
       {
         type: 'column',
-        toolTipContent: '{x}: {y} (元)',
+        yValueFormatString: '$#,###',
+        xValueFormatString: 'MMM YYYY',
+        // toolTipContent: '{x}: {y} (元)',
+        color: '#4F81BC',
         dataPoints: data,
       },
     ],
@@ -149,7 +149,7 @@ function Dividend({ list }) {
           <ItemText>{item.stock_id}</ItemText>
           <ItemText smDisplayNon>{stockName}</ItemText>
           <ItemText day>{item.year}</ItemText>
-          <ItemText>{num}</ItemText>
+          <ItemText>$ {num}</ItemText>
         </Item>
       );
     });
@@ -173,7 +173,7 @@ function Dividend({ list }) {
                   <Title>代碼</Title>
                   <Title smDisplayNon>名稱</Title>
                   <Title day>日期</Title>
-                  <Title>股利</Title>
+                  <Title>股利(元)</Title>
                 </Titles>
                 {renderTable()}
               </Table>
