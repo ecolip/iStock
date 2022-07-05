@@ -32,12 +32,11 @@ const Title = styled.div`
   color: #EAECEF;
 `;
 const SearchContainer = styled.div`
-  padding: 20px;
+  padding: 0 0 0 10px;
   margin-bottom: 30px;
-  background-color: #181A20;
   border-radius: 8px;
   @media (min-width: 576px) {
-    padding: 20px;
+    padding: 10px;
   }
   @media (min-width: 992px) {
     display: flex;
@@ -76,6 +75,7 @@ const Select = styled.select`
   border-radius: 3px;
   cursor: pointer;
   outline: none;
+  background-position: 50%;
   :hover {
     border-color: #F5C829;
   }
@@ -100,27 +100,27 @@ const ListMapGroup = styled.div`
 `;
 const ListContainer = styled.div`
   width: 100%;
-  height: 600px;
   margin-bottom: 50px;
+  height: 600px;
   overflow: auto;
   @media (min-width: 1200px) {
     width: 25%;
-    height: inherit;
+    height: 700px;
+    overflow: auto;
     margin-bottom: 0;
   }
 `;
 const List = styled.div`
-  padding: 20px;
+  padding: 10px;
   margin-bottom: 20px;
   background-color: #181A20;
-  border-radius: 8px;
+  border-radius: 3px;
   :hover {
     background-color: #2D3137;
-    box-shadow: 2px 5px 5px rgb(255 255 255 / 50%);
   }
 `;
 const Name = styled.div`
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 500;
   color: #EAECEF;
 `;
@@ -128,14 +128,11 @@ const Address = styled.div`
   display: flex;
   align-items: center;
   padding: 8px 0;
-  font-size: 15px;
+  font-size: 14px;
   color: #EAECEF;
-  @media (min-width: 1200px) {
-    font-size: 16px;
-  }
 `;
 const Phone = styled.div`
-  font-size: 16px;
+  font-size: 13px;
   color: #EAECEF;
 `;
 const MapContainer = styled.div`

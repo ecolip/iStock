@@ -155,7 +155,7 @@ const StockSpread = styled.div`
 const StockText = styled.div`
   color: #848E9C;
   font-weight: 500;
-  font-size: 18px;
+  font-size: 20px;
 `;
 const ButtonContainer = styled.div`
   display: inline-block;
@@ -219,7 +219,7 @@ function Home() {
       </Banner>
       <ListsDiv>
         <ListsContainer>
-          <ListTitle>台股大盤與類股</ListTitle>
+          <ListTitle>類股收盤 / 漲跌</ListTitle>
           {isLoaded
             ? <Loading />
             : (

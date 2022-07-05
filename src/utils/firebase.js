@@ -6,7 +6,9 @@ import {
 import {
   getFirestore, collection, query, setDoc, doc, getDoc, updateDoc, where, getDocs,
 } from 'firebase/firestore';
+import * as dayjs from 'dayjs';
 import firebaseConfig from '../firebaseConfig';
+import api from './api';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -49,7 +51,7 @@ const register = (email, password) => new Promise((resolve, reject) => {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const { user } = userCredential;
-      setDoc(doc(db, 'userTrackStocks', email), { track: [] });
+      setDoc(doc(db, 'userTrackStocks', email), { track: [], list: [], news: [] });
       resolve(user);
     }).catch((error) => {
       reject(error.code);
@@ -78,6 +80,7 @@ const getNewCategoryPrice = async () => {
 const checkNewPrices = async (openDate) => {
   const docRef = doc(db, 'categoryPrices', 'TAIEX');
   const docSnap = await getDoc(docRef);
+  console.log(docSnap.data().date, openDate);
   return docSnap.data().date === openDate;
 };
 
@@ -85,36 +88,128 @@ const updateCategoryPrices = (item) => {
   setDoc(doc(db, 'categoryPrices', item.stock_id), item);
 };
 
-const getTrackStock = async () => {
+const getOpenDate = async () => {
+  const docRef = doc(db, 'categoryPrices', 'TAIEX');
+  const docSnap = await getDoc(docRef);
+  const { date } = docSnap.data();
+  return date;
+};
+
+const addStockName = (data) => {
+  setDoc(doc(db, 'stockNames', 'list'), { data });
+};
+
+const compareStockId = async (id) => {
+  const docRef = doc(db, 'stockNames', 'list');
+  const docSnap = await getDoc(docRef);
+  const { data } = docSnap.data();
+  const items = data.filter((item) => item.stock_id === id);
+  const item = items[0];
+  if (item) {
+    return item.stock_name;
+  }
+  return false;
+};
+
+const getTrack = async (type) => {
   const user = window.localStorage.getItem('user');
   const { email } = JSON.parse(user);
   const docRef = doc(db, 'userTrackStocks', email);
   const docSnap = await getDoc(docRef);
-  return docSnap.data().track;
+  switch (type) {
+    case 'track':
+      return docSnap.data().track;
+    case 'detail':
+      return docSnap.data().detail;
+    default:
+      return docSnap.data().news;
+  }
+};
+
+const fetchTrackDetail = async (id) => {
+  const token = window.localStorage.getItem('finToken');
+  const openDate = await getOpenDate();
+  const name = await compareStockId(id);
+  const detail = await getTrack('detail');
+  const newDetail = [...detail];
+  const res = await api.getTodayPrice(token, id, openDate);
+  const stockItem = res.data[0];
+  if (stockItem) {
+    const newItem = {
+      ...stockItem,
+      stock_name: name,
+    };
+    newDetail.push(newItem);
+  }
+  return newDetail;
+};
+
+const fetchHistoryNews = async (id) => {
+  const token = window.localStorage.getItem('finToken');
+  const preWeek = dayjs().subtract(7, 'day').format('YYYY-MM-DD');
+  const news = await getTrack('news');
+  const newNews = [...news];
+  const openDate = await getOpenDate();
+  const name = await compareStockId(id);
+  const res = await api.getTodayNews(token, id, openDate, preWeek);
+  const stockItem = res.data[0];
+  if (stockItem) {
+    const newItem = {
+      ...stockItem,
+      stock_name: name,
+    };
+    newNews.push(newItem);
+  }
+  return newNews;
 };
 
 const addTrackStock = async (id) => {
   const user = window.localStorage.getItem('user');
   const { email } = JSON.parse(user);
   const docRef = doc(db, 'userTrackStocks', email);
-  const initTrack = await getTrackStock();
+  const initTrack = await getTrack('track');
+  const detail = await fetchTrackDetail(id);
+  const news = await fetchHistoryNews(id);
   const newTrack = [...initTrack, id];
   updateDoc(docRef, {
     track: newTrack,
+    detail,
+    news,
   });
   return true;
+};
+
+const removeNewsIndex = async (id) => {
+  const originNews = await getTrack('news');
+  originNews.forEach((item, index) => {
+    if (item.stock_id === id) {
+      return index;
+    }
+    return false;
+  });
 };
 
 const removeTrackStock = async (id) => {
   const user = window.localStorage.getItem('user');
   const { email } = JSON.parse(user);
   const docRef = doc(db, 'userTrackStocks', email);
-  const initTrack = await getTrackStock();
-  const newTrack = [...initTrack];
-  const index = initTrack.indexOf(id);
+  const originTrack = await getTrack('track');
+  const originDetail = await getTrack('detail');
+  const originNews = await getTrack('news');
+  const newsIndex = await removeNewsIndex(id);
+  const index = originTrack.indexOf(id);
+  const newTrack = [...originTrack];
+  const newDetail = [...originDetail];
+  const newNews = [...originNews];
   newTrack.splice(index, 1);
+  newNews.splice(index, 1);
+  if (newsIndex) {
+    newDetail.splice(newsIndex, 1);
+  }
   updateDoc(docRef, {
     track: newTrack,
+    detail: newDetail,
+    news: newNews,
   });
   return true;
 };
@@ -240,13 +335,6 @@ const getBrokerages = async (bank, city) => {
   return output;
 };
 
-const getOpenDate = async () => {
-  const docRef = doc(db, 'categoryPrices', 'TAIEX');
-  const docSnap = await getDoc(docRef);
-  const { date } = docSnap.data();
-  return date;
-};
-
 export {
   signIn,
   googleSignIn,
@@ -255,7 +343,8 @@ export {
   updateCategoryPrices,
   checkNewPrices,
   getNewCategoryPrice,
-  getTrackStock,
+  addStockName,
+  getTrack,
   addTrackStock,
   removeTrackStock,
   getAllPosts,

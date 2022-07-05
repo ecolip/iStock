@@ -10,7 +10,7 @@ const StyledArrow = styled(UpArrowAlt)`
   right: 30px;
   z-index: 100;
   color: #0B0E11;
-  background-color: #F0B90B;
+  background-color: #FCD535;
   border-radius: 50%;
   cursor: pointer;
   animation: fadeIn 0.3s;

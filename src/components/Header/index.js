@@ -1,20 +1,17 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { Person } from '@styled-icons/ionicons-solid';
 import { Navicon } from '@styled-icons/evil';
 import { Close } from '@styled-icons/material';
-import Button from '../Button';
 
 const Container = styled.div`
   position: fixed;
   display: none;
   align-items: center;
   width: 100%;
-  height: 80px;
+  height: 70px;
   padding: 0 30px;
   background-color: #181A20;
-  border-bottom: 1px solid #F5F5F5;
   z-index: 100;
   @media (min-width: 992px) {
     display: flex;
@@ -39,7 +36,6 @@ const Logo = styled.div`
   
   @media (min-width: 992px) {
     margin-right: 30px;
-    font-size: 40px;
   }
 `;
 const NavItem = styled.div`
@@ -64,17 +60,6 @@ const PersonContainer = styled.div`
   cursor: pointer;
   :hover {
     color: #F5F5F5;
-  }
-`;
-const PersonIcon = styled(Person)`
-  width: 2rem;
-  height: 2rem;
-  margin-right: 15px;
-  color: #FCD535;
-  cursor: pointer;
-  transition: opacity 0.1s linear;
-  :hover {
-    opacity: 0.9;
   }
 `;
 
@@ -138,16 +123,48 @@ const MobileNavContainer = styled.div`
   height: 100vh;
 `;
 
+const ProfileIcon = styled.div`
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  color: #181A20;
+  background-color: #FCD535;
+  text-align: center;
+  line-height: 45px;
+  font-size: 23px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.1s linear;
+  :hover {
+    opacity: 0.9;
+  }
+`;
+
+const ProfileImg = styled.img`
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+`;
+
 function Header() {
   const [openNav, setOpenNav] = useState(false);
-  const navigate = useNavigate();
+  const [userEmail, setUserEmail] = useState(null);
+  const [img, setImg] = useState(null);
 
-  const logout = () => {
-    window.localStorage.removeItem('firToken');
-    window.localStorage.removeItem('user');
-    window.localStorage.removeItem('finToken');
-    navigate('/', { replace: true });
+  const getUserInfo = () => {
+    const data = window.localStorage.getItem('user');
+    const { email, photoURL } = JSON.parse(data);
+    if (photoURL) {
+      setImg(photoURL);
+    } else {
+      const emailFirst = email.slice(0, 1).toUpperCase();
+      setUserEmail(emailFirst);
+    }
   };
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
 
   return (
     <>
@@ -172,10 +189,11 @@ function Header() {
         <RightContainer>
           <PersonContainer>
             <Link to="/profile">
-              <PersonIcon />
+              {img
+                ? <ProfileImg src={img} />
+                : <ProfileIcon>{userEmail}</ProfileIcon>}
             </Link>
           </PersonContainer>
-          <Button md onClick={() => { logout(); }}>登出</Button>
         </RightContainer>
       </Container>
       <MobileHead>
@@ -188,7 +206,6 @@ function Header() {
         <MobileBackground displayBlock>
           <MobileNavContainer displayBlock>
             <CloseIcon onClick={() => { setOpenNav(false); }} />
-            <Button sm w100 mb1 onClick={() => { logout(); }}>登出</Button>
             <Link to="/profile">
               <NavItem px1 fzBig>我的收藏</NavItem>
             </Link>

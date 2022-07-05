@@ -7,8 +7,10 @@ import Button from '../components/Button';
 import googleSrc from '../imgs/google.svg';
 import AppContext from '../AppContext';
 import {
-  googleSignIn, register, signIn, getCategoryList, updateCategoryPrices, checkNewPrices,
+  googleSignIn, register, signIn, getCategoryList, updateCategoryPrices,
+  checkNewPrices, addStockName,
 } from '../utils/firebase';
+// import { addBrokerages } from '../utils/firebase';
 import { today, preDay } from '../utils/formatDate';
 // import { list, banksList } from '../utils/locationData';
 import api from '../utils/api';
@@ -209,6 +211,7 @@ function Login() {
   const fetchPrices = async (item, day) => {
     const finToken = window.localStorage.getItem('finToken');
     const res = await api.getTodayPrice(finToken, item.stock_id, day);
+    console.log(1);
     const newItem = {
       ...item, close: res.data[0].close, spread: res.data[0].spread.toFixed(2), date: day,
     };
@@ -218,6 +221,7 @@ function Login() {
   const fetchTaiexOpenDate = async (date) => {
     const finToken = window.localStorage.getItem('finToken');
     const res = await api.getTodayPrice(finToken, 'TAIEX', date);
+    if (res.status === 402) return 402;
     if (res.data.length > 0) {
       dispatch({ openDate: date });
       return date;
@@ -227,16 +231,24 @@ function Login() {
 
   const updatePrice = async () => {
     const openDate = await fetchTaiexOpenDate(today());
+    console.log('開盤日or402錯誤', openDate);
+    if (openDate === 402) return;
     const isNew = await checkNewPrices(openDate);
     if (!isNew) {
-      getCategoryList().then((indexList) => {
-        indexList.forEach((item) => {
-          fetchPrices(item, openDate).then((priceItem) => {
-            updateCategoryPrices(priceItem);
-          });
+      const indexList = await getCategoryList();
+      indexList.forEach((item) => {
+        fetchPrices(item, openDate).then((priceItem) => {
+          updateCategoryPrices(priceItem);
         });
       });
     }
+  };
+
+  const fetchStockNames = async () => {
+    const finToken = window.localStorage.getItem('finToken');
+    const res = await api.getStockList(finToken);
+    const { data } = res;
+    addStockName(data);
   };
 
   const getApiToken = async () => {
@@ -288,6 +300,7 @@ function Login() {
     getApiToken().then((token) => {
       if (token) {
         updatePrice();
+        fetchStockNames();
       }
     });
     // initBrokeragesToDB();
