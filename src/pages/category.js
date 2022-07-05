@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-unused-vars */
 import { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
@@ -25,35 +26,44 @@ const Container = styled.div`
 `;
 const TitleText = styled.div`
   padding-bottom: 10px;
+  padding-left: 30px;
   text-align: center;
   font-size: 32px;
   color: white;
   @media (min-width: 992px) {
-    padding-bottom: 0;
+    padding-left: 0;
+    text-align: left;
   }
 `;
 const TableContainer = styled.div`
   min-height: 55vh;
+  padding: 0 30px;
+  @media (min-width: 1260px) {
+    margin: 0 -15px;
+    padding: 0;
+  }
 `;
 const MainContainer = styled.div`
-  padding: 80px 0 30px;
+  position: relative;
+  padding: 120px 0 30px;
   @media (min-width: 1260px) {
     width: 1260px;
     margin: 0 auto;
-    padding: 80px 30px 30px;
+    padding: 120px 30px 30px;
   }
 `;
 const TitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
+  padding: 15px;
   font-size: 14px;
   color: #848E9C;
 `;
 const Title = styled.div`
   display: ${(props) => (props.df ? 'flex' : 'block')};
   justify-content: ${(props) => (props.jce ? 'end' : 'start')};
+  margin-left: ${(props) => (props.ml70 ? '-70px' : '0')};
   width: 100px;
 `;
 const ItemContainer = styled.div`
@@ -62,21 +72,23 @@ const Items = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
+  padding: 15px;
+  border-radius: 3px;
   :hover {
     background-color: #2B3139;
   }
 `;
 const Item = styled.div`
   color: ${(props) => handelColor(props)};
-  display: ${(props) => (props.df ? 'flex' : 'block')};
+  display: ${(props) => (props.df ? 'flex' : 'flex')};
   justify-content: ${(props) => (props.jce ? 'end' : 'start')};
+  margin-left: ${(props) => (props.ml70 ? '-70px' : '0')};
   width: 100px;
-  font-size: 15px;
+  font-size: 17px;
 `;
 const FilledStarIcon = styled(filledStar)`
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   padding: 1px;
   color: #F5C829;
   cursor: pointer;
@@ -84,13 +96,13 @@ const FilledStarIcon = styled(filledStar)`
     opacity: 0.6;
   }
   @media (min-width: 576px) {
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
   }
 `;
 const StarIcon = styled(Star)`
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   padding: 1px;
   color: #F5C829;
   cursor: pointer;
@@ -98,8 +110,8 @@ const StarIcon = styled(Star)`
     opacity: 0.6;
   }
   @media (min-width: 576px) {
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
   }
 `;
 const ArrowUp = styled(ArrowSortedUp)`
@@ -121,6 +133,12 @@ const ArrowDown = styled(ArrowSortedDown)`
     width: 20px;
     height: 20px;
   }
+`;
+const LoadContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
 `;
 
 function Category() {
@@ -223,7 +241,7 @@ function Category() {
         >
           {item.spread === 0 ? '-' : item.spread}
         </Item>
-        <Item df jce>
+        <Item df jce ml70>
           {item.star
             ? <FilledStarIcon onClick={() => { removeDBTrack(item.stock_id); }} />
             : <StarIcon onClick={() => { addDBTrack(item.stock_id); }} />}
@@ -260,10 +278,10 @@ function Category() {
                 ? <ArrowUp onClick={() => { sortSpread('down'); }} />
                 : <ArrowDown onClick={() => { sortSpread('up'); }} />}
             </Title>
-            <Title df jce>追蹤</Title>
+            <Title df jce ml70>追蹤</Title>
           </TitleContainer>
           <ItemContainer>
-            {lists.length > 0 ? renderList() : <Loading />}
+            {lists.length > 0 ? renderList() : <LoadContainer><Loading /></LoadContainer>}
           </ItemContainer>
         </TableContainer>
       </MainContainer>
