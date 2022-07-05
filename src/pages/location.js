@@ -8,6 +8,7 @@ import Button from '../components/Button';
 import Loading from '../components/Loading';
 import ScrollTop from '../components/ScrollTop';
 import GoogleMap from '../components/GoogleMap';
+import arrowIcon from '../imgs/arrow.png';
 import { getBanks, getCities, getBrokerages } from '../utils/firebase';
 
 const Container = styled.div`
@@ -51,7 +52,7 @@ const SearchTitle = styled.div`
 const SearchGroup = styled.div`
   @media (min-width: 768px) {
     display: flex;
-    justify-content: space-between; 
+    align-items: center;
     margin: 15px 0 0;
   }
   @media (min-width: 992px) {
@@ -69,24 +70,28 @@ const Select = styled.select`
   margin: 10px 0;
   font-size: 18px;
   color: #EAECEF;
-  padding: 5px 10px 5px 8px;
+  padding: 5px 10px 5px 38px;
   background-color: transparent;
   border: 1.5px solid #848E9C;
   border-radius: 3px;
   cursor: pointer;
   outline: none;
-  background-position: 50%;
+  appearance:none;
+  -moz-appearance:none;
+  -webkit-appearance:none;;
+  padding-right: 14px;
   :hover {
     border-color: #F5C829;
   }
   @media (min-width: 768px) {
-    width: 30rem;
+    width: 250px;
+    height: 48px;
     margin: 0 20px 0 0;
   }
   @media (min-width: 992px) {
     width: 250px;
     height: 50px;
-    padding: 8px 10px 8px 8px;
+    padding: 8px 10px 8px 25px;
     font-size: 20px;
   }
 `;
@@ -196,11 +201,25 @@ const ButtonDiv = styled.div`
   width: 100%;
   margin-top: 20px;
   @media (min-width: 768px) {
-    width: 200px;
+    width: 100px;
     margin-top: 0;
   }
+`;
+const SelectDiv = styled.div`
+  position: relative;
+`;
+const ArrowImg = styled.img`
+  position: absolute;
+  right: 40px;
+  top: 24px;
+  width: 20px;
+  height: 20px;
+  @media (min-width: 768px) {
+    top: 14px;
+  }
   @media (min-width: 992px) {
-    width: 100px;
+    right: 45px;
+    top: 17px;
   }
 `;
 
@@ -299,12 +318,18 @@ function Location() {
         <SearchContainer>
           <SearchTitle>尋找據點</SearchTitle>
           <SearchGroup>
-            <Select mr20 onChange={(e) => { setSelectBank(e.target.value); }}>
-              {banks && renderBank()}
-            </Select>
-            <Select mr20 onChange={(e) => { setSelectCity(e.target.value); }}>
-              {cities && renderCity()}
-            </Select>
+            <SelectDiv>
+              <Select mr20 onChange={(e) => { setSelectBank(e.target.value); }}>
+                {banks && renderBank()}
+              </Select>
+              <ArrowImg src={arrowIcon} alt="arrow" />
+            </SelectDiv>
+            <SelectDiv>
+              <Select mr20 onChange={(e) => { setSelectCity(e.target.value); }}>
+                {cities && renderCity()}
+              </Select>
+              <ArrowImg src={arrowIcon} alt="arrow" />
+            </SelectDiv>
             <ButtonDiv>
               <Button w100 location onClick={() => { handleSearch(); }}>搜尋</Button>
             </ButtonDiv>
