@@ -116,6 +116,7 @@ const ListContainer = styled.div`
   }
 `;
 const List = styled.div`
+  position: relative;
   padding: 10px;
   margin-bottom: 20px;
   background-color: #181A20;
@@ -148,6 +149,9 @@ const MapContainer = styled.div`
   }
 `;
 const MapIconGroup = styled.div`
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -163,13 +167,13 @@ const MapIconGroup = styled.div`
   }
 `;
 const MapText = styled.div`
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: #181A20;
 `;
 const MapIcon = styled(Map)`
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
 `;
 const Message = styled.div`
   padding: 30px 0;
