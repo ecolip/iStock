@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { Navicon } from '@styled-icons/evil';
 import { Close } from '@styled-icons/material';
@@ -42,13 +42,13 @@ const NavItem = styled.div`
   margin-right: ${(props) => (props.mr ? '20px' : '0')};
   padding: ${(props) => (props.px1 ? '15px 0' : '0')};
   font-size: ${(props) => (props.fzBig ? '20px' : '18px')};
+  color: ${(props) => (props.active ? '#FCD535' : '#EAECEF')};
 
   font-weight: 500;
-  color: #EAECEF;
   cursor: pointer;
   transition: color 0.1s linear;
   :hover {
-    color: #F0B90B;
+    color: #FCD535;
   }
 `;
 const PersonContainer = styled.div`
@@ -147,9 +147,11 @@ const ProfileImg = styled.img`
 `;
 
 function Header() {
+  const [img, setImg] = useState(null);
+  const [path, setPath] = useState('');
   const [openNav, setOpenNav] = useState(false);
   const [userEmail, setUserEmail] = useState(null);
-  const [img, setImg] = useState(null);
+  const ifo = useLocation();
 
   const getUserInfo = () => {
     const data = window.localStorage.getItem('user');
@@ -162,7 +164,14 @@ function Header() {
     }
   };
 
+  const verifyLocation = () => {
+    if (ifo.pathname) {
+      setPath(ifo.pathname);
+    }
+  };
+
   useEffect(() => {
+    verifyLocation();
     getUserInfo();
   }, []);
 
@@ -174,16 +183,18 @@ function Header() {
         </Link>
         <LeftContainer>
           <Link to="/individual">
-            <NavItem mr>個股資訊</NavItem>
+            <NavItem mr active={path === '/individual'}>
+              個股資訊
+            </NavItem>
           </Link>
           <Link to="/track">
-            <NavItem mr>走勢圖</NavItem>
+            <NavItem mr active={path === '/track'}>走勢圖</NavItem>
           </Link>
           <Link to="/post">
-            <NavItem mr>討論區</NavItem>
+            <NavItem mr active={path === '/post'}>討論區</NavItem>
           </Link>
           <Link to="/location">
-            <NavItem>券商位置</NavItem>
+            <NavItem active={path === '/location'}>券商位置</NavItem>
           </Link>
         </LeftContainer>
         <RightContainer>
@@ -207,19 +218,19 @@ function Header() {
           <MobileNavContainer displayBlock>
             <CloseIcon onClick={() => { setOpenNav(false); }} />
             <Link to="/profile">
-              <NavItem px1 fzBig>我的收藏</NavItem>
+              <NavItem px1 fzBig active={path === '/profile'}>我的收藏</NavItem>
             </Link>
             <Link to="/individual">
-              <NavItem px1 fzBig>個股資訊</NavItem>
+              <NavItem px1 fzBig active={path === '/individual'}>個股資訊</NavItem>
             </Link>
             <Link to="/track">
-              <NavItem px1 fzBig>走勢圖</NavItem>
+              <NavItem px1 fzBig active={path === '/track'}>走勢圖</NavItem>
             </Link>
             <Link to="/post">
-              <NavItem px1 fzBig>討論區</NavItem>
+              <NavItem px1 fzBig active={path === '/post'}>討論區</NavItem>
             </Link>
             <Link to="/location">
-              <NavItem px1 fzBig>券商位置</NavItem>
+              <NavItem px1 fzBig active={path === '/location'}>券商位置</NavItem>
             </Link>
           </MobileNavContainer>
         </MobileBackground>
