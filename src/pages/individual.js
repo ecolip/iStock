@@ -82,9 +82,6 @@ const Input = styled.input`
     color: #848E9C;
     opacity: 1;
   }
-  @media (min-width: 576px) {
-    font-size: 20px;
-  }
 `;
 const SearchIcon = styled(SearchOutline)`
   width: 28px;

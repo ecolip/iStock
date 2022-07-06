@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { SearchOutline } from '@styled-icons/evaicons-outline';
 import { Close } from '@styled-icons/material';
-import DiscussionIcon from '../imgs/discussion.png';
+// import DiscussionIcon from '../imgs/discussion.png';
 import HeartImg from '../imgs/heart.svg';
 import ChatImg from '../imgs/chat.svg';
 import Header from '../components/Header';
@@ -35,18 +35,20 @@ const MainContainer = styled.div`
 const TitleContainer = styled.div`
   display: flex;
   align-items: center;
-  padding-bottom: 30px;
 `;
 const LoadContainer = styled.div`
   padding-top: 50px;
 `;
-const DiscussionImg = styled.img`
-  width: 50px;
-  height: 50px;
-  margin-right: 20px;
-`;
+// const DiscussionImg = styled.img`
+//   width: 50px;
+//   height: 50px;
+//   margin-right: 20px;
+// `;
 const Title = styled.div`
-  font-size: 32px;
+  padding-bottom: 2px;
+  border-bottom: 2px solid #F5C829;
+  margin-bottom: 30px;
+  font-size: 22px;
   color: #EAECEF;
 `;
 const ButtonGroup = styled.div`
@@ -67,8 +69,9 @@ const SearchGroup = styled.div`
   padding: 0 13px;
   border-radius: 5px;
   @media (min-width: 576px) {
-    width: 300px;
+    width: 250px;
     margin-left: 20px;
+    height: 40px;
   }
 `;
 const Input = styled.input`
@@ -94,9 +97,6 @@ const Input = styled.input`
     color: #848E9C;
     opacity: 1;
   }
-  @media (min-width: 576px) {
-    font-size: 20px;
-  }
 `;
 const SearchIcon = styled(SearchOutline)`
   width: 28px;
@@ -115,8 +115,7 @@ const WriteContainer = styled.div`
 const WriteTitle = styled.div`
   margin-bottom: ${(props) => (props.mb20 ? '20px' : '0')};
   padding-bottom: ${(props) => (props.pb10 ? '10px' : '0')};
-  font-size: ${(props) => (props.fz24 ? '24px' : '28px')};
-
+  font-size: 22px;
   padding-right: 20px;
   color: #EAECEF;
 `;
@@ -213,8 +212,8 @@ const MessageText = styled.div`
   font-weight: 500;
 `;
 const WriteInput = styled.input`
-  width: 200px;
-  height: 37px;
+  width: 150px;
+  height: 40px;
   padding: 10px;
   font-size: 15px;
   border: 1px solid #848E9C;
@@ -458,7 +457,7 @@ function Post() {
         <Header />
         <MainContainer>
           <TitleContainer>
-            <DiscussionImg src={DiscussionIcon} />
+            {/* <DiscussionImg src={DiscussionIcon} /> */}
             <Title ref={postRef}>討論專區</Title>
           </TitleContainer>
           <ButtonGroup mb100={isLoaded}>
@@ -487,7 +486,7 @@ function Post() {
                     <WriteInput
                       type="text"
                       value={chatId}
-                      placeholder="請輸入討論股票代碼"
+                      placeholder="請輸入股票代碼"
                       onChange={(e) => { setChatId(e.target.value); }}
                     />
                   </Div>
@@ -509,7 +508,7 @@ function Post() {
           <RenderDialogDiv>
             {responsePosts && renderDialog()}
           </RenderDialogDiv>
-          <WriteTitle pb10 fz24>留言</WriteTitle>
+          <WriteTitle pb10>留言</WriteTitle>
           <WriteTextarea
             value={resChat}
             onChange={(e) => { setResChat(e.target.value); }}

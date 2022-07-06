@@ -44,7 +44,7 @@ const SearchContainer = styled.div`
   @media (min-width: 576px) {
     padding: 10px;
   }
-  @media (min-width: 992px) {
+  @media (min-width: 768px) {
     display: flex;
     align-items: center;
   }
@@ -58,7 +58,6 @@ const SearchGroup = styled.div`
   @media (min-width: 768px) {
     display: flex;
     align-items: center;
-    margin: 15px 0 0;
   }
   @media (min-width: 992px) {
     margin: 0;
@@ -73,7 +72,7 @@ const Select = styled.select`
   width: 100%;
   height: 45px;
   margin: 10px 0;
-  font-size: 18px;
+  font-size: 16px;
   color: #EAECEF;
   padding: 5px 10px 5px 38px;
   background-color: transparent;
@@ -89,15 +88,9 @@ const Select = styled.select`
     border-color: #F5C829;
   }
   @media (min-width: 768px) {
-    width: 250px;
-    height: 48px;
+    width: 227px;
+    height: 40px;
     margin: 0 20px 0 0;
-  }
-  @media (min-width: 992px) {
-    width: 250px;
-    height: 50px;
-    padding: 8px 10px 8px 25px;
-    font-size: 20px;
   }
 `;
 const Option = styled.option`
@@ -206,14 +199,14 @@ const DescribeText = styled.div`
   font-size: 22px;
   font-style: italic;
 `;
-const ButtonDiv = styled.div`
-  width: 100%;
-  margin-top: 20px;
-  @media (min-width: 768px) {
-    width: 100px;
-    margin-top: 0;
-  }
-`;
+// const ButtonDiv = styled.div`
+//   width: 100%;
+//   margin-top: 20px;
+//   @media (min-width: 768px) {
+//     width: 100px;
+//     margin-top: 0;
+//   }
+// `;
 const SelectDiv = styled.div`
   position: relative;
 `;
@@ -224,11 +217,7 @@ const ArrowImg = styled.img`
   width: 20px;
   height: 20px;
   @media (min-width: 768px) {
-    top: 14px;
-  }
-  @media (min-width: 992px) {
-    right: 45px;
-    top: 17px;
+    top: 12px;
   }
 `;
 
@@ -341,9 +330,9 @@ function Location() {
               </Select>
               <ArrowImg src={arrowIcon} alt="arrow" />
             </SelectDiv>
-            <ButtonDiv>
-              <Button w100 location onClick={() => { handleSearch(); }}>搜尋</Button>
-            </ButtonDiv>
+            <Button w100 md onClick={() => { handleSearch(); }}>搜尋</Button>
+            {/* <ButtonDiv>
+            </ButtonDiv> */}
           </SearchGroup>
         </SearchContainer>
         <ListMapGroup>
