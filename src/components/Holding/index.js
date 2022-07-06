@@ -76,6 +76,7 @@ function Holding({ list }) {
     animationEnabled: true,
     exportEnabled: true,
     theme: 'dark1',
+    backgroundColor: '#181A20',
     title: {
       text: `${stockId} ${stockName}`,
     },

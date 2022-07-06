@@ -6,14 +6,14 @@ const Button = styled.button`
   margin-top: ${(props) => (props.mt1 ? '50px' : '0')};
   margin-bottom: ${(props) => (props.mb1 ? '30px' : '0')};
   padding: ${(props) => (props.sm ? '12px 0' : props.sm1 ? '7px 20px' : props.md ? '8px 25px' : props.logout ? '3px 15px' : '12px 24px')};
-  color: ${(props) => (props.google ? 'rgb(32, 38, 48)' : '#181A20')};
-  background: ${(props) => (props.google ? '#FFFFFF' : '#FCD535')};
+  color: ${(props) => (props.google ? 'rgb(32, 38, 48)' : props.logout ? '#FCD535' : '#181A20')};
+  background: ${(props) => (props.google ? '#FFFFFF' : props.logout ? '#0B0E11' : '#FCD535')};
   font-size: ${(props) => (props.logout ? '13px' : '16px')};
-
+  border: ${(props) => (props.logout ? '1px solid #FCD535' : 'none')};
   display: flex;
   justify-content: center;
   align-items: center;
-  border: none;
+  
   border-radius: 3px;
   font-weight: 500;
   cursor: pointer;

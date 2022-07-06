@@ -80,8 +80,15 @@ function MonthRevenue({ list }) {
     animationEnabled: true,
     exportEnabled: true,
     theme: 'dark1',
+    backgroundColor: '#181A20',
     title: {
       text: `${stockId} ${stockName}`,
+    },
+    toolbar: {
+      itemBackgroundColor: '#2D3137',
+      itemBackgroundColorOnHover: '#2D3137',
+      fontColor: '#EAECEF',
+      fontColorOnHover: '#FCD535',
     },
     axisX: {
       valueFormatString: 'MMM YYYY',
@@ -95,6 +102,9 @@ function MonthRevenue({ list }) {
       type: 'line',
       yValueFormatString: '$#,###',
       xValueFormatString: 'MMM YYYY',
+      nullDataLineDashType: 'dot',
+      // lineColor: 'red',
+      // markerColor: 'red',
       // toolTipContent: '{x}: $ {y}',
       dataPoints: data,
     }],

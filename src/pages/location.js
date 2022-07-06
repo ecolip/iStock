@@ -20,7 +20,7 @@ const Container = styled.div`
 `;
 const MainContainer = styled.div`
   width: 100%;
-  padding: 110px 30px 100px;
+  padding: 110px 0 100px;
   @media (min-width: 1200px) {
     width: 1200px;
     padding: 110px 30px 80px;

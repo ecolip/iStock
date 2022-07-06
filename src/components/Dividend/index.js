@@ -76,9 +76,10 @@ function Dividend({ list }) {
   const CanvasJS = CanvasJSReact.CanvasJS;
   const CanvasJSChart = CanvasJSReact.CanvasJSChart;
   const options = {
-    // animationEnabled: true,
+    animationEnabled: true,
     // animationDuration: 1000,
     theme: 'dark1',
+    backgroundColor: '#181A20',
     title: {
       text: `${stockId} ${stockName}`,
     },
@@ -94,6 +95,7 @@ function Dividend({ list }) {
     data: [
       {
         type: 'column',
+        bevelEnabled: true,
         yValueFormatString: '$#,###',
         xValueFormatString: 'MMM YYYY',
         // toolTipContent: '{x}: {y} (元)',

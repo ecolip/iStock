@@ -13,43 +13,49 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
-  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #0B0E11;
+`;
+const Div = styled.div`
+  padding: 110px 0 0;
+`;
+const LoadContainer = styled.div`
+  padding-top: 200px;
 `;
 const SearchGroup = styled.div`
-  margin: ${(props) => (props.load ? '40px auto 35vh' : '110px auto 10px')};
-
+  border: ${(props) => (props.focus ? '1px solid #F0B90B' : '1px solid #848E9C')};
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  width: 300px;
-  padding: 0 13px;
-  border: 2px solid #424242;
+  width: 190px;
+  padding: 0 0 0 15px;
+  margin: 0 auto;
   border-radius: 5px;
-  
-  @media (min-width: 996px) {
-    margin: ${(props) => (props.load ? '120px auto 30vh' : '120px auto 10px')};
+  @media (min-width: 576px) {
+    width: 250px;
+    height: 40px;
   }
 `;
 const Input = styled.input`
-  width: 70%;
-  height: 35px;
-  border: none;
+  border: ${(props) => (props.border ? '1px solid #848E9C' : 'none')};
+ 
+  width:80%;
+  height: 40px;
+  font-size: 16px;
   border-radius: 5px;
   outline: none;
-  font-size: 20px;
-  color: #424242;
+  color: white;
+  background: transparent;
   ::placeholder {
-    color: #ccc;
+    color: #848E9C;
   }
   ::-webkit-input-placeholder {
-    color: #ccc;
+    color: #848E9C;
   }
   :-ms-input-placeholder {
-    color: #ccc;
+    color: #848E9C;
   }
   ::-moz-placeholder {
-    color: #ccc;
+    color: #848E9C;
     opacity: 1;
   }
 `;
@@ -57,16 +63,65 @@ const SearchIcon = styled(SearchOutline)`
   width: 28px;
   height: 28px;
   padding: 2px;
-  color: #4A4A4A;
+  color: #F5C829;
   cursor: pointer;
   :hover {
     width: 30px;
     height: 30px;
   }
 `;
+// const SearchGroup = styled.div`
+//   margin: ${(props) => (props.load ? '40px auto 35vh' : '110px auto 10px')};
+
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   width: 300px;
+//   padding: 0 13px;
+//   border: 2px solid #424242;
+//   border-radius: 5px;
+
+//   @media (min-width: 996px) {
+//     margin: ${(props) => (props.load ? '120px auto 30vh' : '120px auto 10px')};
+//   }
+// `;
+// const Input = styled.input`
+//   width: 70%;
+//   height: 35px;
+//   border: none;
+//   border-radius: 5px;
+//   outline: none;
+//   font-size: 20px;
+//   color: #424242;
+//   ::placeholder {
+//     color: #ccc;
+//   }
+//   ::-webkit-input-placeholder {
+//     color: #ccc;
+//   }
+//   :-ms-input-placeholder {
+//     color: #ccc;
+//   }
+//   ::-moz-placeholder {
+//     color: #ccc;
+//     opacity: 1;
+//   }
+// `;
+// const SearchIcon = styled(SearchOutline)`
+//   width: 28px;
+//   height: 28px;
+//   padding: 2px;
+//   color: #4A4A4A;
+//   cursor: pointer;
+//   :hover {
+//     width: 30px;
+//     height: 30px;
+//   }
+// `;
 
 function Track() {
   const [stockId, setStockId] = useState('');
+  const [isFocus, setIsFocus] = useState(false);
   const [isLoaded, setIsLoaded] = useState(true);
   const [option, setOption] = useState(null);
   const [containerProp, setContainerProp] = useState(null);
@@ -79,19 +134,29 @@ function Track() {
     const options = {
       exportEnabled: true,
       exportFileName: 'StockChart',
-      theme: 'light2', // "light1", "dark1", "dark2"
+      theme: 'dark2', // "light1", "dark1", "dark2"
       animationEnabled: true,
+      animationDuration: 100,
+      backgroundColor: '#181A20',
       // backgroundColor: '#F5F5F5',
       title: {
         text: `${id} 走勢圖`,
-        fontSize: 30,
-        fontColor: '#4A4A4A',
+        fontSize: 22,
+        fontColor: '#EAECEF',
+        margin: 10,
+        // padding: 4,
       },
       subtitles: [{
         text: '價/指數-成交量-成交總金額(千萬)',
-        fontSize: 18,
-        fontColor: '#4A4A4A',
+        fontSize: 15,
+        fontColor: '#EAECEF',
       }],
+      toolbar: {
+        itemBackgroundColor: '#2D3137',
+        itemBackgroundColorOnHover: '#2D3137',
+        fontColor: '#EAECEF',
+        fontColorOnHover: '#FCD535',
+      },
       // legend: {
       //   horizontalAlign: 'right', // "center" , "right"
       //   verticalAlign: 'center', // "top" , "bottom"
@@ -123,6 +188,7 @@ function Track() {
         axisY: {
           // title: 'price',
           // prefix: '$',
+          valueFormatString: '$##.###.##.00',
           tickLength: 0,
         },
         toolTip: {
@@ -131,11 +197,12 @@ function Track() {
         data: [{
           name: '價格(in TWD)/指數',
           yValueFormatString: '#,###.##',
+          // connectNullData: true,
           // yValueFormatString: '$#,###.##',
           axisYType: 'secondary',
           type: 'candlestick',
-          // risingColor: 'red',
-          // fallingColor: '#00B050',
+          // risingColor: '#F6465D',
+          // fallingColor: '#49AC8E',
           // color: 'transparent',
           // legendText: 'Volume',
           // showInLegend: true,
@@ -148,9 +215,13 @@ function Track() {
             enabled: true,
             snapToDataPoint: true,
           },
+          scaleBreaks: {
+            customBreaks: [{
+              type: '',
+            }],
+          },
         },
         axisY: {
-          // title: 'Volume',
           // prefix: '$',
           tickLength: 0,
         },
@@ -168,31 +239,38 @@ function Track() {
       rangeSelector: {
         height: 50,
         buttonStyle: {
-          // backgroundColor: '#eccaa0',
-          // backgroundColorOnHover: '#2B3139',
-          // backgroundColorOnSelect: '#2B3139',
-          // borderColor: '#2B3139',
+          backgroundColor: '#181A20',
+          backgroundColorOnHover: '#666666',
+          backgroundColorOnSelect: '#2B3139',
+          borderColor: '#2B3139',
           borderThickness: 1,
-          labelFontColor: '#4F4F4F',
-          // labelFontSize: 16,
-          // labelFontFamily: 'Noto Sans TC',
+          labelFontColor: '#EAECEF',
+          labelFontSize: 16,
+          labelFontFamily: 'Noto Sans TC',
           // labelFontWeight: 'bolder',
         },
         inputFields: {
           valueFormatString: 'YYYY-MM-DD',
-          // borderColor: '#2B3139',
-          // fontFamily: 'Noto Sans TC',
-          // fontSize: 16,
-          // fontColor: '#4F4F4F',
-          // fontWeight: 'bold',
+          style: {
+            backgroundColor: '#181A20',
+            borderColor: '#2B3139',
+            fontFamily: 'Noto Sans TC',
+            fontSize: 16,
+            fontColor: '#EAECEF',
+            // fontWeight: 'bold',
+          },
         },
       },
       navigator: {
+        animationEnabled: true,
         data: [{
           fontSize: 10,
           dataPoints: dps3,
         }],
         slider: {
+          maskColor: '#DEE2E6',
+          handleBorderColor: '#0B0E11',
+          handleColor: '#F5C829',
           minimum: new Date(preYear()),
           maximum: new Date(today()),
         },
@@ -275,7 +353,20 @@ function Track() {
   return (
     <Container ref={containerRef}>
       <Header />
-      <SearchGroup load={isLoaded}>
+      <Div>
+        <SearchGroup focus={isFocus}>
+          <Input
+            type="text"
+            value={stockId}
+            placeholder="請輸入股票代號"
+            onChange={(e) => { setStockId(e.target.value); }}
+            onFocus={() => { setIsFocus(true); }}
+            onBlur={() => { setIsFocus(false); }}
+          />
+          <SearchIcon onClick={() => { updateView(); }} />
+        </SearchGroup>
+      </Div>
+      {/* <SearchGroup load={isLoaded}>
         <Input
           type="text"
           value={stockId}
@@ -283,9 +374,9 @@ function Track() {
           onChange={(e) => { setStockId(e.target.value); }}
         />
         <SearchIcon onClick={() => { updateView(); }} />
-      </SearchGroup>
+      </SearchGroup> */}
       {isLoaded
-        ? <Loading />
+        ? <LoadContainer><Loading /></LoadContainer>
         : <CanvasJSStockChart containerProps={containerProp} options={option} ref={canvasRef} />}
       <Footer />
     </Container>

@@ -100,7 +100,7 @@ function getDateDiff(dateTimeStamp) {
 
 const handelColor = (props) => {
   if (props.green) {
-    return '#0ECB81';
+    return '#49AC8E';
   }
   if (props.red) {
     return '#F6465D';

@@ -22,20 +22,18 @@ const Div = styled.div`
 `;
 const Banner = styled.div`
   width: 100%;
-  background-color: #0B0E11;
-  padding: 100px 20px 10px;
+  padding: 100px 30px 10px;
   @media (min-width: 1200px){
-    padding: 160px 20px 100px;
+    padding: 160px 0 100px;
   }
 `;
 const BannerContainer = styled.div`
-  padding: 50px 20px;
+  padding: 50px 0;
   @media (min-width: 992px){
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-direction: row-reverse;
-    padding: 20px 0;
   }
   @media (min-width: 1200px) {
     width: 1200px;
@@ -75,6 +73,7 @@ const ListsContainer = styled.div`
   @media (min-width: 1200px) {
     width: 1200px;
     margin: 0 auto;
+    padding: 0;
   }
 `;
 const ListContainer = styled.div`

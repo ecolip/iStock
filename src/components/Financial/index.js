@@ -76,6 +76,8 @@ function Financial({ list }) {
   const options = {
     animationEnabled: true,
     theme: 'dark1',
+    backgroundColor: '#181A20',
+    fillOpacity: 0.3,
     title: {
       text: `${stockId} ${stockName}`,
     },

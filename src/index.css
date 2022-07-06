@@ -28,9 +28,9 @@ a {
 .canvasjs-chart-credit{
   display: none;
 }
-.canvasjs-chart-toolbar {
+/* .canvasjs-chart-toolbar {
   display: none;
-}
+} */
 
 /* google map */
 button.gm-ui-hover-effect {
