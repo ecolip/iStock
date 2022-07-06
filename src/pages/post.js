@@ -11,10 +11,10 @@ import Button from '../components/Button';
 import Loading from '../components/Loading';
 import ScrollTop from '../components/ScrollTop';
 import {
-  getAllPosts, getStockPosts, addStockPosts, addHeart, getResponsePosts, addResponsePost,
+  getAllPosts, getStockPosts, addStockPosts, addHeart, getResponsePosts,
+  addResponsePost, compareStockId2, getOriPost,
 } from '../utils/firebase';
 import { getDateDiff } from '../utils/formatDate';
-import api from '../utils/api';
 
 const Container = styled.div`
   display: flex;
@@ -45,9 +45,9 @@ const LoadContainer = styled.div`
 //   margin-right: 20px;
 // `;
 const Title = styled.div`
+  margin: auto 0 30px;
   padding-bottom: 2px;
   border-bottom: 2px solid #F5C829;
-  margin-bottom: 30px;
   font-size: 22px;
   color: #EAECEF;
 `;
@@ -115,13 +115,13 @@ const WriteContainer = styled.div`
 const WriteTitle = styled.div`
   margin-bottom: ${(props) => (props.mb20 ? '20px' : '0')};
   padding-bottom: ${(props) => (props.pb10 ? '10px' : '0')};
-  font-size: 22px;
+  font-size: ${(props) => (props.fz18 ? '18px' : '22px')};
   padding-right: 20px;
   color: #EAECEF;
 `;
 const WriteTextarea = styled.textarea`
   width: 100%;
-  height: 150px;
+  height: 100px;
   border-radius: 5px;
   padding: 10px 15px;
   margin-bottom: 15px;
@@ -248,22 +248,36 @@ const DialogContainer = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: rgba(255,255,255,0.5);
   z-index: 100;
   opacity: 1;
 `;
+const DialogDiv = styled.div`
+  height: 100%;
+  padding: 20px 80px;
+  background-color: #0B0E11;
+  border-radius: 3px;
+  @media (min-width: 768px) {
+    width: 768px;
+    margin: 0 auto;
+  }
+`;
 const Dialog = styled.div`
-  box-shadow: 0 2px 8px rgba(255, 255, 255, .5);
   padding: 20px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
+  background-color: #181A20;
+  border-radius: 3px;
+`;
+const Box = styled.div`
+  position: relative;
+  height: 100%;
 `;
 const CloseIcon = styled(Close)`
   display: flex;
   width: 35px;
   height: 35px;
   margin-left: auto;
-  margin-bottom: 30px;
   color: #F0B90B;
   cursor: pointer;
   transition: color 0.1s linear;
@@ -272,18 +286,14 @@ const CloseIcon = styled(Close)`
   }
 `;
 const RenderDialogDiv = styled.div`
-  min-height: 200px;
-`;
-const DialogDiv = styled.div`
-  height: 100vh;
-  padding: 30px 80px;
-  background-color: #0B0E11;
+  padding-top: 20px;
+  max-height: 55vh;
   overflow: auto;
-  border-radius: 8px;
-  @media (min-width: 768px) {
-    width: 768px;
-    margin: 0 auto;
-  }
+`;
+const DialogInputDiv = styled.div`
+  position: absolute;
+  width: 100%;
+  bottom: 0;
 `;
 
 function Post() {
@@ -319,17 +329,17 @@ function Post() {
     fetchPosts();
   };
 
-  const compareStockId = async (id) => {
-    const token = window.localStorage.getItem('finToken');
-    const res = await api.getStockList(token);
-    const { data } = res;
-    const items = data.filter((item) => item.stock_id === id);
-    const item = items[0];
-    if (item) {
-      return item.stock_name;
-    }
-    return false;
-  };
+  // const compareStockId = async (id) => {
+  //   const token = window.localStorage.getItem('finToken');
+  //   const res = await api.getStockList(token);
+  //   const { data } = res;
+  //   const items = data.filter((item) => item.stock_id === id);
+  //   const item = items[0];
+  //   if (item) {
+  //     return item.stock_name;
+  //   }
+  //   return false;
+  // };
 
   const sendPost = async () => {
     const chatTrim = chat.trim();
@@ -344,7 +354,7 @@ function Post() {
       fetchPosts();
       scrollToPost();
     } else {
-      const name = await compareStockId(chatId);
+      const name = await compareStockId2(chatId);
       if (name) {
         setChatId('');
         setChat('');
@@ -370,17 +380,13 @@ function Post() {
     setIsLoaded(false);
   };
 
-  const openDialog = (uuid, id, name, chatNum) => {
-    getResponsePosts(uuid).then((data) => {
-      setResInfo({
-        id,
-        name,
-        uuid,
-        chatNum,
-      });
-      setResponsePosts(data);
-      setIsOpen(true);
-    });
+  const openDialog = async (uuid) => {
+    const res = await getResponsePosts(uuid);
+    const oriPost = await getOriPost(uuid);
+    console.log('要回覆的post', oriPost);
+    setResInfo(oriPost);
+    setResponsePosts(res);
+    setIsOpen(true);
   };
 
   const closeDialog = () => {
@@ -389,7 +395,8 @@ function Post() {
   };
 
   const sendResponse = async () => {
-    const { uuid, chatNum } = resInfo;
+    const { uuid } = resInfo;
+    const chatNum = resInfo.chat;
     const resChatTrim = resChat.trim();
     if (!resChatTrim.length > 0) {
       alert('請輸入討論文字！');
@@ -424,7 +431,7 @@ function Post() {
           <ChatDiv>
             <Img
               src={ChatImg}
-              onClick={() => { openDialog(item.uuid, item.stock_id, item.stock_name, item.chat); }}
+              onClick={() => { openDialog(item.uuid); }}
             />
             <Num>{item.chat}</Num>
           </ChatDiv>
@@ -503,19 +510,30 @@ function Post() {
       </Container>
       <DialogContainer show={isOpen}>
         <DialogDiv>
-          <CloseIcon onClick={() => { closeDialog(); }} />
-          <WriteTitle mb20>{resInfo.id} {resInfo.name}</WriteTitle>
-          <RenderDialogDiv>
-            {responsePosts && renderDialog()}
-          </RenderDialogDiv>
-          <WriteTitle pb10>留言</WriteTitle>
-          <WriteTextarea
-            value={resChat}
-            onChange={(e) => { setResChat(e.target.value); }}
-          />
-          <ButtonDiv>
-            <Button onClick={() => { sendResponse(); }}>送出</Button>
-          </ButtonDiv>
+          <Box>
+            <CloseIcon onClick={() => { closeDialog(); }} />
+            <AuthorContainer>
+              <Author>{resInfo.author}</Author>
+              <Time>{getDateDiff(resInfo.timestamp * 1000)}</Time>
+            </AuthorContainer>
+            <StockId>{resInfo.stock_id} {resInfo.stock_name}</StockId>
+            <Context>{resInfo.context}</Context>
+            {/* <WriteTitle fz18 mb20>{resInfo.id} {resInfo.name}</WriteTitle>
+              <Context>{resInfo.context}</Context> */}
+            <RenderDialogDiv>
+              {responsePosts && renderDialog()}
+            </RenderDialogDiv>
+            <DialogInputDiv>
+              <WriteTitle pb10>留言</WriteTitle>
+              <WriteTextarea
+                value={resChat}
+                onChange={(e) => { setResChat(e.target.value); }}
+              />
+              <ButtonDiv>
+                <Button onClick={() => { sendResponse(); }}>送出</Button>
+              </ButtonDiv>
+            </DialogInputDiv>
+          </Box>
         </DialogDiv>
       </DialogContainer>
       <ScrollTop />

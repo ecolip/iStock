@@ -255,6 +255,12 @@ const getStockPosts = async (id) => {
   return list;
 };
 
+const getOriPost = async (uuid) => {
+  const docRef = doc(db, 'stockPosts', uuid);
+  const docSnap = await getDoc(docRef);
+  return docSnap.data();
+};
+
 const addStockPosts = async (id, name, context) => {
   const user = window.localStorage.getItem('user');
   const { email } = JSON.parse(user);
@@ -295,7 +301,7 @@ const getResponsePosts = async (uuid) => {
   const docRef = doc(db, 'responsePosts', uuid);
   const docSnap = await getDoc(docRef);
   const result = docSnap.data().data;
-  result.sort((a, b) => b.timestamp - a.timestamp);
+  // result.sort((a, b) => b.timestamp - a.timestamp);
   return result;
 };
 
@@ -369,6 +375,7 @@ export {
   addTrackStock,
   removeTrackStock,
   getAllPosts,
+  getOriPost,
   getStockPosts,
   addStockPosts,
   addHeart,

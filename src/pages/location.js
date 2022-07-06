@@ -74,7 +74,7 @@ const Select = styled.select`
   margin: 10px 0;
   font-size: 16px;
   color: #EAECEF;
-  padding: 5px 10px 5px 38px;
+  padding: 5px 10px 5px 35px;
   background-color: transparent;
   border: 1.5px solid #848E9C;
   border-radius: 3px;
@@ -91,6 +91,7 @@ const Select = styled.select`
     width: 227px;
     height: 40px;
     margin: 0 20px 0 0;
+    padding: 5px 10px 5px 20px;
   }
 `;
 const Option = styled.option`
