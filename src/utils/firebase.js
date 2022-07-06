@@ -99,6 +99,18 @@ const addStockName = (data) => {
   setDoc(doc(db, 'stockNames', 'list'), { data });
 };
 
+const compareStockId2 = async (id) => {
+  const docRef = doc(db, 'stockNames', 'list');
+  const docSnap = await getDoc(docRef);
+  const { data } = docSnap.data();
+  const items = data.filter((item) => item.stock_id === id);
+  const item = items[0];
+  if (item) {
+    return item.stock_name;
+  }
+  return false;
+};
+
 const compareStockId = async (id) => {
   const docRef = doc(db, 'stockNames', 'list');
   const docSnap = await getDoc(docRef);
@@ -181,12 +193,19 @@ const addTrackStock = async (id) => {
 
 const removeNewsIndex = async (id) => {
   const originNews = await getTrack('news');
+  console.log('全部新聞', originNews);
+  const newsIndex = [];
   originNews.forEach((item, index) => {
     if (item.stock_id === id) {
-      return index;
+      console.log('刪除哪個stock_id', item.stock_id, id);
+      newsIndex.push(index);
     }
-    return false;
   });
+  if (newsIndex.length > 0) {
+    console.log('刪除第幾news', newsIndex[0]);
+    return newsIndex[0];
+  }
+  return false;
 };
 
 const removeTrackStock = async (id) => {
@@ -197,14 +216,15 @@ const removeTrackStock = async (id) => {
   const originDetail = await getTrack('detail');
   const originNews = await getTrack('news');
   const newsIndex = await removeNewsIndex(id);
+  console.log(newsIndex);
   const index = originTrack.indexOf(id);
   const newTrack = [...originTrack];
   const newDetail = [...originDetail];
   const newNews = [...originNews];
   newTrack.splice(index, 1);
-  newNews.splice(index, 1);
+  newDetail.splice(index, 1);
   if (newsIndex) {
-    newDetail.splice(newsIndex, 1);
+    newNews.splice(newsIndex, 1);
   }
   updateDoc(docRef, {
     track: newTrack,
@@ -343,6 +363,7 @@ export {
   updateCategoryPrices,
   checkNewPrices,
   getNewCategoryPrice,
+  compareStockId2,
   addStockName,
   getTrack,
   addTrackStock,

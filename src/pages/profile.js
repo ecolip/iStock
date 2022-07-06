@@ -13,7 +13,7 @@ import Button from '../components/Button';
 import Loading from '../components/Loading';
 import ScrollTop from '../components/ScrollTop';
 import {
-  getTrack, addTrackStock, removeTrackStock, getOpenDate,
+  getTrack, addTrackStock, removeTrackStock, compareStockId2,
 } from '../utils/firebase';
 import { handelColor } from '../utils/formatDate';
 import api from '../utils/api';
@@ -34,40 +34,33 @@ const MainContainer = styled.div`
     flex-direction: row;
     justify-content: space-between;
     width: 1200px;
-    padding: 150px 0 80px;
+    padding: 120px 0 80px;
     margin: 0 auto;
   }
 `;
 const Div = styled.div`
-  margin-left: 10px;
-  @media (min-width: 768px) {
-    margin-left: 30px;
-  }
+  margin-right: auto;
+  padding: 20px 0;
 `;
 const UserInfoDiv = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
   margin-bottom: 10px;
-  padding: 0 15px;
   font-size: 14px;
   font-weight: 500;
   color: #fff;
-  background-color: #181A20;
   @media (min-width: 576px) {
-    padding: 20px 30px;
     font-size: 16px;
   }
 `;
 const UserIcon = styled(PersonSquare)`
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
 `;
 const DragIcon = styled(DragIndicator)`
   width: 20px;
   height: 30px;
   margin-right: 5px;
-  cursor: move;
 `;
 const CloseIcon = styled(Close)`
   width: 20px;
@@ -92,8 +85,7 @@ const NewsContainer = styled.div`
   position: relative;
   min-height: 30vh;
   margin-top: 100px;
-  padding: 30px 50px;
-  background-color: #181A20;
+  padding: 0 30px;
   @media (min-width: 1200px) {
     width: 63%;
     min-height: 70vh;
@@ -111,7 +103,6 @@ const NewsNav = styled.div`
 
   display: flex;
   width: 20%;
-  height: 28px;
   justify-content: center;
   align-items: center;
   padding-bottom: 10px;
@@ -129,7 +120,7 @@ const TrackContainer = styled.div`
   }
 `;
 const TrackTitle = styled.div`
-  margin: 30px 0 10px;
+  margin: 30px 0 0;
   font-size: 25px;
   font-weight: bold;
   color: #EAECEF;
@@ -145,18 +136,19 @@ const TrackItems = styled.div`
   position: relative;
   min-height: 30vh;
   padding: 15px 0;
-  background-color: #181A20;
 `;
 const Item = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  height: 40px;
+  justify-content: space-between;
+  padding: 10px 15px;
   color: #EAECEF;
   font-size: 14px;
   font-weight: bold;
-  :hover{
-    background-color: #0B0E11;
+  border-radius: 3px;
+  background-color: #181A20;
+  :hover {
+    background-color: #2D3137;
   }
 `;
 const ItemId = styled.div`
@@ -219,9 +211,12 @@ const NewsItems = styled.div`
 `;
 const NewsItem = styled.div`
   margin-bottom: 25px;
-  padding: 20px;
-  border-radius: 8px;
-  background-color: #2D3137;
+  padding: 10px 20px;
+  border-radius: 3px;
+  background-color: #181A20;
+  :hover {
+    background-color: #2D3137;
+  }
 `;
 const NewsTitle = styled.div`
   padding-bottom: 5px;
@@ -236,7 +231,7 @@ const NewsLink = styled.a`
   font-size: 15px;
   color: #EAECEF;
   transition: all 0.1s linear;
-  :hover {
+  ${NewsItem}:hover & {
     color: #F0B90B;
   }
 `;
@@ -244,7 +239,7 @@ const NewTime = styled.div`
   padding-top: 5px;
   text-align: right;
   font-style: italic;
-  font-size: 14px;
+  font-size: 13px;
   color: #848E9C;
 `;
 const LoadContainer = styled.div`
@@ -264,89 +259,28 @@ function Profile() {
   const [isLoadedDetail, setIsLoadedDetail] = useState(true);
   const navigate = useNavigate();
 
-  const compareStockId = async (id) => {
-    const token = window.localStorage.getItem('finToken');
-    const res = await api.getStockList(token);
-    const { data } = res;
-    const items = data.filter((item) => item.stock_id === id);
-    const item = items[0];
-    if (item) {
-      return item.stock_name;
-    }
-    return false;
-  };
-
-  // const fetchHistoryNews = async () => {
-  //   const data = [];
+  // const compareStockId = async (id) => {
   //   const token = window.localStorage.getItem('finToken');
-  //   const preWeek = dayjs().subtract(7, 'day').format('YYYY-MM-DD');
-  //   const openDate = await getOpenDate();
-  //   const trackIds = await getTrack('track');
-  //   await Promise.all(trackIds.map(async (id) => {
-  //     const name = await compareStockId(id);
-  //     const res = await api.getTodayNews(token, id, openDate, preWeek);
-  //     const newsItems = res.data;
-  //     if (newsItems.length > 0) {
-  //       const newItem = {
-  //         ...newsItems[0],
-  //         stock_name: name,
-  //       };
-  //       data.push(newItem);
-  //     }
-  //   }));
-  //   setNews(data);
-  //   console.log(data, '拿news');
-  //   setIsLoadedNews(false);
+  //   const res = await api.getStockList(token);
+  //   const { data } = res;
+  //   const items = data.filter((item) => item.stock_id === id);
+  //   const item = items[0];
+  //   if (item) {
+  //     return item.stock_name;
+  //   }
+  //   return false;
   // };
-
-  // const fetchTrackList = async () => {
-  //   const data = [];
-  //   const token = window.localStorage.getItem('finToken');
-  //   const openDate = await getOpenDate();
-  //   const trackIds = await getTrack('track');
-  //   await Promise.all(trackIds.map(async (id) => {
-  //     const name = await compareStockId(id);
-  //     const res = await api.getTodayPrice(token, id, openDate);
-  //     const stockItem = res.data[0];
-  //     if (stockItem) {
-  //       const newItem = {
-  //         ...stockItem,
-  //         stock_name: name,
-  //       };
-  //       data.push(newItem);
-  //     }
-  //   }));
-  //   console.log(data, '拿track');
-  //   setList(data);
-  //   setIsLoadedTrack(false);
-  // };
-
-  const updateTrackAndNews = () => {
-    setIsLoadedDetail(true);
-    setIsLoadedNews(true);
-    // fetchTrackList();
-    // fetchHistoryNews();
-  };
-
-  const addTrack = async () => {
-    const stockTrim = stockId.trim();
-    const name = await compareStockId(stockTrim);
-    if (name) {
-      setStockId('');
-      const res = await addTrackStock(stockTrim);
-      if (res) {
-        updateTrackAndNews();
-      }
-    } else {
-      alert('請輸入正確股票代號');
-    }
-  };
 
   const logout = () => {
     window.localStorage.removeItem('firToken');
     window.localStorage.removeItem('user');
     window.localStorage.removeItem('finToken');
     navigate('/', { replace: true });
+  };
+
+  const fetchTrack = async () => {
+    const trackList = await getTrack('track');
+    return trackList;
   };
 
   const fetchDetail = async () => {
@@ -361,17 +295,47 @@ function Profile() {
     setIsLoadedNews(false);
   };
 
+  const updateTrack = () => {
+    fetchDetail();
+    fetchNews();
+  };
+
+  const addTrack = async () => {
+    const stockTrim = stockId.trim();
+    setStockId('');
+    const trackList = await fetchTrack();
+    const isTrack = trackList.includes(stockTrim);
+    if (isTrack) {
+      alert('已在追蹤清單!');
+      return;
+    }
+    const name = await compareStockId2(stockTrim);
+    console.log('抓名稱', name);
+    if (name) {
+      setIsLoadedDetail(true);
+      setIsLoadedNews(true);
+      const res = await addTrackStock(stockTrim);
+      console.log('新增資料回覆', res);
+      if (res) {
+        updateTrack();
+      }
+    } else {
+      alert('請輸入正確股票代號');
+    }
+  };
+
   const removeTrack = async (id) => {
+    setIsLoadedDetail(true);
+    setIsLoadedNews(true);
     const res = await removeTrackStock(id);
     if (res) {
-      fetchDetail();
-      fetchNews();
+      updateTrack();
     }
   };
 
   const renderList = () => {
     const output = detail.map((item) => (
-      <Item key={`profileTrack-${item.stock_id}`}>
+      <Item key={`track-${item.stock_id}`}>
         <ItemId><DragIcon /> {item.stock_id} {item.stock_name}</ItemId>
         <ItemText green={item.spread < 0} red={item.spread > 0}>{item.close}</ItemText>
         <ItemText
@@ -387,7 +351,7 @@ function Profile() {
 
   const renderNews = () => {
     const output = news.map((item) => (
-      <NewsItem key={`news-${item.link}`}>
+      <NewsItem key={`news-${item.stock_id}`}>
         <NewsTitle>{item.stock_id} {item.stock_name}</NewsTitle>
         <NewsLink href={item.link} target="_blank">{item.title}</NewsLink>
         <NewTime>{item.date}</NewTime>
@@ -395,11 +359,6 @@ function Profile() {
     ));
     return output;
   };
-
-  // const fetchTrackAndNews = () => {
-  //   fetchTrackList();
-  //   fetchHistoryNews();
-  // };
 
   const getUserInfo = () => {
     const data = window.localStorage.getItem('user');
@@ -415,8 +374,7 @@ function Profile() {
 
   useEffect(() => {
     getUserInfo();
-    fetchDetail();
-    fetchNews();
+    updateTrack();
   }, []);
 
   return (
@@ -435,12 +393,11 @@ function Profile() {
         </NewsContainer>
         <TrackContainer>
           <UserInfoDiv>
-            {user.photoURL ? <UserImg src={user.photoURL} /> : <UserIcon />}
             <Div>
               {user.displayName && <UserName>姓名: {user.displayName}</UserName>}
               <UserEmail>帳號: {user.email}</UserEmail>
-              <Button sm w100 mb1 onClick={() => { logout(); }}>登出</Button>
             </Div>
+            <Button logout onClick={() => { logout(); }}>登出</Button>
           </UserInfoDiv>
           <TrackTitle>追蹤清單</TrackTitle>
           <TrackItemsContainer>
