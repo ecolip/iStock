@@ -124,14 +124,14 @@ const MobileNavContainer = styled.div`
 `;
 
 const ProfileIcon = styled.div`
-  width: 45px;
-  height: 45px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   color: #181A20;
   background-color: #FCD535;
   text-align: center;
-  line-height: 45px;
-  font-size: 23px;
+  line-height: 32px;
+  font-size: 18px;
   font-weight: 500;
   cursor: pointer;
   transition: color 0.1s linear;
@@ -141,8 +141,8 @@ const ProfileIcon = styled.div`
 `;
 
 const ProfileImg = styled.img`
-  width: 45px;
-  height: 45px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
 `;
 
