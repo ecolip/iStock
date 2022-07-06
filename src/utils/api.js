@@ -1,6 +1,6 @@
 const api = {
   hostname: 'https://api.finmindtrade.com/api/v4/data?',
-  startDate: '2017-05-15',
+  startDate: '2017-07-01',
   finMindLogin() {
     const formData = new FormData();
     formData.append('user_id', process.env.REACT_APP_FINMIND_USER_ID);
@@ -19,7 +19,7 @@ const api = {
       .then((response) => response.json());
   },
   getHistoryPrice(token, id, today) {
-    return fetch(`${this.hostname}token=${token}&dataset=TaiwanStockPrice&data_id=${id}&start_date='2015-05-15'&end_date=${today}`)
+    return fetch(`${this.hostname}token=${token}&dataset=TaiwanStockPrice&data_id=${id}&start_date=${this.startDate}&end_date=${today}`)
       .then((response) => response.json());
   },
   getStockList(token) {

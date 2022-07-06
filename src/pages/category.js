@@ -24,12 +24,15 @@ const Container = styled.div`
   min-height: 100vh;
   background-color: #0B0E11;
 `;
+const Div = styled.div`
+  display: flex;
+`;
 const TitleText = styled.div`
-  padding-bottom: 10px;
-  padding-left: 30px;
-  text-align: center;
-  font-size: 32px;
-  color: white;
+  padding-bottom: 2px;
+  border-bottom: 2px solid #F5C829;
+  margin-bottom: 30px;
+  font-size: 22px;
+  color: #EAECEF;
   @media (min-width: 992px) {
     padding-left: 0;
     text-align: left;
@@ -142,6 +145,7 @@ const LoadContainer = styled.div`
 `;
 
 function Category() {
+  const [title, setTitle] = useState('');
   const [lists, setLists] = useState([]);
   const [isCloseUp, setIsCloseUp] = useState(false);
   const [isSpreadUp, setIsSpreadUp] = useState(false);
@@ -199,12 +203,17 @@ function Category() {
   };
 
   const fetchCategoryStocks = async () => {
-    const category = transferRedirectKey(state.category);
     const token = window.localStorage.getItem('finToken');
+    const category = transferRedirectKey(state.category);
     const res = await api.getStockList(token);
     const { data } = res;
     const stockList = data.filter((item) => item.industry_category === category);
     return stockList;
+  };
+
+  const initTitle = () => {
+    const category = transferRedirectKey(state.category);
+    setTitle(category);
   };
 
   const fetchCategoryPrice = async (tracks) => {
@@ -252,6 +261,7 @@ function Category() {
   };
 
   useEffect(() => {
+    initTitle();
     getTrack('track').then((tracks) => {
       fetchCategoryPrice(tracks);
     });
@@ -261,7 +271,9 @@ function Category() {
     <Container>
       <Header />
       <MainContainer>
-        <TitleText>最新收盤行情</TitleText>
+        <Div>
+          <TitleText>{title} 最新收盤行情</TitleText>
+        </Div>
         <TableContainer>
           <TitleContainer>
             <Title>代號</Title>

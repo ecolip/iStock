@@ -27,9 +27,14 @@ const MainContainer = styled.div`
     margin: 0 auto;
   }
 `;
+const Div = styled.div`
+  display: flex;
+`;
 const Title = styled.div`
-  padding-bottom: 30px;
-  font-size: 32px;
+  padding-bottom: 2px;
+  border-bottom: 2px solid #F5C829;
+  margin-bottom: 30px;
+  font-size: 22px;
   color: #EAECEF;
 `;
 const SearchContainer = styled.div`
@@ -47,7 +52,7 @@ const SearchContainer = styled.div`
 const SearchTitle = styled.div`
   padding-right: 20px;
   color: #EAECEF;
-  font-size: 22px;
+  font-size: 20px;
 `;
 const SearchGroup = styled.div`
   @media (min-width: 768px) {
@@ -318,7 +323,9 @@ function Location() {
     <Container>
       <Header />
       <MainContainer>
-        <Title>券商據點</Title>
+        <Div>
+          <Title>券商據點</Title>
+        </Div>
         <SearchContainer>
           <SearchTitle>尋找據點</SearchTitle>
           <SearchGroup>

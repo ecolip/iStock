@@ -17,6 +17,9 @@ const Container = styled.div`
   min-height: 100vh;
   background-color: #0B0E11;
 `;
+const Div = styled.div`
+  display: flex;
+`;
 const Banner = styled.div`
   width: 100%;
   background-color: #0B0E11;
@@ -96,9 +99,10 @@ const ListContainer = styled.div`
   }
 `;
 const ListTitle = styled.div`
-  text-align: center;
-  padding-bottom: 40px;
-  font-size: 32px;
+  padding-bottom: 2px;
+  border-bottom: 2px solid #F5C829;
+  margin-bottom: 30px;
+  font-size: 22px;
   color: #EAECEF;
 
   @media (min-width: 576px){
@@ -219,7 +223,9 @@ function Home() {
       </Banner>
       <ListsDiv>
         <ListsContainer>
-          <ListTitle>類股收盤 / 漲跌</ListTitle>
+          <Div>
+            <ListTitle>類股收盤 / 漲跌</ListTitle>
+          </Div>
           {isLoaded
             ? <Loading />
             : (

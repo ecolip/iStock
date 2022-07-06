@@ -105,7 +105,7 @@ const NewsNav = styled.div`
   width: 20%;
   justify-content: center;
   align-items: center;
-  padding-bottom: 10px;
+  padding-bottom: 2px;
   font-size: 20px;
   font-weight: bold;
   transition: all 0.1s linear;
