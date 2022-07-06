@@ -24,14 +24,12 @@ const Banner = styled.div`
   width: 100%;
   background-color: #0B0E11;
   padding: 100px 20px 10px;
-
   @media (min-width: 1200px){
     padding: 160px 20px 100px;
   }
 `;
 const BannerContainer = styled.div`
   padding: 50px 20px;
-
   @media (min-width: 992px){
     display: flex;
     justify-content: space-between;
@@ -46,7 +44,6 @@ const BannerContainer = styled.div`
 `;
 const LeftContainer = styled.div`
   width: 100%;
-
   @media (min-width: 992px){
     width: 45%;
   }
@@ -55,9 +52,8 @@ const Title = styled.div`
   padding: 50px 0 30px;
   font-size: 32px;
   color: white;
-
   @media (min-width: 992px){
-    padding: 0 0 30px 0;
+    padding: 0;
   }
 `;
 const Img = styled.img`
@@ -65,7 +61,6 @@ const Img = styled.img`
   justify-content: center;
   align-items: center;
   width: 100%;
-
   @media (min-width: 992px){
     width: 45%;
   }
@@ -77,7 +72,6 @@ const ListsDiv = styled.div`
 `;
 const ListsContainer = styled.div`
   padding: 0 30px;
-
   @media (min-width: 1200px) {
     width: 1200px;
     margin: 0 auto;
@@ -104,7 +98,6 @@ const ListTitle = styled.div`
   margin-bottom: 30px;
   font-size: 22px;
   color: #EAECEF;
-
   @media (min-width: 576px){
     text-align: left;
   }
@@ -126,7 +119,6 @@ const List = styled.div`
     box-shadow: 2px 5px 5px rgb(255 255 255 / 50%);
     background-color: #2B313A;
   }
-
   @media (min-width: 576px){
     width: 48%;
   }
@@ -144,7 +136,6 @@ const StockName = styled.div`
 `;
 const StockClose = styled.div`
   color: ${(props) => (props.green ? '#0ECB81' : '#F6465D')};
-
   padding-bottom: 10px;
   font-size: 28px;
   font-weight: bold;
@@ -152,7 +143,6 @@ const StockClose = styled.div`
 `;
 const StockSpread = styled.div`
   color: ${(props) => (props.green ? '#0ECB81' : '#F6465D')};
-
   font-weight: bold;
   font-size: 26px;
 `;
