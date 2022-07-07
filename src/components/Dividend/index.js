@@ -1,11 +1,9 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable prefer-destructuring */
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Loading from '../Loading';
 import CanvasJSReact from '../../utils/canvasjs-3.6.6/canvasjs.react';
-import api from '../../utils/api';
+import { compareStockId2 } from '../../utils/firebase';
 
 const Div = styled.div`
  margin: 0 -15px;
@@ -69,67 +67,50 @@ const ItemText = styled.div`
 `;
 
 function Dividend({ list }) {
-  const [data, setData] = useState(null);
-  const [stockId, setStockId] = useState('');
+  const [option, setOption] = useState(null);
   const [stockName, setStockName] = useState('');
   const [isLoaded, setIsLoaded] = useState(true);
-  const CanvasJS = CanvasJSReact.CanvasJS;
-  const CanvasJSChart = CanvasJSReact.CanvasJSChart;
-  const options = {
-    animationEnabled: true,
-    // animationDuration: 1000,
-    theme: 'dark1',
-    backgroundColor: '#181A20',
-    title: {
-      text: `${stockId} ${stockName}`,
-    },
-    axisY: {
-      title: '股利(元)',
-      prefix: '$',
-      suffix: '元',
-      includeZero: true,
-    },
-    toolbar: {
-      fontColorOnHover: 'yellow',
-    },
-    data: [
-      {
-        type: 'column',
-        bevelEnabled: true,
-        yValueFormatString: '$#,###',
-        xValueFormatString: 'MMM YYYY',
-        // toolTipContent: '{x}: {y} (元)',
-        color: '#4F81BC',
-        dataPoints: data,
+  const { CanvasJSChart } = CanvasJSReact;
+  // const CanvasJS = CanvasJSReact.CanvasJS;
+
+  const handleOption = (id, name, data) => {
+    const options = {
+      animationEnabled: true,
+      // animationDuration: 2000,
+      theme: 'dark1',
+      backgroundColor: '#181A20',
+      title: {
+        text: `${id} ${name}`,
       },
-    ],
+      axisY: {
+        title: '股利(元)',
+        prefix: '$',
+        suffix: '元',
+        includeZero: true,
+      },
+      toolbar: {
+        fontColorOnHover: 'yellow',
+      },
+      data: [
+        {
+          type: 'column',
+          bevelEnabled: true,
+          yValueFormatString: '$#,###',
+          xValueFormatString: 'MMM YYYY',
+          // toolTipContent: '{x}: {y} (元)',
+          color: '#4F81BC',
+          dataPoints: data,
+        },
+      ],
+    };
+    setOption(options);
+    setIsLoaded(false);
   };
 
-  const compareStockId = async (id) => {
-    const token = window.localStorage.getItem('finToken');
-    const res = await api.getStockList(token);
-    const result = res.data;
-    const items = result.filter((item) => item.stock_id === id);
-    const item = items[0];
-    if (item) {
-      return item.stock_name;
-    }
-    return false;
-  };
-
-  const handleName = async (id) => {
-    const name = await compareStockId(id);
-    if (name) {
-      setStockId(id);
-      setStockName(name);
-    }
-  };
-
-  const handleData = () => {
-    handleName(list[0].stock_id);
+  const handleData = async () => {
+    const name = await compareStockId2(list[0].stock_id);
+    if (!name) return;
     const output = list.map((item) => {
-      // const value = parseFloat(item.CashEarningsDistribution);
-      // const num = Math.round(value);
       const value = item.CashEarningsDistribution;
       const num = Math.round(value * 100) / 100;
       const newItem = {
@@ -138,8 +119,9 @@ function Dividend({ list }) {
       };
       return newItem;
     });
-    setData(output);
-    setIsLoaded(false);
+    console.log('data為', output);
+    setStockName(name);
+    handleOption(list[0].stock_id, name, output);
   };
 
   const renderTable = () => {
@@ -164,10 +146,10 @@ function Dividend({ list }) {
 
   return (
     <Div>
-      {(!isLoaded && data)
+      {!isLoaded
         ? (
           <>
-            <CanvasJSChart options={options} />
+            <CanvasJSChart options={option} />
             <TableContainer>
               <TableTitle>詳細數據</TableTitle>
               <Table>

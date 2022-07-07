@@ -1,11 +1,9 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable prefer-destructuring */
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Loading from '../Loading';
 import CanvasJSReact from '../../utils/canvasjs-3.6.6/canvasjs.react';
-import api from '../../utils/api';
+import { compareStockId2 } from '../../utils/firebase';
 
 const Div = styled.div`
  margin: 0 -15px;
@@ -66,56 +64,10 @@ const ItemText = styled.div`
 `;
 
 function Holding({ list }) {
-  const [data, setData] = useState(null);
-  const [stockId, setStockId] = useState('');
-  const [stockName, setStockName] = useState('');
+  const [option, setOption] = useState(null);
   const [isLoaded, setIsLoaded] = useState(true);
-  const CanvasJS = CanvasJSReact.CanvasJS;
-  const CanvasJSChart = CanvasJSReact.CanvasJSChart;
-  const options = {
-    animationEnabled: true,
-    exportEnabled: true,
-    theme: 'dark1',
-    backgroundColor: '#181A20',
-    title: {
-      text: `${stockId} ${stockName}`,
-    },
-    axisY: {
-      title: '外資持股比例(%)',
-      suffix: '%',
-    },
-    axisX: {
-      valueFormatString: 'MMM YYYY',
-      labelAngle: -20,
-      // interval: 2,
-    },
-    data: [{
-      type: 'area',
-      xValueFormatString: 'MMM YYYY',
-      toolTipContent: '{x}: {y}%',
-      dataPoints: data,
-    }],
-  };
-
-  const compareStockId = async (id) => {
-    const token = window.localStorage.getItem('finToken');
-    const res = await api.getStockList(token);
-    const result = res.data;
-    const items = result.filter((item) => item.stock_id === id);
-    const item = items[0];
-    if (item) {
-      return item.stock_name;
-    }
-    return false;
-  };
-
-  const handleName = async (id) => {
-    const name = await compareStockId(id);
-    if (name) {
-      setStockId(id);
-      setStockName(name);
-    }
-  };
+  const { CanvasJSChart } = CanvasJSReact;
+  // const CanvasJS = CanvasJSReact.CanvasJS;
 
   const transferDate = (date) => {
     const splits3 = date.split('-', 3);
@@ -126,8 +78,39 @@ function Holding({ list }) {
     return { year, monthIndex, day };
   };
 
-  const handleData = () => {
-    handleName(list[0].stock_id);
+  const handleOption = (id, name, data) => {
+    const options = {
+      animationEnabled: true,
+      exportEnabled: true,
+      theme: 'dark1',
+      backgroundColor: '#181A20',
+      title: {
+        text: `${id} ${name}`,
+      },
+      axisY: {
+        title: '外資持股比例(%)',
+        suffix: '%',
+      },
+      axisX: {
+        valueFormatString: 'MMM YYYY',
+        labelAngle: -20,
+        // interval: 2,
+      },
+      data: [{
+        type: 'area',
+        xValueFormatString: 'MMM YYYY',
+        toolTipContent: '{x}: {y}%',
+        dataPoints: data,
+      }],
+    };
+    console.log('設定option', options);
+    setOption(options);
+    setIsLoaded(false);
+  };
+
+  const handleData = async () => {
+    const name = await compareStockId2(list[0].stock_id);
+    if (!name) return;
     const output = list.map((item) => {
       const { year, monthIndex, day } = transferDate(item.date);
       const newItem = {
@@ -136,8 +119,8 @@ function Holding({ list }) {
       };
       return newItem;
     });
-    setData(output);
-    setIsLoaded(false);
+    console.log('data為', output);
+    handleOption(list[0].stock_id, name, output);
   };
 
   const renderTable = () => {
@@ -158,10 +141,10 @@ function Holding({ list }) {
 
   return (
     <Div>
-      {(!isLoaded && data)
+      {!isLoaded
         ? (
           <>
-            <CanvasJSChart options={options} />
+            <CanvasJSChart options={option} />
             <TableContainer>
               <TableTitle>詳細數據</TableTitle>
               <Table>

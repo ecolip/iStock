@@ -1,12 +1,10 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable prefer-destructuring */
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Loading from '../Loading';
 import CanvasJSReact from '../../utils/canvasjs-3.6.6/canvasjs.react';
 import { canvasDay, formatPrice } from '../../utils/formatDate';
-import api from '../../utils/api';
+import { compareStockId2 } from '../../utils/firebase';
 
 const Div = styled.div`
   margin: 0 -15px;
@@ -70,67 +68,55 @@ const ItemNum = styled.div`
 `;
 
 function MonthRevenue({ list }) {
-  const [data, setData] = useState(null);
-  const [stockId, setStockId] = useState('');
-  const [stockName, setStockName] = useState('');
+  const [option, setOption] = useState(null);
   const [isLoaded, setIsLoaded] = useState(true);
-  const CanvasJS = CanvasJSReact.CanvasJS;
-  const CanvasJSChart = CanvasJSReact.CanvasJSChart;
-  const options = {
-    animationEnabled: true,
-    exportEnabled: true,
-    theme: 'dark1',
-    backgroundColor: '#181A20',
-    title: {
-      text: `${stockId} ${stockName}`,
-    },
-    toolbar: {
-      itemBackgroundColor: '#2D3137',
-      itemBackgroundColorOnHover: '#2D3137',
-      fontColor: '#EAECEF',
-      fontColorOnHover: '#FCD535',
-    },
-    axisX: {
-      valueFormatString: 'MMM YYYY',
-      labelAngle: -20,
-    },
-    axisY: {
-      title: '營收(千元)',
-      prefix: '$',
-    },
-    data: [{
-      type: 'line',
-      yValueFormatString: '$#,###',
-      xValueFormatString: 'MMM YYYY',
-      nullDataLineDashType: 'dot',
-      // lineColor: 'red',
-      // markerColor: 'red',
-      // toolTipContent: '{x}: $ {y}',
-      dataPoints: data,
-    }],
+  const [stockName, setStockName] = useState('');
+  const { CanvasJSChart } = CanvasJSReact;
+  // const CanvasJS = CanvasJSReact.CanvasJS;
+
+  const handleOption = (id, name, data) => {
+    const options = {
+      animationEnabled: true,
+      // animationDuration: 2000,
+      exportEnabled: true,
+      theme: 'dark1',
+      backgroundColor: '#181A20',
+      title: {
+        text: `${id} ${name}`,
+      },
+      toolbar: {
+        itemBackgroundColor: '#2D3137',
+        itemBackgroundColorOnHover: '#2D3137',
+        fontColor: '#EAECEF',
+        fontColorOnHover: '#FCD535',
+      },
+      axisX: {
+        valueFormatString: 'MMM YYYY',
+        labelAngle: -20,
+      },
+      axisY: {
+        title: '營收(千元)',
+        prefix: '$',
+      },
+      data: [{
+        type: 'line',
+        yValueFormatString: '$#,###',
+        xValueFormatString: 'MMM YYYY',
+        nullDataLineDashType: 'dot',
+        // lineColor: 'red',
+        // markerColor: 'red',
+        // toolTipContent: '{x}: $ {y}',
+        dataPoints: data,
+      }],
+    };
+    console.log('設定option', options);
+    setOption(options);
+    setIsLoaded(false);
   };
 
-  const compareStockId = async (id) => {
-    const token = window.localStorage.getItem('finToken');
-    const res = await api.getStockList(token);
-    const result = res.data;
-    const items = result.filter((item) => item.stock_id === id);
-    const item = items[0];
-    if (item) {
-      return item.stock_name;
-    }
-    return false;
-  };
-
-  const handleName = async (id) => {
-    const name = await compareStockId(id);
-    if (name) {
-      setStockId(id);
-      setStockName(name);
-    }
-  };
-
-  const handleData = () => {
+  const handleData = async () => {
+    const name = await compareStockId2(list[0].stock_id);
+    if (!name) return;
     const output = list.map((item) => {
       const { year, month, day } = canvasDay(item.date);
       const newItem = {
@@ -139,12 +125,12 @@ function MonthRevenue({ list }) {
       };
       return newItem;
     });
-    setData(output);
-    setIsLoaded(false);
+    console.log('data為', output);
+    setStockName(name);
+    handleOption(list[0].stock_id, name, output);
   };
 
   const renderTable = () => {
-    handleName(list[0].stock_id);
     const output = list.map((item) => (
       <Item key={item.date}>
         <ItemText>{item.stock_id}</ItemText>
@@ -162,10 +148,10 @@ function MonthRevenue({ list }) {
 
   return (
     <Div>
-      {(!isLoaded && data)
+      {!isLoaded
         ? (
           <>
-            <CanvasJSChart options={options} />
+            <CanvasJSChart options={option} />
             <TableContainer>
               <TableTitle>詳細數據</TableTitle>
               <Table>

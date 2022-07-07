@@ -1,12 +1,10 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable prefer-destructuring */
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Loading from '../Loading';
 import CanvasJSReact from '../../utils/canvasjs-3.6.6/canvasjs.react';
 import { formatPrice } from '../../utils/formatDate';
-import api from '../../utils/api';
+import { compareStockId2 } from '../../utils/firebase';
 
 const Div = styled.div`
  margin: 0 -15px;
@@ -67,54 +65,39 @@ const ItemText = styled.div`
 `;
 
 function Financial({ list }) {
-  const [data, setData] = useState(null);
-  const [stockId, setStockId] = useState('');
+  const [option, setOption] = useState(null);
   const [stockName, setStockName] = useState('');
   const [isLoaded, setIsLoaded] = useState(true);
-  const CanvasJS = CanvasJSReact.CanvasJS;
-  const CanvasJSChart = CanvasJSReact.CanvasJSChart;
-  const options = {
-    animationEnabled: true,
-    theme: 'dark1',
-    backgroundColor: '#181A20',
-    fillOpacity: 0.3,
-    title: {
-      text: `${stockId} ${stockName}`,
-    },
-    axisX: {
-      valueFormatString: 'MMM YYYY',
-      labelAngle: -20,
-    },
-    axisY: {
-      title: '綜合損益總額(千元)',
-      prefix: '$',
-    },
-    data: [{
-      yValueFormatString: '$#,###',
-      xValueFormatString: 'MMM YYYY',
-      type: 'spline',
-      dataPoints: data,
-    }],
-  };
+  const { CanvasJSChart } = CanvasJSReact;
+  // const CanvasJS = CanvasJSReact.CanvasJS;
 
-  const compareStockId = async (id) => {
-    const token = window.localStorage.getItem('finToken');
-    const res = await api.getStockList(token);
-    const result = res.data;
-    const items = result.filter((item) => item.stock_id === id);
-    const item = items[0];
-    if (item) {
-      return item.stock_name;
-    }
-    return false;
-  };
-
-  const handleName = async (id) => {
-    const name = await compareStockId(id);
-    if (name) {
-      setStockId(id);
-      setStockName(name);
-    }
+  const handleOption = (id, name, data) => {
+    const options = {
+      animationEnabled: true,
+      theme: 'dark1',
+      backgroundColor: '#181A20',
+      fillOpacity: 0.3,
+      title: {
+        text: `${id} ${name}`,
+      },
+      axisX: {
+        valueFormatString: 'MMM YYYY',
+        labelAngle: -20,
+      },
+      axisY: {
+        title: '綜合損益總額(千元)',
+        prefix: '$',
+      },
+      data: [{
+        yValueFormatString: '$#,###',
+        xValueFormatString: 'MMM YYYY',
+        type: 'spline',
+        dataPoints: data,
+      }],
+    };
+    console.log('設定option', options);
+    setOption(options);
+    setIsLoaded(false);
   };
 
   const transferDate = (date) => {
@@ -126,8 +109,9 @@ function Financial({ list }) {
     return { year, monthIndex, day };
   };
 
-  const handleData = () => {
-    handleName(list[0].stock_id);
+  const handleData = async () => {
+    const name = await compareStockId2(list[0].stock_id);
+    if (!name) return;
     const output = list.map((item) => {
       const { year, monthIndex, day } = transferDate(item.date);
       const newItem = {
@@ -136,8 +120,9 @@ function Financial({ list }) {
       };
       return newItem;
     });
-    setData(output);
-    setIsLoaded(false);
+    console.log('data為', output);
+    setStockName(name);
+    handleOption(list[0].stock_id, name, output);
   };
 
   const renderTable = () => {
@@ -158,10 +143,10 @@ function Financial({ list }) {
 
   return (
     <Div>
-      {(!isLoaded && data)
+      {!isLoaded
         ? (
           <>
-            <CanvasJSChart options={options} />
+            <CanvasJSChart options={option} />
             <TableContainer>
               <TableTitle>詳細數據</TableTitle>
               <Table>
