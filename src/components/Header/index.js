@@ -70,7 +70,7 @@ const MobileHead = styled.div`
   position: fixed;
   background-color: #181A20;
   width: 100%;
-  height: 80px;
+  height: 70px;
   padding: 0px 30px;
   z-index: 100;
   @media (min-width: 992px) {
