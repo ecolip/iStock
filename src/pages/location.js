@@ -200,14 +200,6 @@ const DescribeText = styled.div`
   font-size: 22px;
   font-style: italic;
 `;
-// const ButtonDiv = styled.div`
-//   width: 100%;
-//   margin-top: 20px;
-//   @media (min-width: 768px) {
-//     width: 100px;
-//     margin-top: 0;
-//   }
-// `;
 const SelectDiv = styled.div`
   position: relative;
 `;
@@ -332,8 +324,6 @@ function Location() {
               <ArrowImg src={arrowIcon} alt="arrow" />
             </SelectDiv>
             <Button w100 md onClick={() => { handleSearch(); }}>搜尋</Button>
-            {/* <ButtonDiv>
-            </ButtonDiv> */}
           </SearchGroup>
         </SearchContainer>
         <ListMapGroup>
