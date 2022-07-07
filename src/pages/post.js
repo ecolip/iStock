@@ -116,16 +116,17 @@ const WriteTitle = styled.div`
   margin-bottom: ${(props) => (props.mb20 ? '20px' : '0')};
   padding-bottom: ${(props) => (props.pb10 ? '10px' : '0')};
   font-size: ${(props) => (props.fz18 ? '18px' : '22px')};
+  background-color: ${(props) => (props.bgc ? '#0B0E11' : 'transparent')};
   padding-right: 20px;
   color: #EAECEF;
 `;
 const WriteTextarea = styled.textarea`
   width: 100%;
-  height: 100px;
+  height: 50px;
   border-radius: 5px;
   padding: 10px 15px;
   margin-bottom: 15px;
-  font-size: 16px;
+  font-size: 14px;
   color: #0B0E11;
   outline: none;
   resize: none;
@@ -168,7 +169,7 @@ const StockId = styled.div`
 const Context = styled.div`
   padding-bottom: 15px;
   color: #EAECEF;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
 `;
 const Div = styled.div`
@@ -264,10 +265,11 @@ const DialogDiv = styled.div`
   }
 `;
 const Dialog = styled.div`
-  padding: 20px;
-  margin-bottom: 20px;
-  background-color: #181A20;
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  background-color: #2D3137;
   border-radius: 3px;
+  border-bottom: 1px solid #474D57;
 `;
 const Box = styled.div`
   position: relative;
@@ -286,14 +288,18 @@ const CloseIcon = styled(Close)`
   }
 `;
 const RenderDialogDiv = styled.div`
-  padding-top: 20px;
-  max-height: 55vh;
+  max-height: 50vh;
   overflow: auto;
 `;
 const DialogInputDiv = styled.div`
   position: absolute;
   width: 100%;
   bottom: 0;
+`;
+const Hr = styled.hr`
+  width: 100%;
+  margin-top: 0;
+  border-bottom: 2px solid #474D57;
 `;
 
 function Post() {
@@ -518,13 +524,14 @@ function Post() {
             </AuthorContainer>
             <StockId>{resInfo.stock_id} {resInfo.stock_name}</StockId>
             <Context>{resInfo.context}</Context>
+            <Hr />
             {/* <WriteTitle fz18 mb20>{resInfo.id} {resInfo.name}</WriteTitle>
               <Context>{resInfo.context}</Context> */}
             <RenderDialogDiv>
               {responsePosts && renderDialog()}
             </RenderDialogDiv>
             <DialogInputDiv>
-              <WriteTitle pb10>留言</WriteTitle>
+              <WriteTitle pb10 bgc>留言</WriteTitle>
               <WriteTextarea
                 value={resChat}
                 onChange={(e) => { setResChat(e.target.value); }}
