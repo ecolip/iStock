@@ -92,7 +92,7 @@ function Holding({ list }) {
         suffix: '%',
       },
       axisX: {
-        valueFormatString: 'MMM YYYY',
+        valueFormatString: 'DD MMM YYYY',
         labelAngle: -20,
         // interval: 2,
       },
@@ -104,7 +104,7 @@ function Holding({ list }) {
       },
       data: [{
         type: 'area',
-        xValueFormatString: 'MMM YYYY',
+        xValueFormatString: 'DD MMM YYYY',
         toolTipContent: '{x}: {y}%',
         dataPoints: data,
       }],
