@@ -118,13 +118,13 @@ const StarIcon = styled(Star)`
   }
 `;
 const ArrowUp = styled(ArrowSortedUp)`
-  width: 23px;
-  height: 23px;
+  width: 18px;
+  height: 18px;
   color: #F5C829;
   cursor: pointer;
     @media (min-width: 576px) {
-    width: 28px;
-    height: 28px;
+    width: 20px;
+    height: 20px;
   }
 `;
 const ArrowDown = styled(ArrowSortedDown)`

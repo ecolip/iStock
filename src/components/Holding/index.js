@@ -96,6 +96,12 @@ function Holding({ list }) {
         labelAngle: -20,
         // interval: 2,
       },
+      toolbar: {
+        itemBackgroundColor: '#2D3137',
+        itemBackgroundColorOnHover: '#2D3137',
+        fontColor: '#EAECEF',
+        fontColorOnHover: '#FCD535',
+      },
       data: [{
         type: 'area',
         xValueFormatString: 'MMM YYYY',
