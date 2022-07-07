@@ -183,7 +183,7 @@ const addTrackStock = async (id) => {
   const detail = await fetchTrackDetail(id);
   const news = await fetchHistoryNews(id);
   const newTrack = [...initTrack, id];
-  updateDoc(docRef, {
+  await updateDoc(docRef, {
     track: newTrack,
     detail,
     news,
@@ -226,7 +226,7 @@ const removeTrackStock = async (id) => {
   if (newsIndex) {
     newNews.splice(newsIndex, 1);
   }
-  updateDoc(docRef, {
+  await updateDoc(docRef, {
     track: newTrack,
     detail: newDetail,
     news: newNews,

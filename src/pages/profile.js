@@ -285,12 +285,14 @@ function Profile() {
 
   const fetchDetail = async () => {
     const res = await getTrack('detail');
+    console.log('db回傳detail', res);
     setDetail(res);
     setIsLoadedDetail(false);
   };
 
   const fetchNews = async () => {
     const res = await getTrack('news');
+    console.log('db回傳news', res);
     setNews(res);
     setIsLoadedNews(false);
   };
