@@ -30,11 +30,11 @@ const Div = styled.div`
 const TitleText = styled.div`
   padding-bottom: 2px;
   border-bottom: 2px solid #F5C829;
-  margin-bottom: 30px;
+  margin: 0 0 30px 30px;
   font-size: 22px;
   color: #EAECEF;
   @media (min-width: 992px) {
-    padding-left: 0;
+    margin: 0 0 30px 0;
     text-align: left;
   }
 `;

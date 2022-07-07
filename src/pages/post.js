@@ -121,8 +121,8 @@ const WriteTitle = styled.div`
   color: #EAECEF;
 `;
 const WriteTextarea = styled.textarea`
+  height: ${(props) => (props.h50 ? '50px' : '100px')}; 
   width: 100%;
-  height: 50px;
   border-radius: 5px;
   padding: 10px 15px;
   margin-bottom: 15px;
@@ -533,6 +533,7 @@ function Post() {
             <DialogInputDiv>
               <WriteTitle pb10 bgc>留言</WriteTitle>
               <WriteTextarea
+                h50
                 value={resChat}
                 onChange={(e) => { setResChat(e.target.value); }}
               />

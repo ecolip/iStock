@@ -50,9 +50,6 @@ const Title = styled.div`
   padding: 50px 0 30px;
   font-size: 32px;
   color: white;
-  @media (min-width: 992px){
-    padding: 0;
-  }
 `;
 const Img = styled.img`
   display: flex;
