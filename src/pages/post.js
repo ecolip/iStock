@@ -39,11 +39,6 @@ const TitleContainer = styled.div`
 const LoadContainer = styled.div`
   padding-top: 50px;
 `;
-// const DiscussionImg = styled.img`
-//   width: 50px;
-//   height: 50px;
-//   margin-right: 20px;
-// `;
 const Title = styled.div`
   margin: auto 0 30px;
   padding-bottom: 2px;
@@ -335,18 +330,6 @@ function Post() {
     fetchPosts();
   };
 
-  // const compareStockId = async (id) => {
-  //   const token = window.localStorage.getItem('finToken');
-  //   const res = await api.getStockList(token);
-  //   const { data } = res;
-  //   const items = data.filter((item) => item.stock_id === id);
-  //   const item = items[0];
-  //   if (item) {
-  //     return item.stock_name;
-  //   }
-  //   return false;
-  // };
-
   const sendPost = async () => {
     const chatTrim = chat.trim();
     if (!chatTrim.length > 0) {
@@ -401,13 +384,13 @@ function Post() {
   };
 
   const sendResponse = async () => {
-    const { uuid } = resInfo;
+    const { uuid, author } = resInfo;
     const chatNum = resInfo.chat;
     const resChatTrim = resChat.trim();
     if (!resChatTrim.length > 0) {
       alert('請輸入討論文字！');
     } else {
-      const res = await addResponsePost(uuid, resChatTrim, chatNum);
+      const res = await addResponsePost(author, uuid, resChatTrim, chatNum);
       if (res) {
         setResChat('');
         const data = await getResponsePosts(uuid);
@@ -470,7 +453,6 @@ function Post() {
         <Header />
         <MainContainer>
           <TitleContainer>
-            {/* <DiscussionImg src={DiscussionIcon} /> */}
             <Title ref={postRef}>討論專區</Title>
           </TitleContainer>
           <ButtonGroup mb100={isLoaded}>
@@ -525,8 +507,6 @@ function Post() {
             <StockId>{resInfo.stock_id} {resInfo.stock_name}</StockId>
             <Context>{resInfo.context}</Context>
             <Hr />
-            {/* <WriteTitle fz18 mb20>{resInfo.id} {resInfo.name}</WriteTitle>
-              <Context>{resInfo.context}</Context> */}
             <RenderDialogDiv>
               {responsePosts && renderDialog()}
             </RenderDialogDiv>
