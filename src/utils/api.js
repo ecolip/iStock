@@ -1,6 +1,7 @@
 const api = {
   hostname: 'https://api.finmindtrade.com/api/v4/data?',
   startDate: '2017-07-01',
+  dividendDate: '2000-07-01',
   finMindLogin() {
     const formData = new FormData();
     formData.append('user_id', process.env.REACT_APP_FINMIND_USER_ID);
@@ -35,7 +36,7 @@ const api = {
       .then((response) => response.json());
   },
   getHistoryDividend(token, id, today) {
-    return fetch(`${this.hostname}token=${token}&dataset=TaiwanStockDividend&data_id=${id}&start_date=${this.startDate}&end_date=${today}`)
+    return fetch(`${this.hostname}token=${token}&dataset=TaiwanStockDividend&data_id=${id}&start_date=${this.dividendDate}&end_date=${today}`)
       .then((response) => response.json());
   },
   getHistoryHolding(token, id, today, preWeek) {
