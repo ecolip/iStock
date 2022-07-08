@@ -91,7 +91,7 @@ function MonthRevenue({ list }) {
         fontColorOnHover: '#FCD535',
       },
       axisX: {
-        valueFormatString: 'MMM YYYY',
+        valueFormatString: 'DD MMM YYYY',
         labelAngle: -20,
       },
       axisY: {
@@ -101,7 +101,7 @@ function MonthRevenue({ list }) {
       data: [{
         type: 'line',
         yValueFormatString: '$#,###',
-        xValueFormatString: 'MMM YYYY',
+        xValueFormatString: 'DD MMM YYYY',
         nullDataLineDashType: 'dot',
         // lineColor: 'red',
         // markerColor: 'red',
