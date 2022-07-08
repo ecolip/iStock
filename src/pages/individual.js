@@ -3,7 +3,6 @@ import { useState, useEffect, useRef } from 'react';
 import * as dayjs from 'dayjs';
 import styled from 'styled-components';
 import { SearchOutline } from '@styled-icons/evaicons-outline';
-import useEventListener from '@use-it/event-listener';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Revenue from '../components/Revenue';
@@ -11,8 +10,8 @@ import Dividend from '../components/Dividend';
 import Holding from '../components/Holding';
 import Financial from '../components/Financial';
 import ScrollTop from '../components/ScrollTop';
-// import MonthRevenue2 from '../components/Revenue2';
 import { today, preYear } from '../utils/formatDate';
+import { compareStockId2 } from '../utils/firebase';
 import api from '../utils/api';
 
 const Items = [
@@ -123,8 +122,6 @@ const List = styled.div`
 `;
 const InfoTable = styled.div`
 `;
-const Div = styled.div`
-`;
 
 function Individual() {
   const [list, setList] = useState(null);
@@ -132,18 +129,6 @@ function Individual() {
   const [isFocus, setIsFocus] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const stockIdRef = useRef('2330');
-
-  const compareStockId = async () => {
-    const token = window.localStorage.getItem('finToken');
-    const res = await api.getStockList(token);
-    const { data } = res;
-    const items = data.filter((item) => item.stock_id === stockId);
-    const item = items[0];
-    if (item) {
-      return item.stock_name;
-    }
-    return false;
-  };
 
   const fetchHistoryFinancial = async () => {
     const token = window.localStorage.getItem('finToken');
@@ -196,7 +181,7 @@ function Individual() {
   };
 
   const handleSearch = async () => {
-    const name = await compareStockId();
+    const name = await compareStockId2(stockId);
     if (name) {
       stockIdRef.current = stockId;
       switch (activeIndex) {
@@ -257,12 +242,7 @@ function Individual() {
   const renderSelect = () => {
     switch (activeIndex) {
       case 0:
-        return (
-          <Div>
-            <Revenue list={list} />
-            {/* <Revenue2 /> */}
-          </Div>
-        );
+        return (<Revenue list={list} />);
       case 1:
         return (<Dividend list={list} />);
       case 2:
@@ -275,12 +255,6 @@ function Individual() {
   const initList = () => {
     fetchMonthRevenue(stockIdRef.current);
   };
-
-  useEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      handleSelect();
-    }
-  });
 
   useEffect(() => {
     initList();

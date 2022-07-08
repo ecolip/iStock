@@ -44,7 +44,7 @@ const api = {
       .then((response) => response.json());
   },
   getHistoryFinancial(token, id, today) {
-    return fetch(`${this.hostname}token=${token}&dataset=TaiwanStockFinancialStatements&data_id=${id}&start_date=${this.startDate}&end_date=${today}`)
+    return fetch(`${this.hostname}token=${token}&dataset=TaiwanStockFinancialStatements&data_id=${id}&start_date=${this.dividendDate}&end_date=${today}`)
       .then((response) => response.json());
   },
   getLatAndLng(address) {

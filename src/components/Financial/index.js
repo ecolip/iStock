@@ -97,7 +97,9 @@ function Financial({ list }) {
     };
     console.log('設定option', options);
     setOption(options);
-    setIsLoaded(false);
+    setTimeout(() => {
+      setIsLoaded(false);
+    }, 1000);
   };
 
   const transferDate = (date) => {
@@ -110,8 +112,7 @@ function Financial({ list }) {
   };
 
   const handleData = async () => {
-    setIsLoaded(true);
-    console.log('設定新financial');
+    console.log('handleData financial');
     const name = await compareStockId2(list[0].stock_id);
     if (!name) return;
     const output = list.map((item) => {

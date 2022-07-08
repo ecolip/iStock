@@ -104,12 +104,13 @@ function Dividend({ list }) {
       ],
     };
     setOption(options);
-    setIsLoaded(false);
+    setTimeout(() => {
+      setIsLoaded(false);
+    }, 1000);
   };
 
   const handleData = async () => {
-    setIsLoaded(true);
-    console.log('設定新dividend');
+    console.log('handleData dividend');
     const name = await compareStockId2(list[0].stock_id);
     if (!name) return;
     const output = list.map((item) => {
