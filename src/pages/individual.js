@@ -239,15 +239,18 @@ function Individual() {
   };
 
   const renderLists = () => {
-    const output = Items.map((item, index) => (
-      <List
-        key={item}
-        active={index === activeIndex}
-        onClick={() => { handleSelect(index); }}
-      >
-        {item}
-      </List>
-    ));
+    const output = Items.map((item, index) => {
+      console.log('目前的Index為0~3', activeIndex);
+      return (
+        <List
+          key={item}
+          active={index === activeIndex}
+          onClick={() => { handleSelect(index); }}
+        >
+          {item}
+        </List>
+      );
+    });
     return output;
   };
 

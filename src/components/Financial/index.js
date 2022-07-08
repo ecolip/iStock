@@ -110,8 +110,10 @@ function Financial({ list }) {
   };
 
   const handleData = async () => {
+    console.log('設定新financial');
     const name = await compareStockId2(list[0].stock_id);
     if (!name) return;
+    setIsLoaded(true);
     const output = list.map((item) => {
       const { year, monthIndex, day } = transferDate(item.date);
       const newItem = {
