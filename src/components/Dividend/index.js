@@ -108,10 +108,10 @@ function Dividend({ list }) {
   };
 
   const handleData = async () => {
+    setIsLoaded(true);
     console.log('設定新dividend');
     const name = await compareStockId2(list[0].stock_id);
     if (!name) return;
-    setIsLoaded(true);
     const output = list.map((item) => {
       const value = item.CashEarningsDistribution;
       const num = Math.round(value * 100) / 100;

@@ -115,10 +115,10 @@ function MonthRevenue({ list }) {
   };
 
   const handleData = async () => {
+    setIsLoaded(true);
     console.log('設定新revenue');
     const name = await compareStockId2(list[0].stock_id);
     if (!name) return;
-    setIsLoaded(true);
     const output = list.map((item) => {
       const { year, month, day } = canvasDay(item.date);
       const newItem = {
