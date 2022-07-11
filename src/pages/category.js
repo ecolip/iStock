@@ -34,7 +34,6 @@ const TitleText = styled.div`
   font-size: 22px;
   color: #EAECEF;
   @media (min-width: 992px) {
-    margin: 0 0 30px 0;
     text-align: left;
   }
 `;
