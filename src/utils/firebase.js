@@ -223,7 +223,7 @@ const removeTrackStock = async (id) => {
   const newNews = [...originNews];
   newTrack.splice(index, 1);
   newDetail.splice(index, 1);
-  if (newsIndex) {
+  if (newsIndex !== false) {
     newNews.splice(newsIndex, 1);
   }
   await updateDoc(docRef, {
