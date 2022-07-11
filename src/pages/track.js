@@ -17,7 +17,7 @@ const Container = styled.div`
   background-color: #0B0E11;
 `;
 const Div = styled.div`
-  padding: 110px 0 0;
+  padding: 110px 0 10px;
 `;
 const LoadContainer = styled.div`
   padding-top: 200px;
