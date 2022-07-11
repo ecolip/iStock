@@ -33,8 +33,8 @@ const TitleText = styled.div`
   margin: 0 0 30px 30px;
   font-size: 22px;
   color: #EAECEF;
-  @media (min-width: 992px) {
-    text-align: left;
+  @media (min-width: 1260px) {
+    margin: 0 0 30px;
   }
 `;
 const TableContainer = styled.div`
