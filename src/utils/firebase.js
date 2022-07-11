@@ -305,7 +305,7 @@ const getResponsePosts = async (uuid) => {
   return result;
 };
 
-const addResponsePost = async (uuid, context, chat) => {
+const addResponsePost = async (author, uuid, context, chat) => {
   const user = window.localStorage.getItem('user');
   const { email } = JSON.parse(user);
   const time = Date.now() / 1000;
@@ -316,6 +316,7 @@ const addResponsePost = async (uuid, context, chat) => {
   const newItem = {
     author: email,
     context,
+    postAuthor: author,
     timestamp,
   };
   const newData = [...data, newItem];
