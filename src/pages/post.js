@@ -315,6 +315,7 @@ function Post() {
 
   const fetchPosts = async () => {
     const res = await getAllPosts();
+    setMessage('');
     setIsLoaded(false);
     setPosts(res);
   };
