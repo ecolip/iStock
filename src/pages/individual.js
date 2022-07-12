@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import * as dayjs from 'dayjs';
 import styled from 'styled-components';
+import useEventListener from '@use-it/event-listener';
 import { SearchOutline } from '@styled-icons/evaicons-outline';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -253,6 +254,12 @@ function Individual() {
   const initList = () => {
     fetchMonthRevenue(stockIdRef.current);
   };
+
+  useEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  });
 
   useEffect(() => {
     initList();
