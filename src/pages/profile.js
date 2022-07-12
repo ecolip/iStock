@@ -84,11 +84,11 @@ const NewsContainer = styled.div`
   position: relative;
   min-height: 30vh;
   margin-top: 100px;
-  padding: 0 30px;
   @media (min-width: 1200px) {
     width: 63%;
     min-height: 70vh;
     margin-top: 0;
+    padding: 0 30px;
   }
 `;
 const NavGroup = styled.div`
@@ -207,11 +207,13 @@ const WriteInput = styled.input`
 const NewsItems = styled.div`
   padding-top: 50px;
 `;
-const NewsItem = styled.div`
+const NewsItem = styled.a`
+  display: block;
   margin-bottom: 25px;
   padding: 10px 20px;
   border-radius: 3px;
   background-color: #181A20;
+  cursor: pointer;
   :hover {
     background-color: #2D3137;
   }
@@ -339,8 +341,9 @@ function Profile() {
 
   const renderNews = () => {
     const output = news.map((item) => (
-      <NewsItem key={`news-${item.stock_id}`}>
+      <NewsItem key={`news-${item.stock_id}`} href={item.link} target="_blank">
         <NewsTitle>{item.stock_id} {item.stock_name}</NewsTitle>
+        {/* <NewsLink>{item.title}</NewsLink> */}
         <NewsLink href={item.link} target="_blank">{item.title}</NewsLink>
         <NewTime>{item.date}</NewTime>
       </NewsItem>
