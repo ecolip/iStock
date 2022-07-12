@@ -396,6 +396,12 @@ function Post() {
     }
   };
 
+  const handleSearch = (e) => {
+    if (e.key === 'Enter') {
+      searchStockPosts();
+    }
+  };
+
   const renderPost = () => {
     const output = posts.map((item) => (
       <PostItem key={`post-${item.uuid}`}>
@@ -461,6 +467,7 @@ function Post() {
                 onChange={(e) => { setStockId(e.target.value); }}
                 onFocus={() => { setIsFocus(true); }}
                 onBlur={() => { setIsFocus(false); }}
+                onKeyPress={(e) => { handleSearch(e); }}
               />
               <SearchIcon onClick={() => { searchStockPosts(); }} />
             </SearchGroup>
