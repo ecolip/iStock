@@ -16,7 +16,6 @@ import {
   getTrack, addTrackStock, removeTrackStock, compareStockId2,
 } from '../utils/firebase';
 import { handelColor } from '../utils/formatDate';
-import api from '../utils/api';
 
 const Container = styled.div`
   display: flex;
@@ -100,7 +99,6 @@ const NavGroup = styled.div`
 const NewsNav = styled.div`
   border-bottom: ${(props) => (props.active ? '2px solid #F0B90B' : '2px solid transparent')};
   color: ${(props) => (props.active ? '#EAECEF' : '#848E9C')};
-
   display: flex;
   width: 20%;
   justify-content: center;
@@ -258,18 +256,6 @@ function Profile() {
   const [isLoadedNews, setIsLoadedNews] = useState(true);
   const [isLoadedDetail, setIsLoadedDetail] = useState(true);
   const navigate = useNavigate();
-
-  // const compareStockId = async (id) => {
-  //   const token = window.localStorage.getItem('finToken');
-  //   const res = await api.getStockList(token);
-  //   const { data } = res;
-  //   const items = data.filter((item) => item.stock_id === id);
-  //   const item = items[0];
-  //   if (item) {
-  //     return item.stock_name;
-  //   }
-  //   return false;
-  // };
 
   const logout = () => {
     window.localStorage.removeItem('firToken');

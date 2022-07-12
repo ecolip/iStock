@@ -37,7 +37,6 @@ const SearchGroup = styled.div`
 `;
 const Input = styled.input`
   border: ${(props) => (props.border ? '1px solid #848E9C' : 'none')};
- 
   width:80%;
   height: 40px;
   font-size: 16px;
@@ -70,54 +69,6 @@ const SearchIcon = styled(SearchOutline)`
     height: 30px;
   }
 `;
-// const SearchGroup = styled.div`
-//   margin: ${(props) => (props.load ? '40px auto 35vh' : '110px auto 10px')};
-
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-//   width: 300px;
-//   padding: 0 13px;
-//   border: 2px solid #424242;
-//   border-radius: 5px;
-
-//   @media (min-width: 996px) {
-//     margin: ${(props) => (props.load ? '120px auto 30vh' : '120px auto 10px')};
-//   }
-// `;
-// const Input = styled.input`
-//   width: 70%;
-//   height: 35px;
-//   border: none;
-//   border-radius: 5px;
-//   outline: none;
-//   font-size: 20px;
-//   color: #424242;
-//   ::placeholder {
-//     color: #ccc;
-//   }
-//   ::-webkit-input-placeholder {
-//     color: #ccc;
-//   }
-//   :-ms-input-placeholder {
-//     color: #ccc;
-//   }
-//   ::-moz-placeholder {
-//     color: #ccc;
-//     opacity: 1;
-//   }
-// `;
-// const SearchIcon = styled(SearchOutline)`
-//   width: 28px;
-//   height: 28px;
-//   padding: 2px;
-//   color: #4A4A4A;
-//   cursor: pointer;
-//   :hover {
-//     width: 30px;
-//     height: 30px;
-//   }
-// `;
 
 function Track() {
   const [stockId, setStockId] = useState('');
@@ -366,15 +317,6 @@ function Track() {
           <SearchIcon onClick={() => { updateView(); }} />
         </SearchGroup>
       </Div>
-      {/* <SearchGroup load={isLoaded}>
-        <Input
-          type="text"
-          value={stockId}
-          placeholder="請輸入股票代號"
-          onChange={(e) => { setStockId(e.target.value); }}
-        />
-        <SearchIcon onClick={() => { updateView(); }} />
-      </SearchGroup> */}
       {isLoaded
         ? <LoadContainer><Loading /></LoadContainer>
         : <CanvasJSStockChart containerProps={containerProp} options={option} ref={canvasRef} />}

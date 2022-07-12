@@ -1,3 +1,5 @@
+/* eslint-disable no-useless-escape */
+/* eslint-disable no-unused-vars */
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -58,7 +60,6 @@ const MethodGroup = styled.div`
 const MethodBtn = styled.div`
   color: ${(props) => (props.click ? 'white' : '#848E9C')};
   background-color: ${(props) => (props.click ? '#2B3139' : 'transparent')};
-
   padding: 10px 20px;
   border-radius: 4px;
   font-size: 16px;
@@ -123,7 +124,6 @@ function Login() {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState(null);
   const navigate = useNavigate();
-  // eslint-disable-next-line no-unused-vars
   const [state, dispatch] = useContext(AppContext);
 
   const trimText = () => {
@@ -151,7 +151,6 @@ function Login() {
 
   const verifyEmailAndPassword = () => {
     const { triEmail, triPassword } = trimText();
-    // eslint-disable-next-line no-useless-escape
     const pattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
     if (!triEmail.match(pattern)) {
       setMessage('請輸入正確 Email');

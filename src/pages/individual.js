@@ -45,7 +45,6 @@ const SearchContainer = styled.div`
 `;
 const SearchGroup = styled.div`
   border: ${(props) => (props.focus ? '1px solid #F0B90B' : '1px solid #848E9C')};
-
   width: 190px;
   display: flex;
   justify-content: space-between;
@@ -60,7 +59,6 @@ const SearchGroup = styled.div`
 `;
 const Input = styled.input`
   border: ${(props) => (props.border ? '1px solid #848E9C' : 'none')};
- 
   width:80%;
   height: 40px;
   font-size: 16px;

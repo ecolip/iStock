@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { SearchOutline } from '@styled-icons/evaicons-outline';
 import { Close } from '@styled-icons/material';
-// import DiscussionIcon from '../imgs/discussion.png';
 import HeartImg from '../imgs/heart.svg';
 import ChatImg from '../imgs/chat.svg';
 import Header from '../components/Header';
@@ -48,14 +47,12 @@ const Title = styled.div`
 `;
 const ButtonGroup = styled.div`
   margin-bottom: ${(props) => (props.mb100 ? '100px' : '0')};
-
   display: flex;
   align-items: center;
   padding-bottom: 15px;
 `;
 const SearchGroup = styled.div`
   border: ${(props) => (props.focus ? '1px solid #F0B90B' : '1px solid #848E9C')};
-
   width: 190px;
   display: flex;
   justify-content: space-between;
@@ -71,7 +68,6 @@ const SearchGroup = styled.div`
 `;
 const Input = styled.input`
   border: ${(props) => (props.border ? '1px solid #848E9C' : 'none')};
- 
   width:80%;
   height: 40px;
   font-size: 16px;
@@ -239,7 +235,6 @@ const WriteInput = styled.input`
 `;
 const DialogContainer = styled.div`
   display: ${(props) => (props.show ? 'block' : 'none')};
-
   position: fixed;
   top: 0;
   left: 0;

@@ -68,7 +68,6 @@ const SearchGroup = styled.div`
 `;
 const Select = styled.select`
   margin-right: ${(props) => (props.mr20 ? '20px' : '0')};
-
   width: 100%;
   height: 45px;
   margin: 10px 0;
