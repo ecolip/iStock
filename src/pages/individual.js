@@ -50,7 +50,6 @@ const SearchGroup = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-left: auto;
   padding: 0 13px;
   border-radius: 5px;
   @media (min-width: 576px) {

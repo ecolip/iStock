@@ -108,7 +108,7 @@ const CloseIcon = styled(Close)`
   width: 35px;
   height: 35px;
   margin-left: auto;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   color: #F0B90B;
   cursor: pointer;
   transition: color 0.1s linear;
@@ -117,7 +117,7 @@ const CloseIcon = styled(Close)`
   }
 `;
 const MobileNavContainer = styled.div`
-  padding: 94px 48px;
+  padding: 30px 48px;
   background-color: #181A20;
   width: 300px;
   height: 100vh;

@@ -204,10 +204,10 @@ const MessageText = styled.div`
   font-weight: 500;
 `;
 const WriteInput = styled.input`
-  width: 150px;
+  width: 171px;
   height: 40px;
   padding: 10px;
-  font-size: 15px;
+  font-size: 13px;
   border: 1px solid #848E9C;
   border-radius: 5px;
   outline: none;
@@ -228,9 +228,6 @@ const WriteInput = styled.input`
   ::-moz-placeholder {
     color: #848E9C;
     opacity: 1;
-  }
-  @media (min-width: 576px) {
-    font-size: 16px;
   }
 `;
 const DialogContainer = styled.div`
@@ -484,7 +481,7 @@ function Post() {
                     <WriteInput
                       type="text"
                       value={chatId}
-                      placeholder="請輸入股票代碼"
+                      placeholder="請輸入股票代碼 預設加權"
                       onChange={(e) => { setChatId(e.target.value); }}
                     />
                   </Div>
