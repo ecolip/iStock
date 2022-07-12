@@ -20,7 +20,7 @@ const Container = styled.div`
 `;
 const MainContainer = styled.div`
   width: 100%;
-  padding: 110px 0 100px;
+  padding: 110px 30px 100px;
   @media (min-width: 1200px) {
     width: 1200px;
     padding: 110px 30px 80px;
@@ -38,12 +38,8 @@ const Title = styled.div`
   color: #EAECEF;
 `;
 const SearchContainer = styled.div`
-  padding: 0 0 0 10px;
   margin-bottom: 30px;
   border-radius: 8px;
-  @media (min-width: 576px) {
-    padding: 10px;
-  }
   @media (min-width: 768px) {
     display: flex;
     align-items: center;
