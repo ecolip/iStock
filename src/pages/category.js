@@ -60,7 +60,7 @@ const TitleContainer = styled.div`
   align-items: center;
   padding: 15px;
   font-size: 14px;
-  color: #848E9C;
+  color: #EAECEF;
 `;
 const Title = styled.div`
   display: ${(props) => (props.df ? 'flex' : 'block')};
