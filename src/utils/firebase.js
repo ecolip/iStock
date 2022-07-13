@@ -51,7 +51,7 @@ const register = (email, password) => new Promise((resolve, reject) => {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const { user } = userCredential;
-      setDoc(doc(db, 'userTrackStocks', email), { track: [], list: [], news: [] });
+      setDoc(doc(db, 'userTrackStocks', email), { track: [], detail: [], news: [] });
       resolve(user);
     }).catch((error) => {
       reject(error.code);
@@ -124,12 +124,16 @@ const compareStockId = async (id) => {
 };
 
 const getTrack = async (type) => {
+  console.log(type);
   const user = window.localStorage.getItem('user');
   const { email } = JSON.parse(user);
   const docRef = doc(db, 'userTrackStocks', email);
   const docSnap = await getDoc(docRef);
+  console.log(docSnap.data().track);
+  console.log(docSnap.data().detail);
   switch (type) {
     case 'track':
+      console.log(docSnap.data().track);
       return docSnap.data().track;
     case 'detail':
       return docSnap.data().detail;
