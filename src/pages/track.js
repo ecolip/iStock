@@ -81,7 +81,17 @@ function Track() {
   const initStockId = useRef('TAIEX');
   const { CanvasJSStockChart } = CanvasJSReact;
 
+  const getClientWidth = () => {
+    const element = document.getElementById('track-id');
+    const { clientWidth } = element;
+    if (clientWidth < 576) {
+      return false;
+    }
+    return true;
+  };
+
   const definedOptions = (dps1, dps2, dps3, id) => {
+    const isWebWidth = getClientWidth();
     const options = {
       exportEnabled: true,
       exportFileName: 'StockChart',
@@ -202,6 +212,7 @@ function Track() {
         },
         inputFields: {
           valueFormatString: 'YYYY-MM-DD',
+          enabled: isWebWidth,
           style: {
             backgroundColor: '#181A20',
             borderColor: '#2B3139',
@@ -302,7 +313,7 @@ function Track() {
   }, []);
 
   return (
-    <Container ref={containerRef}>
+    <Container id="track-id" ref={containerRef}>
       <Header />
       <Div>
         <SearchGroup focus={isFocus}>
