@@ -8,6 +8,7 @@ import Category from './pages/category';
 import Location from './pages/location';
 import Individual from './pages/individual';
 import NotFound from './pages/NotFound';
+import Dialog from './components/Dialog';
 
 function App() {
   return (
@@ -20,7 +21,9 @@ function App() {
           <Route exact path="individual" element={<Individual />} />
           <Route exact path="category" element={<Category />} />
           <Route exact path="location" element={<Location />} />
-          <Route exact path="post" element={<Post />} />
+          <Route exact path="post" element={<Post />}>
+            <Route path="response/:postId" element={<Dialog />} />
+          </Route>
           <Route exact path="track" element={<Track />} />
           <Route exact path="*" element={<NotFound />} />
         </Routes>

@@ -4,7 +4,7 @@ import {
   createUserWithEmailAndPassword, signInWithEmailAndPassword,
 } from 'firebase/auth';
 import {
-  getFirestore, collection, query, setDoc, doc, getDoc, updateDoc, where, getDocs,
+  getFirestore, collection, query, setDoc, doc, getDoc, updateDoc, where, getDocs, onSnapshot,
 } from 'firebase/firestore';
 import * as dayjs from 'dayjs';
 import firebaseConfig from '../firebaseConfig';
@@ -124,16 +124,12 @@ const compareStockId = async (id) => {
 };
 
 const getTrack = async (type) => {
-  console.log(type);
   const user = window.localStorage.getItem('user');
   const { email } = JSON.parse(user);
   const docRef = doc(db, 'userTrackStocks', email);
   const docSnap = await getDoc(docRef);
-  console.log(docSnap.data().track);
-  console.log(docSnap.data().detail);
   switch (type) {
     case 'track':
-      console.log(docSnap.data().track);
       return docSnap.data().track;
     case 'detail':
       return docSnap.data().detail;
@@ -305,11 +301,11 @@ const getResponsePosts = async (uuid) => {
   const docRef = doc(db, 'responsePosts', uuid);
   const docSnap = await getDoc(docRef);
   const result = docSnap.data().data;
-  // result.sort((a, b) => b.timestamp - a.timestamp);
   return result;
+  // result.sort((a, b) => b.timestamp - a.timestamp);
 };
 
-const addResponsePost = async (author, uuid, context, chat) => {
+const addResponsePost = async (uuid, postAuthor, postTitle, context, chat) => {
   const user = window.localStorage.getItem('user');
   const { email } = JSON.parse(user);
   const time = Date.now() / 1000;
@@ -318,16 +314,19 @@ const addResponsePost = async (author, uuid, context, chat) => {
   const docSnap = await getDoc(docRef);
   const { data } = docSnap.data();
   const newItem = {
+    uuid,
     author: email,
     context,
-    postAuthor: author,
+    isRead: false,
+    postAuthor,
+    postTitle,
     timestamp,
   };
   const newData = [...data, newItem];
-  updateDoc(docRef, {
+  await setDoc(docRef, {
     data: newData,
   });
-  addChat(uuid, chat);
+  await addChat(uuid, chat);
   return true;
 };
 
@@ -366,6 +365,42 @@ const getBrokerages = async (bank, city) => {
   return output;
 };
 
+const getUnReadResponse = async (uuids) => {
+  const posts = [];
+  await Promise.all(uuids.map(async (uuid) => {
+    const docRef = doc(db, 'responsePosts', uuid);
+    const docSnap = await getDoc(docRef);
+    const { data } = docSnap.data();
+    const output = data.find((item) => item.isRead === false);
+    if (output) {
+      posts.push(output);
+    }
+  }));
+  return posts;
+};
+
+const getUserUnReadResponses = (myEmail) => new Promise((resolve) => {
+  const q = query(collection(db, 'stockPosts'), where('author', '==', myEmail));
+  onSnapshot(q, async (querySnapshot) => {
+    const uuids = [];
+    querySnapshot.forEach((item) => {
+      uuids.push(item.data().uuid);
+    });
+    const res = await getUnReadResponse(uuids);
+    resolve(res);
+  });
+});
+
+const updateRead = async (uuid) => {
+  const docRef = doc(db, 'responsePosts', uuid);
+  const docSnap = await getDoc(docRef);
+  const newData = docSnap.data().data;
+  const output = newData.map((item) => ({ ...item, isRead: true }));
+  setDoc(docRef, {
+    data: output,
+  });
+};
+
 export {
   signIn,
   googleSignIn,
@@ -391,4 +426,6 @@ export {
   getCities,
   getBrokerages,
   getOpenDate,
+  getUserUnReadResponses,
+  updateRead,
 };

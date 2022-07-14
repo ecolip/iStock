@@ -210,7 +210,6 @@ function Login() {
   const fetchPrices = async (item, day) => {
     const finToken = window.localStorage.getItem('finToken');
     const res = await api.getTodayPrice(finToken, item.stock_id, day);
-    console.log(1);
     const newItem = {
       ...item, close: res.data[0].close, spread: res.data[0].spread.toFixed(2), date: day,
     };

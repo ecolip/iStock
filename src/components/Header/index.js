@@ -3,6 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { Navicon } from '@styled-icons/evil';
 import { Close } from '@styled-icons/material';
+import { AlertOn, AlertOff } from '@styled-icons/fluentui-system-regular';
+import { getUserUnReadResponses, updateRead } from '../../utils/firebase';
 
 const Container = styled.div`
   position: fixed;
@@ -26,14 +28,17 @@ const RightContainer = styled.div`
   display: flex;
   align-items: center;
 `;
+const Div = styled.div`
+  display: flex;
+  align-items: center;
+  position: relative;
+`;
 const Logo = styled.div`
   padding-bottom: ${(props) => (props.mb ? '50px' : '0')};
-
   color: #F0B90B;
   font-size: 36px;
   font-weight: bold;
   cursor: pointer;
-  
   @media (min-width: 992px) {
     margin-right: 30px;
   }
@@ -43,7 +48,6 @@ const NavItem = styled.div`
   padding: ${(props) => (props.px1 ? '15px 0' : '0')};
   font-size: ${(props) => (props.fzBig ? '20px' : '18px')};
   color: ${(props) => (props.active ? '#FCD535' : '#EAECEF')};
-
   font-weight: 500;
   cursor: pointer;
   transition: color 0.1s linear;
@@ -62,7 +66,6 @@ const PersonContainer = styled.div`
     color: #F5F5F5;
   }
 `;
-
 const MobileHead = styled.div`
   display: flex;
   justify-content: space-between;
@@ -81,7 +84,6 @@ const MobileHead = styled.div`
 const NavigationIcon = styled(Navicon)` 
   width: 45px;
   height: 45px;
-  margin-top: 5px;
   color: #FCD535;
   cursor: pointer;
   transition: color 0.1s linear;
@@ -108,7 +110,7 @@ const CloseIcon = styled(Close)`
   width: 35px;
   height: 35px;
   margin-left: auto;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   color: #F0B90B;
   cursor: pointer;
   transition: color 0.1s linear;
@@ -117,12 +119,11 @@ const CloseIcon = styled(Close)`
   }
 `;
 const MobileNavContainer = styled.div`
-  padding: 30px 48px;
+  padding: 94px 48px;
   background-color: #181A20;
   width: 300px;
   height: 100vh;
 `;
-
 const ProfileIcon = styled.div`
   width: 32px;
   height: 32px;
@@ -139,19 +140,64 @@ const ProfileIcon = styled.div`
     opacity: 0.9;
   }
 `;
-
 const ProfileImg = styled.img`
   width: 32px;
   height: 32px;
   border-radius: 50%;
 `;
+const AlertOnIcon = styled(AlertOn)`
+  width: 25px;
+  height: 25px;
+  margin: 5px;
+  color: #FCD535;
+  cursor: pointer;
+  @media(min-width: 992px){
+    margin: 5px 25px;
+  }
+`;
+const AlertOffIcon = styled(AlertOff)`
+  width: 25px;
+  height: 25px;
+  margin: 5px;
+  color: #848E9C;
+  @media(min-width: 992px){
+    margin: 5px 25px;
+  }
+`;
+const DropDown = styled.div`
+  display: ${(props) => (props.open ? 'block' : 'none')};
+  position: absolute;
+  top: 95%;
+  width: 100px;
+  right: 0;
+  font-size: 14px;
+  text-align: center;
+  background-color: #2D3137;
+  border-radius: 3px;
+`;
+const Item = styled.div`
+  padding: 10px 0;
+  color: #fff;
+  :hover {
+    color: #FCD535;
+  }
+`;
 
 function Header() {
   const [img, setImg] = useState(null);
   const [path, setPath] = useState('');
+  const [open, setOpen] = useState(false);
+  const [unReadData, setUnReadData] = useState(null);
   const [openNav, setOpenNav] = useState(false);
   const [userEmail, setUserEmail] = useState(null);
   const ifo = useLocation();
+
+  const fetchUnRead = async (email) => {
+    const unReadList = await getUserUnReadResponses(email);
+    if (unReadList.length > 0) {
+      setUnReadData(unReadList);
+    }
+  };
 
   const getUserInfo = () => {
     const data = window.localStorage.getItem('user');
@@ -162,6 +208,7 @@ function Header() {
       const emailFirst = email.slice(0, 1).toUpperCase();
       setUserEmail(emailFirst);
     }
+    fetchUnRead(email);
   };
 
   const verifyLocation = () => {
@@ -170,9 +217,30 @@ function Header() {
     }
   };
 
+  const renderUnReadList = () => {
+    const output = unReadData.map((item) => (
+      <Link to={`/post/response/${item.uuid}`} key={`unRead-${item.uuid}`}>
+        <Item onClick={() => { updateRead(item.uuid); }}>{`${item.postTitle}...`}</Item>
+      </Link>
+    ));
+    return output;
+  };
+
+  const renderBells = () => (
+    <Div>
+      <AlertOnIcon
+        onMouseEnter={() => { setOpen(true); }}
+        onClick={() => { setOpen(!open); }}
+      />
+      <DropDown open={open} onMouseLeave={() => { setOpen(false); }}>
+        {unReadData && renderUnReadList()}
+      </DropDown>
+    </Div>
+  );
+
   useEffect(() => {
-    verifyLocation();
     getUserInfo();
+    verifyLocation();
   }, []);
 
   return (
@@ -183,9 +251,7 @@ function Header() {
         </Link>
         <LeftContainer>
           <Link to="/individual">
-            <NavItem mr active={path === '/individual'}>
-              個股資訊
-            </NavItem>
+            <NavItem mr active={path === '/individual'}>個股資訊</NavItem>
           </Link>
           <Link to="/track">
             <NavItem mr active={path === '/track'}>走勢圖</NavItem>
@@ -199,6 +265,9 @@ function Header() {
         </LeftContainer>
         <RightContainer>
           <PersonContainer>
+            {unReadData
+              ? renderBells()
+              : <AlertOffIcon />}
             <Link to="/profile">
               {img
                 ? <ProfileImg src={img} />
@@ -211,7 +280,12 @@ function Header() {
         <Link to="/home">
           <Logo>iStock</Logo>
         </Link>
-        <NavigationIcon onClick={() => { setOpenNav(true); }} />
+        <Div>
+          {!unReadData
+            ? <AlertOffIcon />
+            : renderBells()}
+          <NavigationIcon onClick={() => { setOpenNav(true); }} />
+        </Div>
       </MobileHead>
       {openNav && (
         <MobileBackground displayBlock>

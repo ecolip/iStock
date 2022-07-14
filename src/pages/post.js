@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { SearchOutline } from '@styled-icons/evaicons-outline';
-import { Close } from '@styled-icons/material';
 import HeartImg from '../imgs/heart.svg';
 import ChatImg from '../imgs/chat.svg';
 import Header from '../components/Header';
@@ -10,8 +10,7 @@ import Button from '../components/Button';
 import Loading from '../components/Loading';
 import ScrollTop from '../components/ScrollTop';
 import {
-  getAllPosts, getStockPosts, addStockPosts, addHeart, getResponsePosts,
-  addResponsePost, compareStockId2, getOriPost,
+  getAllPosts, getStockPosts, addStockPosts, addHeart, compareStockId2,
 } from '../utils/firebase';
 import { getDateDiff } from '../utils/formatDate';
 
@@ -155,7 +154,6 @@ const StockId = styled.div`
   color: #EAECEF;
   font-size: 18px;
   font-weight: bold;
-
 `;
 const Context = styled.div`
   padding-bottom: 15px;
@@ -165,7 +163,6 @@ const Context = styled.div`
 `;
 const Div = styled.div`
   padding-bottom: ${(props) => (props.pb20 ? '20px' : '0')};
-
   display: flex;
   align-items: center;
 `;
@@ -230,78 +227,17 @@ const WriteInput = styled.input`
     opacity: 1;
   }
 `;
-const DialogContainer = styled.div`
-  display: ${(props) => (props.show ? 'block' : 'none')};
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background-color: rgba(255,255,255,0.5);
-  z-index: 100;
-  opacity: 1;
-`;
-const DialogDiv = styled.div`
-  height: 100%;
-  padding: 20px 80px;
-  background-color: #0B0E11;
-  border-radius: 3px;
-  @media (min-width: 768px) {
-    width: 768px;
-    margin: 0 auto;
-  }
-`;
-const Dialog = styled.div`
-  margin-bottom: 10px;
-  padding: 10px 20px;
-  background-color: #2D3137;
-  border-radius: 3px;
-  border-bottom: 1px solid #474D57;
-`;
-const Box = styled.div`
-  position: relative;
-  height: 100%;
-`;
-const CloseIcon = styled(Close)`
-  display: flex;
-  width: 35px;
-  height: 35px;
-  margin-left: auto;
-  color: #F0B90B;
-  cursor: pointer;
-  transition: color 0.1s linear;
-  :hover {
-    opacity: 0.9;
-  }
-`;
-const RenderDialogDiv = styled.div`
-  max-height: 50vh;
-  overflow: auto;
-`;
-const DialogInputDiv = styled.div`
-  position: absolute;
-  width: 100%;
-  bottom: 0;
-`;
-const Hr = styled.hr`
-  width: 100%;
-  margin-top: 0;
-  border-bottom: 2px solid #474D57;
-`;
 
 function Post() {
   const [chat, setChat] = useState('');
   const [chatId, setChatId] = useState('');
   const [posts, setPosts] = useState(null);
   const [stockId, setStockId] = useState('');
-  const [resInfo, setResInfo] = useState('');
-  const [resChat, setResChat] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
   const [isLoaded, setIsLoaded] = useState(true);
-  const [responsePosts, setResponsePosts] = useState(null);
   const postRef = useRef(null);
+  const navigate = useNavigate();
 
   const scrollToPost = () => {
     window.scrollTo({
@@ -312,13 +248,12 @@ function Post() {
 
   const fetchPosts = async () => {
     const res = await getAllPosts();
-    setMessage('');
     setIsLoaded(false);
     setPosts(res);
   };
 
-  const addHeartNum = (uuid, heart) => {
-    const uuidTrim = uuid.trim();
+  const addHeartNum = (id, heart) => {
+    const uuidTrim = id.trim();
     addHeart(uuidTrim, heart);
     fetchPosts();
   };
@@ -362,41 +297,8 @@ function Post() {
     setIsLoaded(false);
   };
 
-  const openDialog = async (uuid) => {
-    const res = await getResponsePosts(uuid);
-    const oriPost = await getOriPost(uuid);
-    console.log('要回覆的post', oriPost);
-    setResInfo(oriPost);
-    setResponsePosts(res);
-    setIsOpen(true);
-  };
-
-  const closeDialog = () => {
-    setResInfo({});
-    setIsOpen(false);
-  };
-
-  const sendResponse = async () => {
-    const { uuid, author } = resInfo;
-    const chatNum = resInfo.chat;
-    const resChatTrim = resChat.trim();
-    if (!resChatTrim.length > 0) {
-      alert('請輸入討論文字！');
-    } else {
-      const res = await addResponsePost(author, uuid, resChatTrim, chatNum);
-      if (res) {
-        setResChat('');
-        const data = await getResponsePosts(uuid);
-        setResponsePosts(data);
-        fetchPosts();
-      }
-    }
-  };
-
-  const handleSearch = (e) => {
-    if (e.key === 'Enter') {
-      searchStockPosts();
-    }
+  const redirectDialog = (uuid) => {
+    navigate(`/post/response/${uuid}`, { replace: true });
   };
 
   const renderPost = () => {
@@ -419,25 +321,12 @@ function Post() {
           <ChatDiv>
             <Img
               src={ChatImg}
-              onClick={() => { openDialog(item.uuid); }}
+              onClick={() => { redirectDialog(item.uuid); }}
             />
             <Num>{item.chat}</Num>
           </ChatDiv>
         </Div>
       </PostItem>
-    ));
-    return output;
-  };
-
-  const renderDialog = () => {
-    const output = responsePosts.map((item) => (
-      <Dialog key={`response-${item.timestamp}`}>
-        <AuthorContainer>
-          <Author>{item.author}</Author>
-          <Time>{getDateDiff(item.timestamp * 1000)}</Time>
-        </AuthorContainer>
-        <Context>{item.context}</Context>
-      </Dialog>
     ));
     return output;
   };
@@ -464,7 +353,6 @@ function Post() {
                 onChange={(e) => { setStockId(e.target.value); }}
                 onFocus={() => { setIsFocus(true); }}
                 onBlur={() => { setIsFocus(false); }}
-                onKeyPress={(e) => { handleSearch(e); }}
               />
               <SearchIcon onClick={() => { searchStockPosts(); }} />
             </SearchGroup>
@@ -496,34 +384,7 @@ function Post() {
         </MainContainer>
         <Footer />
       </Container>
-      <DialogContainer show={isOpen}>
-        <DialogDiv>
-          <Box>
-            <CloseIcon onClick={() => { closeDialog(); }} />
-            <AuthorContainer>
-              <Author>{resInfo.author}</Author>
-              <Time>{getDateDiff(resInfo.timestamp * 1000)}</Time>
-            </AuthorContainer>
-            <StockId>{resInfo.stock_id} {resInfo.stock_name}</StockId>
-            <Context>{resInfo.context}</Context>
-            <Hr />
-            <RenderDialogDiv>
-              {responsePosts && renderDialog()}
-            </RenderDialogDiv>
-            <DialogInputDiv>
-              <WriteTitle pb10 bgc>留言</WriteTitle>
-              <WriteTextarea
-                h50
-                value={resChat}
-                onChange={(e) => { setResChat(e.target.value); }}
-              />
-              <ButtonDiv>
-                <Button onClick={() => { sendResponse(); }}>送出</Button>
-              </ButtonDiv>
-            </DialogInputDiv>
-          </Box>
-        </DialogDiv>
-      </DialogContainer>
+      <Outlet />
       <ScrollTop />
     </>
   );
