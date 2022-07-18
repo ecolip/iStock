@@ -14,7 +14,7 @@ const Container = styled.div`
 function Footer() {
   return (
     <Container>
-      iStock © 2022 ~ 2024
+      iStock © 版權所有
     </Container>
   );
 }
