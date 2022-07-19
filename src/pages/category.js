@@ -200,9 +200,8 @@ function Category() {
   };
 
   const fetchCategoryStocks = async () => {
-    const token = window.localStorage.getItem('finToken');
     const category = transferRedirectKey(state.category);
-    const res = await api.getStockList(token);
+    const res = await api.getStockList();
     const { data } = res;
     const stockList = data.filter((item) => item.industry_category === category);
     return stockList;
@@ -215,11 +214,10 @@ function Category() {
 
   const fetchCategoryPrice = async (tracks) => {
     const stockPrices = [];
-    const token = window.localStorage.getItem('finToken');
     const openDate = await getOpenDate();
     const stockList = await fetchCategoryStocks();
     await Promise.all(stockList.map(async (item) => {
-      const res = await api.getTodayPrice(token, item.stock_id, openDate);
+      const res = await api.getTodayPrice(item.stock_id, openDate);
       const stockItem = res.data[0];
       if (stockItem) {
         const newItem = {

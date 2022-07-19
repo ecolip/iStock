@@ -129,9 +129,7 @@ function Individual() {
   const stockIdRef = useRef('2330');
 
   const fetchHistoryFinancial = async () => {
-    const token = window.localStorage.getItem('finToken');
-    const revenue = await api.getHistoryFinancial(token, stockIdRef.current, today());
-    // console.log(revenue);
+    const revenue = await api.getHistoryFinancial(stockIdRef.current, today());
     if (revenue.data.length > 0) {
       const newData = [];
       revenue.data.forEach((item) => {
@@ -146,10 +144,8 @@ function Individual() {
   };
 
   const fetchHistoryHolding = async () => {
-    const token = window.localStorage.getItem('finToken');
     const preWeek = dayjs().subtract(7, 'day').format('YYYY-MM-DD');
-    const revenue = await api.getHistoryHolding(token, stockIdRef.current, today(), preWeek);
-    // console.log(revenue);
+    const revenue = await api.getHistoryHolding(stockIdRef.current, today(), preWeek);
     if (revenue.data.length > 0) {
       setList(revenue.data);
     } else {
@@ -158,8 +154,7 @@ function Individual() {
   };
 
   const fetchHistoryDividend = async () => {
-    const token = window.localStorage.getItem('finToken');
-    const revenue = await api.getHistoryDividend(token, stockIdRef.current, today());
+    const revenue = await api.getHistoryDividend(stockIdRef.current, today());
     if (revenue.data.length > 0) {
       setList(revenue.data);
     } else {
@@ -168,8 +163,7 @@ function Individual() {
   };
 
   const fetchMonthRevenue = async () => {
-    const token = window.localStorage.getItem('finToken');
-    const revenue = await api.getMonthRevenue(token, stockIdRef.current, today(), preYear());
+    const revenue = await api.getMonthRevenue(stockIdRef.current, today(), preYear());
     if (revenue.data.length > 0) {
       setList(revenue.data);
       setStockId('');
@@ -222,18 +216,15 @@ function Individual() {
   };
 
   const renderLists = () => {
-    const output = Items.map((item, index) => {
-      console.log('目前的Index為0~3', activeIndex);
-      return (
-        <List
-          key={item}
-          active={index === activeIndex}
-          onClick={() => { handleSelect(index); }}
-        >
-          {item}
-        </List>
-      );
-    });
+    const output = Items.map((item, index) => (
+      <List
+        key={item}
+        active={index === activeIndex}
+        onClick={() => { handleSelect(index); }}
+      >
+        {item}
+      </List>
+    ));
     return output;
   };
 

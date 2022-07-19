@@ -99,13 +99,11 @@ function Track() {
       animationEnabled: true,
       animationDuration: 100,
       backgroundColor: '#181A20',
-      // backgroundColor: '#F5F5F5',
       title: {
         text: `${id} 走勢圖`,
         fontSize: 22,
         fontColor: '#EAECEF',
         margin: 10,
-        // padding: 4,
       },
       subtitles: [{
         text: '價/指數-成交量-成交總金額(千萬)',
@@ -118,11 +116,6 @@ function Track() {
         fontColor: '#EAECEF',
         fontColorOnHover: '#FCD535',
       },
-      // legend: {
-      //   horizontalAlign: 'right', // "center" , "right"
-      //   verticalAlign: 'center', // "top" , "bottom"
-      //   fontSize: 15,
-      // },
       charts: [{
         axisX: {
           lineThickness: 5,
@@ -147,8 +140,6 @@ function Track() {
           },
         },
         axisY: {
-          // title: 'price',
-          // prefix: '$',
           valueFormatString: '$##.###.##.00',
           tickLength: 0,
         },
@@ -183,7 +174,6 @@ function Track() {
           },
         },
         axisY: {
-          // prefix: '$',
           tickLength: 0,
         },
         toolTip: {
@@ -208,7 +198,6 @@ function Track() {
           labelFontColor: '#EAECEF',
           labelFontSize: 16,
           labelFontFamily: 'Noto Sans TC',
-          // labelFontWeight: 'bolder',
         },
         inputFields: {
           valueFormatString: 'YYYY-MM-DD',
@@ -219,7 +208,6 @@ function Track() {
             fontFamily: 'Noto Sans TC',
             fontSize: 16,
             fontColor: '#EAECEF',
-            // fontWeight: 'bold',
           },
         },
       },
@@ -270,22 +258,18 @@ function Track() {
   };
 
   const drawView = (type) => {
-    const finToken = window.localStorage.getItem('finToken');
     setIsLoaded(true);
-    // console.log('畫圖');
     if (type === 'init') {
-      api.getHistoryPrice(finToken, initStockId.current, today()).then((res) => {
+      api.getHistoryPrice(initStockId.current, today()).then((res) => {
         if (res.data.length > 0) {
-          // console.log('初始資料', res.data);
           constructView(res.data, '加權指數');
         }
       });
     } else {
       const stockIdTrim = stockId.trim();
-      api.getHistoryPrice(finToken, stockIdTrim, today()).then((res) => {
+      api.getHistoryPrice(stockIdTrim, today()).then((res) => {
         if (res.data.length > 0) {
           constructView(res.data, stockIdTrim);
-          // console.log('新商品', res.data);
         } else {
           setIsLoaded(false);
           alert('查無資料，請重新輸入股票代碼！');

@@ -208,8 +208,7 @@ function Login() {
   };
 
   const fetchPrices = async (item, day) => {
-    const finToken = window.localStorage.getItem('finToken');
-    const res = await api.getTodayPrice(finToken, item.stock_id, day);
+    const res = await api.getTodayPrice(item.stock_id, day);
     const newItem = {
       ...item, close: res.data[0].close, spread: res.data[0].spread.toFixed(2), date: day,
     };
@@ -217,8 +216,7 @@ function Login() {
   };
 
   const fetchTaiexOpenDate = async (date) => {
-    const finToken = window.localStorage.getItem('finToken');
-    const res = await api.getTodayPrice(finToken, 'TAIEX', date);
+    const res = await api.getTodayPrice('TAIEX', date);
     if (res.status === 402) return 402;
     if (res.data.length > 0) {
       dispatch({ openDate: date });
@@ -243,16 +241,14 @@ function Login() {
   };
 
   const fetchStockNames = async () => {
-    const finToken = window.localStorage.getItem('finToken');
-    const res = await api.getStockList(finToken);
+    const res = await api.getStockList();
     const { data } = res;
     addStockName(data);
   };
 
   const getApiToken = async () => {
-    const res = await api.finMindLogin();
-    window.localStorage.setItem('finToken', res.token);
-    return res.token;
+    const token = await api.finMindLogin();
+    return token;
   };
 
   // const handleBrokerages = (bankName) => {

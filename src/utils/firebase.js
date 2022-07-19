@@ -138,12 +138,11 @@ const getTrack = async (type) => {
 };
 
 const fetchTrackDetail = async (id) => {
-  const token = window.localStorage.getItem('finToken');
   const openDate = await getOpenDate();
   const name = await compareStockId(id);
   const detail = await getTrack('detail');
   const newDetail = [...detail];
-  const res = await api.getTodayPrice(token, id, openDate);
+  const res = await api.getTodayPrice(id, openDate);
   const stockItem = res.data[0];
   if (stockItem) {
     const newItem = {
@@ -156,13 +155,12 @@ const fetchTrackDetail = async (id) => {
 };
 
 const fetchHistoryNews = async (id) => {
-  const token = window.localStorage.getItem('finToken');
   const preWeek = dayjs().subtract(7, 'day').format('YYYY-MM-DD');
   const news = await getTrack('news');
   const newNews = [...news];
   const openDate = await getOpenDate();
   const name = await compareStockId(id);
-  const res = await api.getTodayNews(token, id, openDate, preWeek);
+  const res = await api.getTodayNews(id, openDate, preWeek);
   const stockItem = res.data[0];
   if (stockItem) {
     const newItem = {
