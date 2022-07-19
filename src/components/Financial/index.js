@@ -56,10 +56,8 @@ const Item = styled.div`
 const ItemText = styled.div`
   display: ${(props) => (props.smDisplayNon ? 'none' : 'block')};
   width: ${(props) => (props.day ? '80px' : '40px')};
-
  @media (min-width: 768px) {
     display: ${(props) => (props.smDisplayNon ? 'block' : 'block')};
-
     width: 100px;
   }
 `;
@@ -69,7 +67,6 @@ function Financial({ list }) {
   const [stockName, setStockName] = useState('');
   const [isLoaded, setIsLoaded] = useState(true);
   const { CanvasJSChart } = CanvasJSReact;
-  // const CanvasJS = CanvasJSReact.CanvasJS;
 
   const handleOption = (id, name, data) => {
     const options = {
@@ -95,7 +92,6 @@ function Financial({ list }) {
         dataPoints: data,
       }],
     };
-    console.log('設定option', options);
     setOption(options);
     setTimeout(() => {
       setIsLoaded(false);
@@ -112,7 +108,6 @@ function Financial({ list }) {
   };
 
   const handleData = async () => {
-    console.log('handleData financial');
     const name = await compareStockId2(list[0].stock_id);
     if (!name) return;
     const output = list.map((item) => {
@@ -123,7 +118,6 @@ function Financial({ list }) {
       };
       return newItem;
     });
-    console.log('data為', output);
     setStockName(name);
     handleOption(list[0].stock_id, name, output);
   };
@@ -169,7 +163,6 @@ function Financial({ list }) {
 }
 
 Financial.propTypes = {
-  // list: PropTypes.shape([]).isRequired,
   list: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.object])).isRequired,
 };
 

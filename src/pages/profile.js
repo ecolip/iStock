@@ -1,12 +1,9 @@
-/* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Close } from '@styled-icons/material';
-import { PersonSquare } from '@styled-icons/bootstrap';
 import { DragIndicator } from '@styled-icons/material-twotone';
 import useEventListener from '@use-it/event-listener';
-import * as dayjs from 'dayjs';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Button from '../components/Button';
@@ -52,10 +49,6 @@ const UserInfoDiv = styled.div`
     font-size: 16px;
   }
 `;
-const UserIcon = styled(PersonSquare)`
-  width: 40px;
-  height: 40px;
-`;
 const DragIcon = styled(DragIndicator)`
   width: 20px;
   height: 30px;
@@ -70,11 +63,6 @@ const CloseIcon = styled(Close)`
   :hover {
     opacity: 0.6;
   }
-`;
-const UserImg = styled.img`
-  width: 60px;
-  height: 60px;
-  border-radius: 8px;
 `;
 const UserName = styled.div`
 `;
@@ -224,9 +212,8 @@ const NewsTitle = styled.div`
   font-weight: bold;
   color: #EAECEF;
 `;
-const NewsLink = styled.a`
+const NewsLink = styled.div`
   position: relative;
-  min-height: 30vh;
   padding: 5px 0;
   font-size: 15px;
   color: #EAECEF;
@@ -273,14 +260,12 @@ function Profile() {
 
   const fetchDetail = async () => {
     const res = await getTrack('detail');
-    console.log('db回傳detail', res);
     setDetail(res);
     setIsLoadedDetail(false);
   };
 
   const fetchNews = async () => {
     const res = await getTrack('news');
-    console.log('db回傳news', res);
     setNews(res);
     setIsLoadedNews(false);
   };
@@ -300,12 +285,10 @@ function Profile() {
       return;
     }
     const name = await compareStockId2(stockTrim);
-    console.log('抓名稱', name);
     if (name) {
       setIsLoadedDetail(true);
       setIsLoadedNews(true);
       const res = await addTrackStock(stockTrim);
-      console.log('新增資料回覆', res);
       if (res) {
         updateTrack();
       }
@@ -343,8 +326,7 @@ function Profile() {
     const output = news.map((item) => (
       <NewsItem key={`news-${item.stock_id}`} href={item.link} target="_blank">
         <NewsTitle>{item.stock_id} {item.stock_name}</NewsTitle>
-        {/* <NewsLink>{item.title}</NewsLink> */}
-        <NewsLink href={item.link} target="_blank">{item.title}</NewsLink>
+        <NewsLink>{item.title}</NewsLink>
         <NewTime>{item.date}</NewTime>
       </NewsItem>
     ));

@@ -1,14 +1,14 @@
-/* eslint-disable no-nested-ternary */
 import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { Map } from '@styled-icons/boxicons-solid';
+import arrowIcon from '../imgs/arrow.png';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Button from '../components/Button';
 import Loading from '../components/Loading';
 import ScrollTop from '../components/ScrollTop';
 import GoogleMap from '../components/GoogleMap';
-import arrowIcon from '../imgs/arrow.png';
+
 import { getBanks, getCities, getBrokerages } from '../utils/firebase';
 
 const Container = styled.div`
@@ -210,14 +210,14 @@ const ArrowImg = styled.img`
 `;
 
 function Location() {
+  const [list, setList] = useState([]);
   const [banks, setBanks] = useState(null);
   const [cities, setCities] = useState(null);
+  const [name, setName] = useState('元大-松江');
+  const [message, setMessage] = useState(false);
   const [selectBank, setSelectBank] = useState('元大');
   const [selectCity, setSelectCity] = useState('台北市');
-  const [name, setName] = useState('元大-松江');
   const [address, setAddress] = useState('台北市中山區松江路139號3樓及3樓之1');
-  const [list, setList] = useState([]);
-  const [message, setMessage] = useState(false);
   const mapRef = useRef(null);
 
   const scrollToMap = () => {
@@ -290,6 +290,15 @@ function Location() {
     return output;
   };
 
+  const renderContext = () => {
+    if (message) {
+      return <Message>無符合搜尋結果</Message>;
+    } if (list.length > 0) {
+      return renderList();
+    }
+    return <Loading />;
+  };
+
   useEffect(() => {
     fetchBanks();
     fetchCities();
@@ -323,9 +332,7 @@ function Location() {
         </SearchContainer>
         <ListMapGroup>
           <ListContainer>
-            { message ? <Message>無符合搜尋結果</Message>
-              : list.length > 0 ? renderList()
-                : <Loading />}
+            { renderContext() }
           </ListContainer>
           <MapDescribe>
             <Hr />

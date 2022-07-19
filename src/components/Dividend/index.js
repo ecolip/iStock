@@ -71,12 +71,10 @@ function Dividend({ list }) {
   const [stockName, setStockName] = useState('');
   const [isLoaded, setIsLoaded] = useState(true);
   const { CanvasJSChart } = CanvasJSReact;
-  // const CanvasJS = CanvasJSReact.CanvasJS;
 
   const handleOption = (id, name, data) => {
     const options = {
       animationEnabled: true,
-      // animationDuration: 2000,
       theme: 'dark1',
       backgroundColor: '#181A20',
       title: {
@@ -97,7 +95,6 @@ function Dividend({ list }) {
           bevelEnabled: true,
           yValueFormatString: '$#,###',
           xValueFormatString: 'MMM YYYY',
-          // toolTipContent: '{x}: {y} (元)',
           color: '#4F81BC',
           dataPoints: data,
         },
@@ -110,7 +107,6 @@ function Dividend({ list }) {
   };
 
   const handleData = async () => {
-    console.log('handleData dividend');
     const name = await compareStockId2(list[0].stock_id);
     if (!name) return;
     const output = list.map((item) => {
@@ -122,7 +118,6 @@ function Dividend({ list }) {
       };
       return newItem;
     });
-    console.log('data為', output);
     setStockName(name);
     handleOption(list[0].stock_id, name, output);
   };
@@ -172,7 +167,6 @@ function Dividend({ list }) {
 }
 
 Dividend.propTypes = {
-  // list: PropTypes.shape([]).isRequired,
   list: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.object])).isRequired,
 };
 

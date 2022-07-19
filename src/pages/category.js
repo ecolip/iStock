@@ -1,5 +1,3 @@
-/* eslint-disable no-nested-ternary */
-/* eslint-disable no-unused-vars */
 import { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { Star } from '@styled-icons/boxicons-regular';
@@ -148,7 +146,7 @@ function Category() {
   const [lists, setLists] = useState([]);
   const [isCloseUp, setIsCloseUp] = useState(false);
   const [isSpreadUp, setIsSpreadUp] = useState(false);
-  const [state, dispatch] = useContext(AppContext);
+  const [state] = useContext(AppContext);
 
   const verifySpread = (spread) => {
     if (spread < 0) {

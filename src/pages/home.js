@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -155,7 +154,7 @@ const ButtonContainer = styled.div`
 function Home() {
   const [stockLists, setStockLists] = useState(null);
   const [isLoaded, setIsLoaded] = useState(true);
-  const [state, dispatch] = useContext(AppContext);
+  const [, dispatch] = useContext(AppContext);
   const navigate = useNavigate();
 
   const verifySpread = (spread) => {

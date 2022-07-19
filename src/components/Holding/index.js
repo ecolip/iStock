@@ -55,7 +55,6 @@ const Item = styled.div`
 const ItemText = styled.div`
   display: ${(props) => (props.smDisplayNon ? 'none' : 'block')};
   width: ${(props) => (props.day ? '80px' : '40px')};
-
  @media (min-width: 768px) {
     display: ${(props) => (props.smDisplayNon ? 'block' : 'block')};
 
@@ -67,7 +66,6 @@ function Holding({ list }) {
   const [option, setOption] = useState(null);
   const [isLoaded, setIsLoaded] = useState(true);
   const { CanvasJSChart } = CanvasJSReact;
-  // const CanvasJS = CanvasJSReact.CanvasJS;
 
   const transferDate = (date) => {
     const splits3 = date.split('-', 3);
@@ -94,7 +92,6 @@ function Holding({ list }) {
       axisX: {
         valueFormatString: 'DD MMM YYYY',
         labelAngle: -20,
-        // interval: 2,
       },
       toolbar: {
         itemBackgroundColor: '#2D3137',
@@ -109,7 +106,6 @@ function Holding({ list }) {
         dataPoints: data,
       }],
     };
-    console.log('設定option', options);
     setOption(options);
     setTimeout(() => {
       setIsLoaded(false);
@@ -117,7 +113,6 @@ function Holding({ list }) {
   };
 
   const handleData = async () => {
-    console.log('handleData holding');
     const name = await compareStockId2(list[0].stock_id);
     if (!name) return;
     const output = list.map((item) => {
@@ -128,7 +123,6 @@ function Holding({ list }) {
       };
       return newItem;
     });
-    console.log('data為', output);
     handleOption(list[0].stock_id, name, output);
   };
 
@@ -173,7 +167,6 @@ function Holding({ list }) {
 }
 
 Holding.propTypes = {
-  // list: PropTypes.shape([]).isRequired,
   list: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.object])).isRequired,
 };
 

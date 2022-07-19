@@ -72,12 +72,10 @@ function MonthRevenue({ list }) {
   const [isLoaded, setIsLoaded] = useState(true);
   const [stockName, setStockName] = useState('');
   const { CanvasJSChart } = CanvasJSReact;
-  // const CanvasJS = CanvasJSReact.CanvasJS;
 
   const handleOption = (id, name, data) => {
     const options = {
       animationEnabled: true,
-      // animationDuration: 2000,
       exportEnabled: true,
       theme: 'dark1',
       backgroundColor: '#181A20',
@@ -103,13 +101,9 @@ function MonthRevenue({ list }) {
         yValueFormatString: '$#,###',
         xValueFormatString: 'DD MMM YYYY',
         nullDataLineDashType: 'dot',
-        // lineColor: 'red',
-        // markerColor: 'red',
-        // toolTipContent: '{x}: $ {y}',
         dataPoints: data,
       }],
     };
-    console.log('設定option', options);
     setOption(options);
     setTimeout(() => {
       setIsLoaded(false);
@@ -117,7 +111,6 @@ function MonthRevenue({ list }) {
   };
 
   const handleData = async () => {
-    console.log('handleData revenue');
     const name = await compareStockId2(list[0].stock_id);
     if (!name) return;
     const output = list.map((item) => {
@@ -128,7 +121,6 @@ function MonthRevenue({ list }) {
       };
       return newItem;
     });
-    console.log('data為', output);
     setStockName(name);
     handleOption(list[0].stock_id, name, output);
   };
@@ -174,7 +166,6 @@ function MonthRevenue({ list }) {
 }
 
 MonthRevenue.propTypes = {
-  // list: PropTypes.shape([]).isRequired,
   list: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.object])).isRequired,
 };
 

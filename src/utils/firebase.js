@@ -80,7 +80,6 @@ const getNewCategoryPrice = async () => {
 const checkNewPrices = async (openDate) => {
   const docRef = doc(db, 'categoryPrices', 'TAIEX');
   const docSnap = await getDoc(docRef);
-  console.log(docSnap.data().date, openDate);
   return docSnap.data().date === openDate;
 };
 
@@ -193,16 +192,13 @@ const addTrackStock = async (id) => {
 
 const removeNewsIndex = async (id) => {
   const originNews = await getTrack('news');
-  console.log('全部新聞', originNews);
   const newsIndex = [];
   originNews.forEach((item, index) => {
     if (item.stock_id === id) {
-      console.log('刪除哪個stock_id', item.stock_id, id);
       newsIndex.push(index);
     }
   });
   if (newsIndex.length > 0) {
-    console.log('刪除第幾news', newsIndex[0]);
     return newsIndex[0];
   }
   return false;
@@ -216,7 +212,6 @@ const removeTrackStock = async (id) => {
   const originDetail = await getTrack('detail');
   const originNews = await getTrack('news');
   const newsIndex = await removeNewsIndex(id);
-  console.log(newsIndex);
   const index = originTrack.indexOf(id);
   const newTrack = [...originTrack];
   const newDetail = [...originDetail];
@@ -302,7 +297,6 @@ const getResponsePosts = async (uuid) => {
   const docSnap = await getDoc(docRef);
   const result = docSnap.data().data;
   return result;
-  // result.sort((a, b) => b.timestamp - a.timestamp);
 };
 
 const addResponsePost = async (uuid, postAuthor, postTitle, context, chat) => {
