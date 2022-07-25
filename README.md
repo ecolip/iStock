@@ -1,11 +1,11 @@
 # iStock
-### project name: iStock
+### Project name: iStock
 ### Description: A web platform for users to manager the stocks they are interested in.
 
-### account and password: test@gmail.com / 123456
-[iStock Demo](https://istock-23751.firebaseapp.com/)
+### Account and Password: test@gmail.com / 123456
+[Demo](https://istock-23751.firebaseapp.com/)
 
-### skills
+### Skills
 - **ReactJS (Context, Hooks)** / **React Router for SPA**
 - **Styled component** / **Flex Box**
 - **RESTFul API**
@@ -19,7 +19,7 @@
 - **Browser compatibility**
 
 ### Function Map
-![](https://imgur.com/lYu1gjS)
+![](https://i.imgur.com/lYu1gjS.jpg)
 
 ### Function Display
 - Home page: show Taiwan's stocks, click category and redirect category page
