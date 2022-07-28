@@ -1,5 +1,3 @@
-/* eslint-disable no-useless-escape */
-/* eslint-disable no-unused-vars */
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -120,11 +118,11 @@ const HrText = styled.div`
 
 function Login() {
   const [login, setLogin] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('emma@gmail.com');
+  const [password, setPassword] = useState('123456');
   const [message, setMessage] = useState(null);
   const navigate = useNavigate();
-  const [state, dispatch] = useContext(AppContext);
+  const [, dispatch] = useContext(AppContext);
 
   const trimText = () => {
     const triEmail = email.trim();

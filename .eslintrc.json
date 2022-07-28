@@ -13,7 +13,8 @@
     }],
     "import/no-cycle": [2, { "ignoreExternal": true, "maxDepth": 1 }],
     "no-alert": "off",
-    "no-useless-escape":"off"
+    "no-useless-escape":"off",
+    "react-hooks/exhaustive-deps": "off"
   },
   "globals": {
     "window": "readonly"
