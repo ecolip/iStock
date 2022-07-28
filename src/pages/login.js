@@ -118,7 +118,7 @@ const HrText = styled.div`
 
 function Login() {
   const [login, setLogin] = useState(true);
-  const [email, setEmail] = useState('emma@gmail.com');
+  const [email, setEmail] = useState('test@gmail.com');
   const [password, setPassword] = useState('123456');
   const [message, setMessage] = useState(null);
   const navigate = useNavigate();
