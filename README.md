@@ -1,8 +1,8 @@
 # iStock
-### Project name: iStock
-### Description: A web platform for users to manager the stocks they are interested in.
+#### Project name: **iStock**
+#### Description: A web platform for users to manager the stocks they are interested in.
 
-### Account and Password: test@gmail.com / 123456
+#### Account and Password: test@gmail.com / 123456
 [Demo](https://istock-23751.firebaseapp.com/)
 ![](https://i.imgur.com/sywte8e.jpg)
 ![](https://i.imgur.com/DaCkuAv.jpg)
