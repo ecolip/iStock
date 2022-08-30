@@ -5,8 +5,8 @@
 #### Account and Password: test@gmail.com / 123456
 [Demo](https://istock-23751.firebaseapp.com/)
 ![](https://i.imgur.com/sywte8e.jpg)
-![](https://i.imgur.com/DaCkuAv.jpg)
-![](https://i.imgur.com/6XsXwGi.jpg)
+![](https://i.imgur.com/LZEHR2u.jpg)
+![](https://i.imgur.com/SWF6tTU.jpg)
 ![](https://i.imgur.com/ya5rFbp.jpg)
 ![](https://i.imgur.com/OQd2yja.jpg)
 
