@@ -1,4 +1,6 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import {
+  BrowserRouter, Routes, Route, Navigate,
+} from 'react-router-dom';
 import Home from './pages/home';
 import Post from './pages/post';
 import Track from './pages/track';
@@ -15,7 +17,8 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route exact path="/" element={<Login />} />
+          <Route exact path="/" element={<Navigate to="/login" replace />} />
+          <Route exact path="login" element={<Login />} />
           <Route exact path="home" element={<Home />} />
           <Route exact path="profile" element={<Profile />} />
           <Route exact path="individual" element={<Individual />} />
@@ -26,6 +29,8 @@ function App() {
           </Route>
           <Route exact path="track" element={<Track />} />
           <Route exact path="*" element={<NotFound />} />
+          {/* <Route exact path="*" element={<Navigate to="/login" />} /> */}
+          {/* 直接導回首頁做法 */}
         </Routes>
       </BrowserRouter>
     </div>

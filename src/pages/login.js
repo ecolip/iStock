@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import useEventListener from '@use-it/event-listener';
 import Footer from '../components/Footer';
@@ -121,7 +120,6 @@ function Login() {
   const [email, setEmail] = useState('test@gmail.com');
   const [password, setPassword] = useState('123456');
   const [message, setMessage] = useState(null);
-  const navigate = useNavigate();
   const [, dispatch] = useContext(AppContext);
 
   const trimText = () => {
@@ -171,7 +169,7 @@ function Login() {
       window.localStorage.setItem('firToken', res.accessToken);
       window.localStorage.setItem('user', user);
       clearInput();
-      navigate('./home', { replace: true });
+      window.location.href = '/home';
     }).catch((code) => {
       if (code === 'auth/user-not-found') {
         setMessage('此帳號尚未註冊');
@@ -191,7 +189,7 @@ function Login() {
       window.localStorage.setItem('firToken', res.accessToken);
       window.localStorage.setItem('user', user);
       clearInput();
-      navigate('./home', { replace: true });
+      window.location.href = '/home';
     }).catch((code) => {
       if (code === 'auth/email-already-in-use') {
         setMessage('此帳號已註冊');
@@ -201,7 +199,7 @@ function Login() {
 
   const firebaseGoogleLogin = () => {
     googleSignIn().then(() => {
-      navigate('./home', { replace: true });
+      window.location.href = '/home';
     });
   };
 

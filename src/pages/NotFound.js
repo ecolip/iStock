@@ -35,6 +35,7 @@ const SubTitle = styled.div`
 
 function NotFound() {
   return (
+    // <Navigate to="/login" /> // 可以直接導回首頁
     <Container>
       <MainContainer>
         <Title>404 Error Page</Title>
